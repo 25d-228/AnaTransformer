@@ -1,0 +1,86 @@
+{
+  "files": {
+    "cogs/dev.tsv": {
+      "bytes": 522121,
+      "sha256": "ab66388a309c7ac1ad210c781a6a0ce12281a9ef24619a12422a752cef61bc21"
+    },
+    "cogs/gen.tsv": {
+      "bytes": 5532102,
+      "sha256": "d013d9eee0bafc153f8decc85f42814ac97260f84964d980e1e2b84577b82361"
+    },
+    "cogs/test.tsv": {
+      "bytes": 521111,
+      "sha256": "68f8e51e9f6d9cd22d64efe68dd21d7ea5ba327e9a2359481030161aea757035"
+    },
+    "cogs/train.tsv": {
+      "bytes": 4146574,
+      "sha256": "220b3804b562c0156ee986eff1bdd15c27e52142549362a64f57baf86e304c78"
+    },
+    "iwslt14/dev.de": {
+      "bytes": 778787,
+      "sha256": "2edb653fb2264265a4c6b2f849e227c74d8890d185e694dbe303ddf01a5b1f73"
+    },
+    "iwslt14/dev.en": {
+      "bytes": 698449,
+      "sha256": "62902b945006b869a54e0586527a534374917968d6531d8ed1f7143371ce9d79"
+    },
+    "iwslt14/test.de": {
+      "bytes": 696588,
+      "sha256": "6d1331dd62ee5d15a0ccf52596a2a787d29f3691753f8541f186373f5c3426be"
+    },
+    "iwslt14/test.en": {
+      "bytes": 618398,
+      "sha256": "d820875b4e5ab105d3f9fef5bbb065136c04f4774664fec3a8dfbdd5523b68b5"
+    },
+    "iwslt14/train.de": {
+      "bytes": 17243198,
+      "sha256": "f7813c885ae5c66d04630e7a4fa663d4f9307f4c79af8491ea10b977e7b7ab54"
+    },
+    "iwslt14/train.en": {
+      "bytes": 15438492,
+      "sha256": "b26f54498498d74826ef69e3b92a6fa6c40652a6e2fa9907991e0133824fca52"
+    },
+    "multi30k/dev.de": {
+      "bytes": 75919,
+      "sha256": "366863c09b91e91c100bc87501a85fe1ce49270c2301de46d39075aee5ce8021"
+    },
+    "multi30k/dev.en": {
+      "bytes": 63297,
+      "sha256": "1f2a23d992769b5b3d209b0a10dd0b77c08cceb1f20dfb97ed0aafa49d107227"
+    },
+    "multi30k/test.de": {
+      "bytes": 70649,
+      "sha256": "4be6b5b3236b79c25475c6bb829800a7ce559e9ba7a1f6c2394fe4d40be46d16"
+    },
+    "multi30k/test.en": {
+      "bytes": 62076,
+      "sha256": "399a4382932c1aadd3ceb9bef1008d388a64c76d4ae4e9d4728c6f4301cac182"
+    },
+    "multi30k/train.de": {
+      "bytes": 2110358,
+      "sha256": "67aa53ff412b6af1f47c604a623e112e2c28c61519aa7cf8a5348af21722b67a"
+    },
+    "multi30k/train.en": {
+      "bytes": 1801238,
+      "sha256": "460a15fbd157e34a7a9957ee388c1ca247fe47af3ef25fb50442af6c274e0fc6"
+    }
+  },
+  "counts": {
+    "cogs": {
+      "train": 24155,
+      "dev": 3000,
+      "test": 3000,
+      "gen": 21000
+    },
+    "iwslt14": {
+      "train": 160239,
+      "dev": 7283,
+      "test": 6750
+    },
+    "multi30k": {
+      "train": 29000,
+      "dev": 1014,
+      "test": 1000
+    }
+  }
+}

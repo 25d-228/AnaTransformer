@@ -1,0 +1,25 @@
+{
+  "max_steps": 50000,
+  "batch_size": 160,
+  "warmup_steps": 4000,
+  "learning_rate": 0.0005,
+  "schedule": "inverse_sqrt",
+  "selection": "best_dev_loss",
+  "weight_decay": 0.0001,
+  "adam_betas": [
+    0.9,
+    0.98
+  ],
+  "verified": true,
+  "source": "iwslt14: searched 1 rates (1x the published one) on `baseline` alone. the published rate reaches the published range (33.44), so it stands. Confirmed, not replaced. Every architecture in the grid is trained on this recipe unchanged; none of them had a vote in it. Published starting point: fairseq `transformer_iwslt_de_en`: Adam (0.9, 0.98), inverse-sqrt from 5e-4 with 4,000 warmup steps, weight decay 1e-4, label smoothing 0.1. Their batch is 4,096 tokens; ours is 160 sentences, which is about the same, and `ana tune` confirms the rate against development loss.",
+  "search": [
+    {
+      "scale": 1.0,
+      "dev": 2.7245915876579994,
+      "scores": {
+        "test": 33.44412150928786
+      },
+      "chosen": true
+    }
+  ]
+}
