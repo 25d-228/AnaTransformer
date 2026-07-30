@@ -10,6 +10,9 @@ from __future__ import annotations
 
 import math
 from abc import ABC, abstractmethod
+from collections.abc import Iterator
+from contextlib import contextmanager
+from typing import Literal
 
 import torch
 import torch.nn.functional as F
@@ -24,6 +27,22 @@ from ana.nn.grouping import (
 )
 
 MAGNITUDE_CLAMP = 5.0
+D4Intervention = Literal[
+    "original",
+    "gate_zero",
+    "uniform_router",
+    "identity_router",
+    "hard_argmax",
+    "magnitude_one",
+]
+D4_INTERVENTIONS: tuple[D4Intervention, ...] = (
+    "original",
+    "gate_zero",
+    "uniform_router",
+    "identity_router",
+    "hard_argmax",
+    "magnitude_one",
+)
 
 # The exponent the powered mixer routes, and the floor held under |z| before it is raised to
 # that exponent. The derivative of |z|**q is q*|z|**(q-1), which grows without bound as |z|
@@ -41,13 +60,19 @@ def _positive_magnitude(layer: nn.Linear, readout: Tensor) -> Tensor:
     return F.softplus(logits)
 
 
-def _d4_matrix(router: nn.Linear, readout: Tensor, permutations: Tensor) -> Tensor:
-    weights = F.softmax(router(readout), dim=-1)
+def _d4_matrix(weights: Tensor, permutations: Tensor) -> Tensor:
     return torch.einsum("bnc,cji->bnji", weights, permutations)
 
 
-def _gated_residual(z: Tensor, mixed: Tensor, gate: Tensor, scale: Tensor) -> Tensor:
-    gated = z + torch.sigmoid(gate) * (mixed - z)
+def _gated_residual(
+    z: Tensor,
+    mixed: Tensor,
+    gate: Tensor,
+    scale: Tensor,
+    gate_strength: Tensor | None = None,
+) -> Tensor:
+    strength = torch.sigmoid(gate) if gate_strength is None else gate_strength
+    gated = z + strength * (mixed - z)
     return gated * scale
 
 
@@ -95,6 +120,71 @@ class RoleTransform(nn.Module, ABC):
 
     @abstractmethod
     def forward(self, z: Tensor, pad_mask: Tensor) -> Tensor: ...
+
+
+class D4RoleTransform(RoleTransform, ABC):
+    """Common inference-only controls for routed D4 role transforms.
+
+    The active condition is an ordinary Python attribute: it is deliberately absent from the
+    state dictionary and restored by `temporary_d4_intervention`. Checkpoint parameters are
+    never edited to implement a diagnostic.
+    """
+
+    def __init__(self) -> None:
+        super().__init__()
+        self._d4_intervention: D4Intervention = "original"
+
+    def learned_route_probabilities(self, readout: Tensor) -> Tensor:
+        """The trained soft router, irrespective of an active inference intervention."""
+        return F.softmax(self.router(readout), dim=-1)
+
+    def route_probabilities(self, readout: Tensor) -> Tensor:
+        """Router probabilities after applying the one active inference condition."""
+        learned = self.learned_route_probabilities(readout)
+        if self._d4_intervention == "uniform_router":
+            return torch.full_like(learned, 1.0 / N_PERMUTATIONS)
+        if self._d4_intervention == "identity_router":
+            identity = torch.zeros_like(learned)
+            identity[..., 0] = 1.0
+            return identity
+        if self._d4_intervention == "hard_argmax":
+            return F.one_hot(learned.argmax(dim=-1), N_PERMUTATIONS).to(learned.dtype)
+        return learned
+
+    def gate_strength(self) -> Tensor:
+        if self._d4_intervention == "gate_zero":
+            return torch.zeros_like(self.gate)
+        return torch.sigmoid(self.gate)
+
+    def routed_magnitude(self, readout: Tensor) -> Tensor:
+        magnitude = getattr(self, "magnitude", None)
+        if magnitude is None or self._d4_intervention == "magnitude_one":
+            return torch.ones_like(readout[..., :1])
+        return _positive_magnitude(magnitude, readout)
+
+
+@contextmanager
+def temporary_d4_intervention(model: nn.Module, condition: D4Intervention) -> Iterator[None]:
+    """Apply one inference-only condition and restore every module even after an exception."""
+    if condition not in D4_INTERVENTIONS:
+        raise ValueError(
+            f"unknown D4 intervention {condition!r}; choose from {', '.join(D4_INTERVENTIONS)}"
+        )
+
+    modules = [module for module in model.modules() if isinstance(module, D4RoleTransform)]
+    if not modules:
+        raise ValueError("the model has no routed D4 role transforms")
+    if condition == "magnitude_one" and any(not isinstance(module, D4Mixing) for module in modules):
+        raise ValueError("magnitude_one is only defined for D4 models with a learned magnitude")
+
+    previous = [module._d4_intervention for module in modules]
+    try:
+        for module in modules:
+            module._d4_intervention = condition
+        yield
+    finally:
+        for module, restored in zip(modules, previous, strict=True):
+            module._d4_intervention = restored
 
 
 class DiagonalRescale(RoleTransform):
@@ -152,7 +242,7 @@ class DynamicMagnification(RoleTransform):
         return _gated_residual(z, mixed, self.gate, self.scale)
 
 
-class D4MixingWithoutMagnitude(RoleTransform):
+class D4MixingWithoutMagnitude(D4RoleTransform):
     """The routed D4 mixer from `D4Mixing`, with magnitude fixed to exactly one.
 
     This is the D4-only factorial cell. It retains the current feature/token router, gate,
@@ -188,13 +278,13 @@ class D4MixingWithoutMagnitude(RoleTransform):
 
     def forward(self, z: Tensor, pad_mask: Tensor) -> Tensor:
         readout = self.grouping.router_readout(z, pad_mask)
-        matrix = _d4_matrix(self.router, readout, self.permutations)
-        magnitude = torch.ones_like(readout[..., :1])
+        matrix = _d4_matrix(self.route_probabilities(readout), self.permutations)
+        magnitude = self.routed_magnitude(readout)
         mixed = self.grouping.mix(z, matrix, magnitude, pad_mask)
-        return _gated_residual(z, mixed, self.gate, self.scale)
+        return _gated_residual(z, mixed, self.gate, self.scale, self.gate_strength())
 
 
-class D4Mixing(RoleTransform):
+class D4Mixing(D4RoleTransform):
     """A routed blend over the eight permutations of D4, applied to groups of four.
 
     For each group the router emits eight weights, and their softmax picks a convex
@@ -276,11 +366,11 @@ class D4Mixing(RoleTransform):
     def forward(self, z: Tensor, pad_mask: Tensor) -> Tensor:
         readout = self.grouping.router_readout(z, pad_mask)
 
-        matrix = _d4_matrix(self.router, readout, self.permutations)
-        magnitude = _positive_magnitude(self.magnitude, readout)
+        matrix = _d4_matrix(self.route_probabilities(readout), self.permutations)
+        magnitude = self.routed_magnitude(readout)
 
         mixed = self.grouping.mix(z, matrix, magnitude, pad_mask)
-        return _gated_residual(z, mixed, self.gate, self.scale)
+        return _gated_residual(z, mixed, self.gate, self.scale, self.gate_strength())
 
 
 class D4MixingPowered(D4Mixing):
@@ -350,8 +440,8 @@ class D4MixingPowered(D4Mixing):
     def forward(self, z: Tensor, pad_mask: Tensor) -> Tensor:
         readout = self.grouping.router_readout(z, pad_mask)
 
-        matrix = _d4_matrix(self.router, readout, self.permutations)
-        magnitude = _positive_magnitude(self.magnitude, readout)
+        matrix = _d4_matrix(self.route_probabilities(readout), self.permutations)
+        magnitude = self.routed_magnitude(readout)
 
         batch, length, d_model = z.shape
         groups = d_model // GROUP_SIZE
@@ -372,4 +462,4 @@ class D4MixingPowered(D4Mixing):
         restored = unbent * largest * magnitude.view(batch, 1, groups, 1)
 
         mixed = restored.reshape(batch, length, d_model)
-        return _gated_residual(z, mixed, self.gate, self.scale)
+        return _gated_residual(z, mixed, self.gate, self.scale, self.gate_strength())

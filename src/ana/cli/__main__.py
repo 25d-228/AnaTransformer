@@ -49,8 +49,12 @@ import subprocess
 from collections import defaultdict
 from dataclasses import replace
 
+import torch
+
 from ana import recipes
 from ana.config import TrainConfig
+from ana.d4_diagnostic import STUDY_ID as D4_DIAGNOSTIC_STUDY_ID
+from ana.d4_diagnostic import run_diagnostic
 from ana.data.corpora import CORPORA, build_corpus
 from ana.experiment import run_cell
 from ana.factorial import CORPUS as FACTORIAL_CORPUS
@@ -451,6 +455,24 @@ def _factorial(args: argparse.Namespace) -> None:
     _shard(jobs, gpu_ids, FACTORIAL_STUDY_ID, args.dry_run)
 
 
+def _d4_diagnostic(args: argparse.Namespace) -> None:
+    """Analyze trained factorial checkpoints; this command never enters the training path."""
+    device = torch.device(args.device)
+    if device.type == "cuda" and not torch.cuda.is_available():
+        raise SystemExit(f"requested {device}, but CUDA is unavailable")
+    artifact = run_diagnostic(
+        args.run_dir,
+        args.json,
+        args.markdown,
+        device,
+    )
+    print(
+        f"{artifact['study_id']}: wrote {artifact['decode_count']} development decodes to "
+        f"{args.json} and {args.markdown}",
+        flush=True,
+    )
+
+
 def _report(args: argparse.Namespace) -> None:
     records, smoked = [], 0
     for path in sorted(glob.glob(os.path.join(args.out, "*", "results.json"))):
@@ -722,6 +744,28 @@ def main() -> None:
         "--dry-run", action="store_true", help="write the scripts, start nothing"
     )
     factorial.set_defaults(handler=_factorial)
+
+    diagnostic = sub.add_parser(
+        "diagnose-d4",
+        help="analyze the six trained Multi30k D4 factorial checkpoints without training",
+    )
+    diagnostic.add_argument(
+        "--run-dir",
+        default=f"runs/{FACTORIAL_STUDY_ID}",
+        help="private factorial run directory containing weights.pt and results.json siblings",
+    )
+    diagnostic.add_argument(
+        "--json",
+        default=f"results/{D4_DIAGNOSTIC_STUDY_ID}.json",
+        help="compact JSON artifact path",
+    )
+    diagnostic.add_argument(
+        "--markdown",
+        default=f"results/{D4_DIAGNOSTIC_STUDY_ID}.md",
+        help="generated Markdown report path",
+    )
+    diagnostic.add_argument("--device", default="cuda:0")
+    diagnostic.set_defaults(handler=_d4_diagnostic)
 
     report = sub.add_parser("report", help="[3] read the runs and print the comparison")
     report.add_argument("--out", default="runs")

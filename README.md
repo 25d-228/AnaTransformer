@@ -51,6 +51,17 @@ ana factorial --gpu-ids 0                # five models x seeds 42, 43, 44
 It writes under `runs/multi30k_factorial_v1` by default, scores both development and test BLEU,
 and never reuses the old one-seed pilot cells.
 
+The next step analyzes the six trained D4 checkpoints without training or loading the test set:
+
+```bash
+ana diagnose-d4 --run-dir runs/multi30k_factorial_v1 --device cuda:0
+```
+
+It first reproduces development BLEU for every checkpoint within 0.05. Only after all six pass
+does it run the prescribed gate, router, hard-selection, and magnitude interventions. The
+outputs are compact JSON and Markdown artifacts under `results/`; checkpoint parameters and
+default state dictionaries are never changed.
+
 `tune` and `run` start their jobs in the background and return immediately. Watch them with
 `tail -f logs/*.out`. A cell that already has a results file is skipped, so a machine that dies
 part way through can be restarted and will resume **at the granularity of a whole cell** — a run
