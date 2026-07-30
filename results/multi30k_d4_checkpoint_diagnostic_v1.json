@@ -3312,7 +3312,9 @@
   "definitions": {
     "effective_number_of_routes": "mean_token exp(H(p))",
     "gate_strength": "sigmoid(gate)",
+    "hard_argmax_scope": "hard argmax makes routed matrix P an exact D4 permutation; the full role remains diag(scale)[(1-g)I + gP]z in ana_d4_enc and additionally contains a learned positive magnitude in ana_feat_enc",
     "identity_probability": "mean_token p_0, where D4 element 0 is identity",
+    "identity_router_gate_zero_equivalence": "in ana_d4_enc, identity_router and gate_zero are the same effective ablation because magnitude is one and identity mixing gives mixed = z",
     "magnitude": "positive softplus magnitude over real source tokens: mean, sample standard deviation, p05, p50, p95",
     "maximum_route_probability": "mean_token max_k p_k",
     "mean_route_distribution": "mean_token p in the fixed D4 order",

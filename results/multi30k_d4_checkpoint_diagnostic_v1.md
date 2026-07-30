@@ -106,13 +106,14 @@ Each row is the mean of the same labeled module over seeds 42, 43, and 44.
 - **Are routes token-conditioned?** Generalized token JS averages 0.6721 and 0.6860; zero is token-constant routing.
 - **Did Q, K, and V differentiate?** Normalized role JS averages 0.8475 and 0.8759; zero means identical role distributions.
 - **Are soft matrices close to exact D4 permutations?** Mean normalized nearest-form distance is 0.090 and 0.072; zero is an exact form.
-- **Does hard argmax retain BLEU?** Its mean difference is -0.08 for `ana_d4_enc` and -0.07 for `ana_feat_enc`.
+- **Does hard argmax retain BLEU?** Its mean difference is -0.08 for `ana_d4_enc` and -0.07 for `ana_feat_enc`. Hard argmax makes only the routed matrix `P` an exact D4 permutation; the learned gate, diagonal scale, and (for `ana_feat_enc`) magnitude remain active.
 - **Does learned routing beat uniform and identity?** Relative to original, uniform / identity change mean BLEU by -1.34 / -2.16 for `ana_d4_enc`, and -2.18 / -3.71 for `ana_feat_enc`.
+- **Are gate zero and identity routing independent checks?** Not for `ana_d4_enc`: magnitude is fixed to one, so identity mixing gives `mixed = z`, exactly as gate zero does. Their identical scores are one effective ablation, not independent evidence.
 - **Does the combined model rely on magnification?** Setting magnitude to one changes mean BLEU by -5.61.
 
 ## Interpretation for the next discussion
 
-Descriptively, this matches the first decision pattern: hard argmax retains nearly all BLEU, routing is strongly token- and role-differentiated, the soft matrices lie near individual D4 forms, and gate/router interventions matter on every seed. Exact analogy-equivalent routing therefore remains a live direction for a later comparison with random permutation families and generic local mixers. Those comparisons are not implemented here.
+Descriptively, this matches the first decision pattern: hard argmax retains nearly all BLEU, routing is strongly token- and role-differentiated, the soft matrices lie near individual D4 forms, and effective gate/router interventions matter on every seed. This is evidence for a near-discrete, token- and role-conditioned D4 routing component. It does not make the whole role transform exactly D4: under hard argmax the D4-only role is `diag(scale)[(1-g)I + gP]z`, while the combined role also contains a learned magnitude. The full transform is therefore not shown to lie exactly in an analogy-preserving `D4 × R+` orbit. Exact D4 routing remains a live direction for a later comparison with random permutation families and generic local mixers. Those comparisons are not implemented here.
 
 The combined checkpoints also rely heavily on their learned magnitudes, but the factorial screen did not show a useful combined-model advantage. Checkpoint reliance therefore demonstrates co-adaptation, not that the magnifier improves the architecture.
 

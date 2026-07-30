@@ -53,6 +53,15 @@ CONDITIONS: dict[str, tuple[D4Intervention, ...]] = {
 
 DEFINITIONS = {
     "gate_strength": "sigmoid(gate)",
+    "hard_argmax_scope": (
+        "hard argmax makes routed matrix P an exact D4 permutation; the full role remains "
+        "diag(scale)[(1-g)I + gP]z in ana_d4_enc and additionally contains a learned positive "
+        "magnitude in ana_feat_enc"
+    ),
+    "identity_router_gate_zero_equivalence": (
+        "in ana_d4_enc, identity_router and gate_zero are the same effective ablation because "
+        "magnitude is one and identity mixing gives mixed = z"
+    ),
     "normalized_router_entropy": "mean_token H(p) / log(8)",
     "maximum_route_probability": "mean_token max_k p_k",
     "effective_number_of_routes": "mean_token exp(H(p))",
@@ -416,6 +425,10 @@ def require_reproduction(
     observed: float,
     tolerance: float = REPRODUCTION_TOLERANCE,
 ) -> float:
+    if not math.isfinite(stored) or not math.isfinite(observed):
+        raise ValueError("stored and reproduced development BLEU must be finite")
+    if not math.isfinite(tolerance) or tolerance < 0:
+        raise ValueError("the reproduction tolerance must be finite and non-negative")
     difference = observed - stored
     if abs(difference) > tolerance:
         raise ValueError(
@@ -560,8 +573,26 @@ def build_artifact(
     return artifact
 
 
+def _require_finite_numbers(value: Any, path: str = "artifact") -> None:
+    """Reject non-finite numeric values anywhere in a diagnostic artifact."""
+    if isinstance(value, bool):
+        return
+    if isinstance(value, (int, float)):
+        if not math.isfinite(value):
+            raise ValueError(f"{path} contains a non-finite numeric value")
+        return
+    if isinstance(value, dict):
+        for key, child in value.items():
+            _require_finite_numbers(child, f"{path}.{key}")
+        return
+    if isinstance(value, (list, tuple)):
+        for index, child in enumerate(value):
+            _require_finite_numbers(child, f"{path}[{index}]")
+
+
 def validate_artifact(artifact: dict[str, Any]) -> None:
     """Refuse partial checkpoints, conditions, labels, or failed reproductions."""
+    _require_finite_numbers(artifact)
     if artifact.get("study_id") != STUDY_ID:
         raise ValueError(f"artifact is not marked as {STUDY_ID}")
     if artifact.get("source_factorial_study") != SOURCE_STUDY_ID:
@@ -749,7 +780,9 @@ def markdown_report(artifact: dict[str, Any]) -> str:
         f"{delta('ana_d4_enc', 'hard_argmax')['mean_difference_from_original']:+.2f} for "
         f"`ana_d4_enc` and "
         f"{delta('ana_feat_enc', 'hard_argmax')['mean_difference_from_original']:+.2f} for "
-        "`ana_feat_enc`.",
+        "`ana_feat_enc`. Hard argmax makes only the routed matrix `P` an exact D4 "
+        "permutation; the learned gate, diagonal scale, and (for `ana_feat_enc`) magnitude "
+        "remain active.",
         f"- **Does learned routing beat uniform and identity?** Relative to original, uniform / "
         f"identity change mean BLEU by "
         f"{delta('ana_d4_enc', 'uniform_router')['mean_difference_from_original']:+.2f} / "
@@ -758,6 +791,9 @@ def markdown_report(artifact: dict[str, Any]) -> str:
         f"{delta('ana_feat_enc', 'uniform_router')['mean_difference_from_original']:+.2f} / "
         f"{delta('ana_feat_enc', 'identity_router')['mean_difference_from_original']:+.2f} for "
         "`ana_feat_enc`.",
+        "- **Are gate zero and identity routing independent checks?** Not for `ana_d4_enc`: "
+        "magnitude is fixed to one, so identity mixing gives `mixed = z`, exactly as gate zero "
+        "does. Their identical scores are one effective ablation, not independent evidence.",
         f"- **Does the combined model rely on magnification?** Setting magnitude to one changes "
         f"mean BLEU by "
         f"{delta('ana_feat_enc', 'magnitude_one')['mean_difference_from_original']:+.2f}.",
@@ -766,10 +802,14 @@ def markdown_report(artifact: dict[str, Any]) -> str:
         "",
         "Descriptively, this matches the first decision pattern: hard argmax retains nearly all "
         "BLEU, routing is strongly token- and role-differentiated, the soft matrices lie near "
-        "individual D4 forms, and gate/router interventions matter on every seed. Exact "
-        "analogy-equivalent routing therefore remains a live direction for a later comparison "
-        "with random permutation families and generic local mixers. Those comparisons are not "
-        "implemented here.",
+        "individual D4 forms, and effective gate/router interventions matter on every seed. "
+        "This is evidence for a near-discrete, token- and role-conditioned D4 routing component. "
+        "It does not make the whole role transform exactly D4: under hard argmax the D4-only "
+        "role is `diag(scale)[(1-g)I + gP]z`, while the combined role also contains a learned "
+        "magnitude. The full transform is therefore not shown to lie exactly in an "
+        "analogy-preserving `D4 × R+` orbit. Exact D4 routing remains a live direction for a "
+        "later comparison with random permutation families and generic local mixers. Those "
+        "comparisons are not implemented here.",
         "",
         "The combined checkpoints also rely heavily on their learned magnitudes, but the "
         "factorial screen did not show a useful combined-model advantage. Checkpoint reliance "

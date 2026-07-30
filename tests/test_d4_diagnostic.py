@@ -300,6 +300,34 @@ def test_reproduction_guard_rejects_a_mismatched_score() -> None:
         require_reproduction(40.0, 40.051)
 
 
+@pytest.mark.parametrize(
+    ("stored", "observed"),
+    [
+        (math.nan, 40.0),
+        (40.0, math.nan),
+        (math.inf, 40.0),
+        (40.0, -math.inf),
+    ],
+)
+def test_reproduction_guard_rejects_non_finite_scores(stored: float, observed: float) -> None:
+    with pytest.raises(ValueError, match="must be finite"):
+        require_reproduction(stored, observed)
+
+
+def test_artifact_validation_rejects_non_finite_reported_values() -> None:
+    artifact = build_artifact(_checkpoints(), "analysis123", "source123")
+
+    non_finite_intervention = copy.deepcopy(artifact)
+    non_finite_intervention["checkpoints"][0]["interventions"][0]["development_bleu"] = math.nan
+    with pytest.raises(ValueError, match="non-finite"):
+        validate_artifact(non_finite_intervention)
+
+    non_finite_statistic = copy.deepcopy(artifact)
+    non_finite_statistic["checkpoints"][0]["modules"][0]["gate_strength"] = math.inf
+    with pytest.raises(ValueError, match="non-finite"):
+        validate_artifact(non_finite_statistic)
+
+
 def test_json_and_markdown_generation_are_deterministic() -> None:
     first = build_artifact(_checkpoints(), "analysis123", "source123")
     second = build_artifact(_checkpoints(), "analysis123", "source123")
