@@ -113,9 +113,15 @@ def _sample_standard_deviation(values: list[float]) -> float:
 class _ModuleAccumulator:
     """Online sufficient statistics for one encoder-layer role."""
 
-    def __init__(self, permutations: Tensor, has_magnitude: bool) -> None:
+    def __init__(
+        self,
+        permutations: Tensor,
+        has_magnitude: bool,
+        distance_key: str = "nearest_d4_distance",
+    ) -> None:
         self.permutations = permutations.detach()
         self.has_magnitude = has_magnitude
+        self.distance_key = distance_key
         self.count = 0
         self.sum_probabilities = torch.zeros(N_PERMUTATIONS, dtype=torch.float64)
         self.sum_entropy = 0.0
@@ -172,7 +178,7 @@ class _ModuleAccumulator:
             "effective_number_of_routes": self.sum_effective / self.count,
             "identity_probability": float(mean_probabilities[0]),
             "mean_route_distribution": mean_probabilities.tolist(),
-            "nearest_d4_distance": self.sum_nearest_distance / self.count,
+            self.distance_key: self.sum_nearest_distance / self.count,
             "token_conditioned_routing_variation": max(
                 0.0,
                 (entropy_of_mean - mean_entropy) / math.log(N_PERMUTATIONS),
@@ -219,10 +225,10 @@ class _RoleDifferentiationAccumulator:
         return self.sum_divergence / self.count
 
 
-def labeled_encoder_d4_roles(
+def labeled_encoder_permutation_roles(
     model: Seq2SeqTransformer,
 ) -> list[tuple[int, str, D4RoleTransform]]:
-    """Return every encoder layer and Q/K/V D4 role exactly once, in fixed order."""
+    """Return every encoder layer and Q/K/V permutation role once, in fixed order."""
     labeled = []
     for layer_index, layer in enumerate(model.encoder, start=1):
         projection = layer.self_attention.projection
@@ -235,7 +241,9 @@ def labeled_encoder_d4_roles(
         ):
             module = getattr(projection, attribute)
             if not isinstance(module, D4RoleTransform):
-                raise ValueError(f"encoder layer {layer_index} role {role} is not a D4 router")
+                raise ValueError(
+                    f"encoder layer {layer_index} role {role} is not a permutation router"
+                )
             if module.grouping is not FEATURE:
                 raise ValueError(
                     f"encoder layer {layer_index} role {role} is not routed per source token"
@@ -245,25 +253,41 @@ def labeled_encoder_d4_roles(
     expected = set(product(range(1, model.config.n_encoder_layers + 1), ROLES))
     observed = {(layer, role) for layer, role, _ in labeled}
     if observed != expected or len(labeled) != len(expected):
-        raise ValueError(f"D4 module labels are incomplete or duplicated: {sorted(observed)}")
+        raise ValueError(
+            f"permutation module labels are incomplete or duplicated: {sorted(observed)}"
+        )
 
     every_d4 = {module for module in model.modules() if isinstance(module, D4RoleTransform)}
     labeled_modules = {module for _, _, module in labeled}
     if every_d4 != labeled_modules:
-        raise ValueError("the checkpoint contains D4 modules outside the labeled encoder roles")
+        raise ValueError(
+            "the checkpoint contains permutation modules outside the labeled encoder roles"
+        )
     return labeled
+
+
+def labeled_encoder_d4_roles(
+    model: Seq2SeqTransformer,
+) -> list[tuple[int, str, D4RoleTransform]]:
+    """Backward-compatible D4 diagnostic name for the generic family-aware labeler."""
+    return labeled_encoder_permutation_roles(model)
 
 
 class RouterStatisticsCollector:
     """Forward hooks that retain sufficient statistics, not activation dumps."""
 
-    def __init__(self, model: Seq2SeqTransformer) -> None:
+    def __init__(
+        self,
+        model: Seq2SeqTransformer,
+        distance_key: str = "nearest_d4_distance",
+    ) -> None:
         self.model = model
-        self.labeled = labeled_encoder_d4_roles(model)
+        self.labeled = labeled_encoder_permutation_roles(model)
         self.modules = {
             (layer, role): _ModuleAccumulator(
                 module.permutations,
                 isinstance(module, D4Mixing),
+                distance_key,
             )
             for layer, role, module in self.labeled
         }
@@ -331,11 +355,12 @@ def collect_router_statistics(
     encoded_development: list[tuple[list[int], list[int]]],
     batch_size: int,
     device: torch.device,
+    distance_key: str = "nearest_d4_distance",
 ) -> list[dict[str, Any]]:
     """Collect Part A statistics over real source tokens only."""
     model.eval()
     batches = fixed_batches(encoded_development, batch_size, model.config.pad_id)
-    collector = RouterStatisticsCollector(model)
+    collector = RouterStatisticsCollector(model, distance_key)
     with collector:
         for batch in batches:
             model.encode(batch.source_ids.to(device), batch.source_mask.to(device))

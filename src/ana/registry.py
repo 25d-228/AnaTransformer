@@ -66,7 +66,16 @@ from dataclasses import dataclass, replace
 from ana.config import ALL_SITES, ENCODER_ONLY, ModelConfig, Site
 from ana.model import Seq2SeqTransformer
 from ana.nn.attention import MultiHeadAttention
-from ana.nn.grouping import FEATURE, FEATURE_PER_GROUP, SEQUENCE, Grouping
+from ana.nn.grouping import (
+    FEATURE,
+    FEATURE_PER_GROUP,
+    PERM_CONTROL_A,
+    PERM_CONTROL_B,
+    PERM_CONTROL_C,
+    SEQUENCE,
+    Grouping,
+    PermutationFamily,
+)
 from ana.nn.projection import SeparateQKV, SharedQKV
 from ana.nn.roles import (
     D4Mixing,
@@ -91,12 +100,15 @@ class ModelSpec:
     mixer: Mixer | None = None
     grouping: Grouping | None = None
     sites: frozenset[Site] = ALL_SITES
+    permutations: PermutationFamily | None = None
 
     def __post_init__(self) -> None:
         if self.mixer is None:
             return
         if self.grouping is None:
             raise ValueError(f"{self.name}: a mixer needs a grouping")
+        if self.permutations is not None and self.mixer is not D4MixingWithoutMagnitude:
+            raise ValueError(f"{self.name}: a fixed family requires the permutation-only mixer")
         if not self.grouping.moves_information_between_positions:
             return
         illegal = {site for site in self.sites if not site.query_stream_is_complete}
@@ -148,6 +160,36 @@ REGISTRY: dict[str, ModelSpec] = {
             mixer=D4MixingWithoutMagnitude,
             grouping=FEATURE,
             sites=ENCODER_ONLY,
+        ),
+        ModelSpec(
+            name="perm_ctrl_a_enc",
+            purpose="cycle-type-matched non-closed permutation family A; the first fixed "
+            "family-specificity control for ana_d4_enc",
+            shared=True,
+            mixer=D4MixingWithoutMagnitude,
+            grouping=FEATURE,
+            sites=ENCODER_ONLY,
+            permutations=PERM_CONTROL_A,
+        ),
+        ModelSpec(
+            name="perm_ctrl_b_enc",
+            purpose="cycle-type-matched non-closed permutation family B; the second fixed "
+            "family-specificity control for ana_d4_enc",
+            shared=True,
+            mixer=D4MixingWithoutMagnitude,
+            grouping=FEATURE,
+            sites=ENCODER_ONLY,
+            permutations=PERM_CONTROL_B,
+        ),
+        ModelSpec(
+            name="perm_ctrl_c_enc",
+            purpose="cycle-type-matched non-closed permutation family C; the third fixed "
+            "family-specificity control for ana_d4_enc",
+            shared=True,
+            mixer=D4MixingWithoutMagnitude,
+            grouping=FEATURE,
+            sites=ENCODER_ONLY,
+            permutations=PERM_CONTROL_C,
         ),
         ModelSpec(
             name="ana_seq_enc",
@@ -320,6 +362,12 @@ def _attention_factory(
 
             def role(d_model: int) -> RoleTransform:
                 if mixes_here:
+                    if spec.permutations is not None:
+                        return spec.mixer(
+                            d_model,
+                            spec.grouping,
+                            permutations=spec.permutations,
+                        )
                     return spec.mixer(d_model, spec.grouping)
                 # Where the mixing does not run, fall back to the diagonal, not to the
                 # identity. The identity would make the query, key and value streams the

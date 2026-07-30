@@ -32,12 +32,14 @@ from torch import Tensor
 
 GROUP_SIZE = 4
 N_PERMUTATIONS = 8
+Permutation = tuple[int, int, int, int]
+PermutationFamily = tuple[Permutation, ...]
 
 # The eight permutations that Lepage gives for the equivalent forms of an analogy
 # a:b::c:d. Read each row as a gather: output slot j takes input slot row[j].
 # They are closed under composition and form the dihedral group of order eight,
 # which is checked below at import time.
-D4_PERMUTATIONS: tuple[tuple[int, ...], ...] = (
+D4_PERMUTATIONS: PermutationFamily = (
     (0, 1, 2, 3),  # a:b::c:d   identity
     (0, 2, 1, 3),  # a:c::b:d   exchange the means
     (3, 2, 1, 0),  # d:c::b:a
@@ -48,8 +50,48 @@ D4_PERMUTATIONS: tuple[tuple[int, ...], ...] = (
     (3, 1, 2, 0),  # d:b::c:a
 )
 
+PERM_CONTROL_A: PermutationFamily = (
+    (0, 1, 2, 3),
+    (0, 1, 3, 2),
+    (0, 3, 2, 1),
+    (1, 0, 3, 2),
+    (1, 2, 3, 0),
+    (2, 3, 0, 1),
+    (2, 3, 1, 0),
+    (3, 2, 1, 0),
+)
 
-def _is_closed_group(perms: tuple[tuple[int, ...], ...]) -> bool:
+PERM_CONTROL_B: PermutationFamily = (
+    (0, 1, 2, 3),
+    (0, 1, 3, 2),
+    (0, 3, 2, 1),
+    (1, 0, 3, 2),
+    (2, 3, 0, 1),
+    (3, 0, 1, 2),
+    (3, 2, 0, 1),
+    (3, 2, 1, 0),
+)
+
+PERM_CONTROL_C: PermutationFamily = (
+    (0, 1, 2, 3),
+    (1, 0, 2, 3),
+    (1, 0, 3, 2),
+    (1, 2, 3, 0),
+    (2, 1, 0, 3),
+    (2, 3, 0, 1),
+    (3, 2, 0, 1),
+    (3, 2, 1, 0),
+)
+
+PERMUTATION_FAMILIES: dict[str, PermutationFamily] = {
+    "ana_d4_enc": D4_PERMUTATIONS,
+    "perm_ctrl_a_enc": PERM_CONTROL_A,
+    "perm_ctrl_b_enc": PERM_CONTROL_B,
+    "perm_ctrl_c_enc": PERM_CONTROL_C,
+}
+
+
+def _is_closed_group(perms: PermutationFamily) -> bool:
     members = set(perms)
     for p in perms:
         for q in perms:
@@ -61,15 +103,19 @@ def _is_closed_group(perms: tuple[tuple[int, ...], ...]) -> bool:
 assert _is_closed_group(D4_PERMUTATIONS), "the eight forms are not a closed group"
 
 
-def permutation_matrices() -> Tensor:
+def permutation_matrices(permutations: PermutationFamily = D4_PERMUTATIONS) -> Tensor:
     """The eight permutations as (8, 4, 4) matrices, so a blend of them is one matmul.
 
     A convex combination of permutation matrices is doubly stochastic: every row and
     every column sums to one. That is the whole reason a softmax over these eight is
     a meaningful operator and not just a shuffle.
     """
+    if len(permutations) != N_PERMUTATIONS:
+        raise ValueError(f"a permutation family must contain {N_PERMUTATIONS} members")
     matrices = torch.zeros(N_PERMUTATIONS, GROUP_SIZE, GROUP_SIZE)
-    for c, perm in enumerate(D4_PERMUTATIONS):
+    for c, perm in enumerate(permutations):
+        if tuple(sorted(perm)) != tuple(range(GROUP_SIZE)):
+            raise ValueError(f"family member {perm!r} is not a permutation of four positions")
         for j, i in enumerate(perm):
             matrices[c, j, i] = 1.0
     return matrices

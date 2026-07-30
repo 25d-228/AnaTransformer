@@ -19,10 +19,12 @@ import torch.nn.functional as F
 from torch import Tensor, nn
 
 from ana.nn.grouping import (
+    D4_PERMUTATIONS,
     GROUP_SIZE,
     N_PERMUTATIONS,
     Grouping,
     PerGroupFeatureGrouping,
+    PermutationFamily,
     permutation_matrices,
 )
 
@@ -251,7 +253,13 @@ class D4MixingWithoutMagnitude(D4RoleTransform):
         role = scale * (z + sigmoid(gate) * (mix_D4(z, router(z)) - z))
     """
 
-    def __init__(self, d_model: int, grouping: Grouping, gate_init: float = -2.0) -> None:
+    def __init__(
+        self,
+        d_model: int,
+        grouping: Grouping,
+        gate_init: float = -2.0,
+        permutations: PermutationFamily = D4_PERMUTATIONS,
+    ) -> None:
         super().__init__()
         if d_model % GROUP_SIZE:
             raise ValueError(f"d_model {d_model} is not divisible by the group size {GROUP_SIZE}")
@@ -262,7 +270,7 @@ class D4MixingWithoutMagnitude(D4RoleTransform):
         self.router = nn.Linear(width, N_PERMUTATIONS)
         self.gate = nn.Parameter(torch.tensor(float(gate_init)))
         self.scale = nn.Parameter(torch.ones(d_model))
-        self.register_buffer("permutations", permutation_matrices(), persistent=False)
+        self.register_buffer("permutations", permutation_matrices(permutations), persistent=False)
         self.reset_role_parameters()
 
     @staticmethod
