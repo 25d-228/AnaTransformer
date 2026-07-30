@@ -94,6 +94,17 @@ class Corpus(ABC):
     def load(self) -> dict[str, list[Example]]:
         """Returns splits named `train`, `dev` and `test`, and any others it wants scored."""
 
+    def load_split(self, split: str) -> list[Example]:
+        """Load one named split.
+
+        Corpus-wide training preparation still uses `load()`. Evaluation-only diagnostics use
+        this narrower interface so a development-only study need not read the test set.
+        """
+        splits = self.load()
+        if split not in splits:
+            raise ValueError(f"{self.name} has no split {split!r}")
+        return splits[split]
+
     @property
     def metric(self) -> Metric:
         return Bleu()

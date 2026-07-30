@@ -60,6 +60,11 @@ class LineAligned(Corpus):
     def load(self) -> dict[str, list[Example]]:
         return {split: self._read(split) for split in ("train", "dev", "test")}
 
+    def load_split(self, split: str) -> list[Example]:
+        if split not in ("train", "dev", "test"):
+            raise ValueError(f"{self.name} has no split {split!r}")
+        return self._read(split)
+
 
 class Multi30k(LineAligned):
     """Image captions: 29,000 pairs, English into German. The smallest of the three.
@@ -302,6 +307,17 @@ class Cogs(Corpus):
             "test": self._read("test.tsv"),
             "gen": self._read("gen.tsv"),
         }
+
+    def load_split(self, split: str) -> list[Example]:
+        filenames = {
+            "train": "train.tsv",
+            "dev": "dev.tsv",
+            "test": "test.tsv",
+            "gen": "gen.tsv",
+        }
+        if split not in filenames:
+            raise ValueError(f"{self.name} has no split {split!r}")
+        return self._read(filenames[split])
 
 
 CORPORA: dict[str, type[Corpus]] = {
