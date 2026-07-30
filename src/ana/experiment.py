@@ -29,7 +29,7 @@ from ana.registry import (
     config_for,
     count_parameters,
 )
-from ana.trainer import fixed_batches, train
+from ana.trainer import fixed_batches, set_seed, train
 
 SMOKE_STEPS = 30
 SMOKE_EXAMPLES = 200
@@ -128,6 +128,11 @@ def run_cell(
 ) -> dict:
     if device is None:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    # The declared seed owns the initial parameters as well as the training stream. Keep the
+    # second reset in `train()`: model construction consumes a different amount of randomness
+    # across architectures, while training must begin from the same RNG state for every model.
+    set_seed(train_config.seed)
 
     corpus = build_corpus(corpus_name)
     tokenizer, splits = prepare(corpus, smoke)
@@ -261,6 +266,7 @@ def run_cell(
         "seconds": round(outcome.seconds, 1),
         "manifest": {
             "seed": train_config.seed,
+            "seeded_before_model_init": True,
             "git_commit": git_commit(),
             "train_config": asdict(train_config),
             "model_config": asdict(shape),
