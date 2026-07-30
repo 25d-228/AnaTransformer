@@ -125,6 +125,8 @@ def run_cell(
     output_dir: str = "runs",
     smoke: bool = False,
     device: torch.device | None = None,
+    study_id: str | None = None,
+    score_dev: bool = False,
 ) -> dict:
     if device is None:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -190,7 +192,7 @@ def run_cell(
     scores: dict[str, float] = {}
     hypotheses: dict[str, list[str]] = {}
     for split in splits:
-        if split in ("train", "dev"):
+        if split == "train" or (split == "dev" and not score_dev):
             continue
         value, generated = score_split(
             model,
@@ -267,10 +269,12 @@ def run_cell(
         "manifest": {
             "seed": train_config.seed,
             "seeded_before_model_init": True,
+            "study_id": study_id,
             "git_commit": git_commit(),
             "train_config": asdict(train_config),
             "model_config": asdict(shape),
             "smoke": smoke,
+            "score_dev": score_dev,
             "device": str(device),
             "python": platform.python_version(),
             "torch": torch.__version__,

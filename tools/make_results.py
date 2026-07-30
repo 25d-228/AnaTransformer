@@ -30,7 +30,7 @@ import statistics as st
 
 from ana.cli.__main__ import DEFAULT_SEEDS
 from ana.data.corpora import CORPORA, build_corpus
-from ana.registry import REGISTRY
+from ana.registry import PILOT_MODELS
 from ana.stats import across_seed_test, bootstrap_score, paired_bootstrap
 
 RUNS = "runs"
@@ -147,7 +147,7 @@ def write(corpus: str) -> str | None:
     seeds = [int(s) for s in DEFAULT_SEEDS[corpus].split(",")]
     seeded = len(seeds) > 1
 
-    runs = {m: {s: cell(corpus, m, s) for s in seeds} for m in REGISTRY}
+    runs = {m: {s: cell(corpus, m, s) for s in seeds} for m in PILOT_MODELS}
     runs = {m: {s: r for s, r in d.items() if r} for m, d in runs.items()}
 
     # Only a model with every one of its seeds gets a score. A mean drawn from fewer runs than the
@@ -175,7 +175,7 @@ def write(corpus: str) -> str | None:
     out.append("| " + " | ".join(head) + " |")
     out.append("|" + "---|" * len(head))
 
-    for m in REGISTRY:
+    for m in PILOT_MODELS:
         params, saved = shape(corpus, m)
         row = [f"`{m}`", f"{params:.2f}M", f"{saved:.1%}"]
         for split in splits:
@@ -194,14 +194,14 @@ def write(corpus: str) -> str | None:
                     row.append(f"{values[0]:.2f}")
         out.append("| " + " | ".join(row) + " |")
 
-    ana = [m for m in REGISTRY if m.startswith("ana_")]
+    ana = [m for m in PILOT_MODELS if m.startswith("ana_")]
     shared_params = shape(corpus, SHARED)[0]
     spread = max(abs(shape(corpus, m)[0] - shared_params) for m in ana) / shared_params
 
     out += comparisons(
         corpus,
         BASELINE,
-        list(REGISTRY),
+        list(PILOT_MODELS),
         complete,
         seeds,
         splits,

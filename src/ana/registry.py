@@ -1,4 +1,4 @@
-"""The eight models, held as data rather than as a hierarchy of classes.
+"""The registered models, held as data rather than as a hierarchy of classes.
 
 Read from `shared_qkv` downwards. Its per-role operator is a diagonal. The `ana_*` operator
 replaces that diagonal with a routed blend over the eight permutations of D4, and then the
@@ -9,6 +9,8 @@ attention sites the operator runs.
     baseline           an ordinary transformer, in the corpus's published configuration
     baseline_matched   the same transformer, narrowed until it is the size of the shared ones
     shared_qkv         Kowsher et al. 2024: one projection, a diagonal per role. PRIOR WORK.
+    ana_mag_enc        factorial ablation: input-dependent magnitude, no D4 router
+    ana_d4_enc         factorial ablation: routed D4 mixer, magnitude fixed to one
     ana_seq_enc        ours: cuts 4 tokens,   routed per token-GROUP
     ana_feat_enc       ours: cuts 4 channels, routed per TOKEN
     ana_feat_1_enc     ours: cuts 4 channels, routed per channel-GROUP
@@ -66,7 +68,14 @@ from ana.model import Seq2SeqTransformer
 from ana.nn.attention import MultiHeadAttention
 from ana.nn.grouping import FEATURE, FEATURE_PER_GROUP, SEQUENCE, Grouping
 from ana.nn.projection import SeparateQKV, SharedQKV
-from ana.nn.roles import D4Mixing, D4MixingPowered, DiagonalRescale, RoleTransform
+from ana.nn.roles import (
+    D4Mixing,
+    D4MixingPowered,
+    D4MixingWithoutMagnitude,
+    DiagonalRescale,
+    DynamicMagnification,
+    RoleTransform,
+)
 
 Mixer = Callable[[int, Grouping], RoleTransform]
 
@@ -123,6 +132,24 @@ REGISTRY: dict[str, ModelSpec] = {
             shared=True,
         ),
         ModelSpec(
+            name="ana_mag_enc",
+            purpose="the input-dependent positive magnifier without D4 mixing; the magnitude-only "
+            "cell in the Multi30k factorial screen",
+            shared=True,
+            mixer=DynamicMagnification,
+            grouping=FEATURE,
+            sites=ENCODER_ONLY,
+        ),
+        ModelSpec(
+            name="ana_d4_enc",
+            purpose="the routed D4 mixer with magnitude fixed to one; the D4-only cell in the "
+            "Multi30k factorial screen",
+            shared=True,
+            mixer=D4MixingWithoutMagnitude,
+            grouping=FEATURE,
+            sites=ENCODER_ONLY,
+        ),
+        ModelSpec(
             name="ana_seq_enc",
             purpose="mixing routed over the eight forms, four tokens at a time",
             shared=True,
@@ -169,6 +196,20 @@ REGISTRY: dict[str, ModelSpec] = {
         ),
     ]
 }
+
+# The original completed grid remains frozen. The two factorial ablations are registered through
+# the same construction and parameter-counting paths, but `ana run` must not silently add them to
+# COGS or IWSLT when their preregistered scope is Multi30k only.
+PILOT_MODELS = (
+    "baseline",
+    "baseline_matched",
+    "shared_qkv",
+    "ana_seq_enc",
+    "ana_feat_enc",
+    "ana_feat_1_enc",
+    "ana_feat_2_enc",
+    "ana_feat_all",
+)
 
 
 def baseline_parameters(config: ModelConfig) -> int:

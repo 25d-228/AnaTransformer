@@ -53,7 +53,11 @@ from ana import recipes
 from ana.config import TrainConfig
 from ana.data.corpora import CORPORA, build_corpus
 from ana.experiment import run_cell
-from ana.registry import REGISTRY
+from ana.factorial import CORPUS as FACTORIAL_CORPUS
+from ana.factorial import MODELS as FACTORIAL_MODELS
+from ana.factorial import SEEDS as FACTORIAL_SEEDS
+from ana.factorial import STUDY_ID as FACTORIAL_STUDY_ID
+from ana.registry import PILOT_MODELS, REGISTRY
 from ana.stats import across_seed_test, bootstrap_score, paired_bootstrap
 
 # One run, at the rate the paper used. The recipe comes from the paper, so there is nothing to
@@ -120,7 +124,15 @@ def _train(args: argparse.Namespace) -> None:
     out = os.path.join(args.out, "smoke") if args.smoke and args.out == "runs" else args.out
 
     for name in models:
-        record = run_cell(name, args.corpus, config, out, smoke=args.smoke)
+        record = run_cell(
+            name,
+            args.corpus,
+            config,
+            out,
+            smoke=args.smoke,
+            study_id=args.study_id,
+            score_dev=args.score_dev,
+        )
         scores = "  ".join(f"{k} {v:.2f}" for k, v in record["scores"].items())
         print(
             f"{record['corpus']:10} {record['model']:18} seed {record['manifest']['seed']}  "
@@ -131,7 +143,7 @@ def _train(args: argparse.Namespace) -> None:
         )
 
 
-def _shard(jobs: list[str], gpus: int, tag: str, dry_run: bool) -> None:
+def _shard(jobs: list[str], gpus: int | list[int], tag: str, dry_run: bool) -> None:
     """One run per card at a time.
 
     Runs are independent, so there is nothing to coordinate: split the list, give each card its
@@ -144,8 +156,9 @@ def _shard(jobs: list[str], gpus: int, tag: str, dry_run: bool) -> None:
         return
 
     os.makedirs("logs", exist_ok=True)
-    for gpu in range(gpus):
-        shard = jobs[gpu::gpus]
+    gpu_ids = list(range(gpus)) if isinstance(gpus, int) else gpus
+    for position, gpu in enumerate(gpu_ids):
+        shard = jobs[position :: len(gpu_ids)]
         if not shard:
             continue
         script = f"logs/{tag}_gpu{gpu}.sh"
@@ -382,7 +395,7 @@ def _run(args: argparse.Namespace) -> None:
     seeds = [int(s) for s in (args.seeds or DEFAULT_SEEDS.get(args.corpus, "42")).split(",")]
     jobs = []
     for seed in seeds:
-        for model in REGISTRY:
+        for model in PILOT_MODELS:
             if os.path.exists(
                 os.path.join(args.out, f"{args.corpus}_{model}_seed{seed}", "results.json")
             ):
@@ -392,14 +405,50 @@ def _run(args: argparse.Namespace) -> None:
                 f"--corpus {args.corpus} --seed {seed} --out {args.out}"
             )
 
-    total = len(seeds) * len(REGISTRY)
+    total = len(seeds) * len(PILOT_MODELS)
     print(
-        f"{args.corpus}: {len(REGISTRY)} models x {len(seeds)} seed(s) {seeds} = {total} runs, "
+        f"{args.corpus}: {len(PILOT_MODELS)} models x {len(seeds)} seed(s) {seeds} = {total} runs, "
         f"{len(jobs)} still to do\n"
     )
     _shard(jobs, args.gpus, f"run_{args.corpus}", args.dry_run)
     if jobs and not args.dry_run:
         print("then:  ana report")
+
+
+def _factorial(args: argparse.Namespace) -> None:
+    """Launch only the fifteen preregistered cells, under an isolated study namespace."""
+    recipe = _recipe(FACTORIAL_CORPUS)
+    if not recipe.verified:
+        raise SystemExit(
+            f"{FACTORIAL_CORPUS} has no confirmed recipe; the factorial screen cannot start"
+        )
+
+    jobs = []
+    for seed in FACTORIAL_SEEDS:
+        for model in FACTORIAL_MODELS:
+            done = os.path.join(args.out, f"{FACTORIAL_CORPUS}_{model}_seed{seed}", "results.json")
+            if os.path.exists(done):
+                continue
+            jobs.append(
+                f"{args.python} -m ana.cli.__main__ train --model {model} "
+                f"--corpus {FACTORIAL_CORPUS} --seed {seed} --out {args.out} "
+                f"--study-id {FACTORIAL_STUDY_ID} --score-dev"
+            )
+
+    gpu_ids = (
+        [int(value) for value in args.gpu_ids.split(",")]
+        if args.gpu_ids
+        else list(range(args.gpus))
+    )
+    if not gpu_ids or len(gpu_ids) != len(set(gpu_ids)) or min(gpu_ids) < 0:
+        raise SystemExit("--gpu-ids must be a non-empty comma-separated list of unique integers")
+
+    total = len(FACTORIAL_MODELS) * len(FACTORIAL_SEEDS)
+    print(
+        f"{FACTORIAL_STUDY_ID}: {len(FACTORIAL_MODELS)} models x "
+        f"{len(FACTORIAL_SEEDS)} seeds = {total} runs, {len(jobs)} still to do\n"
+    )
+    _shard(jobs, gpu_ids, FACTORIAL_STUDY_ID, args.dry_run)
 
 
 def _report(args: argparse.Namespace) -> None:
@@ -520,9 +569,7 @@ def _across_seed_block(models, splits, seeds, against) -> None:
             )
             printed += 1
 
-    print(
-        f"\n  {printed} comparisons, over {len(seeds)} seeds, uncorrected for multiplicity."
-    )
+    print(f"\n  {printed} comparisons, over {len(seeds)} seeds, uncorrected for multiplicity.")
 
 
 def _bootstrap_block(corpus, models, splits, seed, against, out) -> None:
@@ -622,7 +669,7 @@ def main() -> None:
             "the study, in order:\n\n"
             "  ana tune --corpus cogs             check the published recipe       (1 run)\n"
             "  ana tune --corpus cogs --report    check the baseline, write the recipe\n"
-            "  ana run  --corpus cogs             all 6 models, all 5 seeds       (30 runs)\n"
+            "  ana run  --corpus cogs             all 8 pilot models, all 5 seeds (40 runs)\n"
             "  ana report                         the comparison\n\n"
             "repeat tune and run for multi30k and iwslt14. Nothing needs the network, and a\n"
             "machine that dies part way through can be restarted: finished cells are skipped.\n\n"
@@ -659,6 +706,23 @@ def main() -> None:
     run.add_argument("--force", action="store_true", help="run without a confirmed recipe")
     run.set_defaults(handler=_run)
 
+    factorial = sub.add_parser(
+        "factorial",
+        help="run the preregistered 15-cell Multi30k magnitude x D4 screen",
+    )
+    factorial.add_argument("--gpus", type=int, default=1)
+    factorial.add_argument(
+        "--gpu-ids",
+        default=None,
+        help="specific visible GPU indices, comma-separated; overrides --gpus",
+    )
+    factorial.add_argument("--out", default=f"runs/{FACTORIAL_STUDY_ID}")
+    factorial.add_argument("--python", default="python3")
+    factorial.add_argument(
+        "--dry-run", action="store_true", help="write the scripts, start nothing"
+    )
+    factorial.set_defaults(handler=_factorial)
+
     report = sub.add_parser("report", help="[3] read the runs and print the comparison")
     report.add_argument("--out", default="runs")
     report.add_argument(
@@ -681,6 +745,14 @@ def main() -> None:
     train.add_argument("--warmup", type=int, default=None, help="overrides the recipe")
     train.add_argument("--out", default="runs")
     train.add_argument("--smoke", action="store_true", help="tiny model, 30 steps")
+    train.add_argument(
+        "--study-id", default=None, help="provenance namespace written to the record"
+    )
+    train.add_argument(
+        "--score-dev",
+        action="store_true",
+        help="decode and score the development split as well as outcome splits",
+    )
     train.set_defaults(handler=_train)
 
     args = parser.parse_args()

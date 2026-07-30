@@ -40,6 +40,8 @@ def _run_and_capture(
         output_dir=str(tmp_path / f"seed{seed}"),
         smoke=True,
         device=torch.device("cpu"),
+        study_id="seed_test",
+        score_dev=True,
     )
     return initial, record
 
@@ -53,3 +55,6 @@ def test_run_cell_seeds_model_initialisation_and_marks_the_record(tmp_path, monk
     assert all(torch.equal(first[name], second[name]) for name in first)
     assert any(not torch.equal(first[name], different[name]) for name in first)
     assert record["manifest"]["seeded_before_model_init"] is True
+    assert record["manifest"]["study_id"] == "seed_test"
+    assert record["manifest"]["score_dev"] is True
+    assert set(record["scores"]) == {"dev", "test"}
