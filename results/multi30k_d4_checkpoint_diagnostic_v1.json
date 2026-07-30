@@ -1,0 +1,3338 @@
+{
+  "aggregates": {
+    "interventions_across_seeds": [
+      {
+        "condition": "original",
+        "mean_development_bleu": 39.3619779436411,
+        "mean_difference_from_original": 0.0,
+        "model": "ana_d4_enc",
+        "paired_differences_from_original": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "sample_standard_deviation_development_bleu": 0.5692751303215932
+      },
+      {
+        "condition": "gate_zero",
+        "mean_development_bleu": 37.199648188960715,
+        "mean_difference_from_original": -2.1623297546803855,
+        "model": "ana_d4_enc",
+        "paired_differences_from_original": [
+          -3.0850948812702654,
+          -1.147164766975969,
+          -2.254729615794922
+        ],
+        "sample_standard_deviation_development_bleu": 0.9419816298868179
+      },
+      {
+        "condition": "uniform_router",
+        "mean_development_bleu": 38.02608483829822,
+        "mean_difference_from_original": -1.3358931053428833,
+        "model": "ana_d4_enc",
+        "paired_differences_from_original": [
+          -1.503037381646898,
+          -1.1507373291877485,
+          -1.3539046051940034
+        ],
+        "sample_standard_deviation_development_bleu": 0.5336109674304024
+      },
+      {
+        "condition": "identity_router",
+        "mean_development_bleu": 37.199648188960715,
+        "mean_difference_from_original": -2.1623297546803855,
+        "model": "ana_d4_enc",
+        "paired_differences_from_original": [
+          -3.0850948812702654,
+          -1.147164766975969,
+          -2.254729615794922
+        ],
+        "sample_standard_deviation_development_bleu": 0.9419816298868179
+      },
+      {
+        "condition": "hard_argmax",
+        "mean_development_bleu": 39.28175285237351,
+        "mean_difference_from_original": -0.08022509126759066,
+        "model": "ana_d4_enc",
+        "paired_differences_from_original": [
+          -0.0180969913803537,
+          -0.12013473208067893,
+          -0.10244355034173935
+        ],
+        "sample_standard_deviation_development_bleu": 0.5669439759356873
+      },
+      {
+        "condition": "original",
+        "mean_development_bleu": 39.406108555433114,
+        "mean_difference_from_original": 0.0,
+        "model": "ana_feat_enc",
+        "paired_differences_from_original": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "sample_standard_deviation_development_bleu": 0.46922457731712713
+      },
+      {
+        "condition": "gate_zero",
+        "mean_development_bleu": 27.817621735483375,
+        "mean_difference_from_original": -11.588486819949738,
+        "model": "ana_feat_enc",
+        "paired_differences_from_original": [
+          -12.914397114359023,
+          -13.809891086959503,
+          -8.04117225853069
+        ],
+        "sample_standard_deviation_development_bleu": 3.3013360154069837
+      },
+      {
+        "condition": "uniform_router",
+        "mean_development_bleu": 37.22217822661017,
+        "mean_difference_from_original": -2.183930328822946,
+        "model": "ana_feat_enc",
+        "paired_differences_from_original": [
+          -2.537961132519783,
+          -1.7326824951454824,
+          -2.2811473588035724
+        ],
+        "sample_standard_deviation_development_bleu": 0.058220609482670355
+      },
+      {
+        "condition": "identity_router",
+        "mean_development_bleu": 35.69778868102253,
+        "mean_difference_from_original": -3.7083198744105843,
+        "model": "ana_feat_enc",
+        "paired_differences_from_original": [
+          -5.094297323757502,
+          -3.1958614563650585,
+          -2.8348008431091927
+        ],
+        "sample_standard_deviation_development_bleu": 0.9897056987907887
+      },
+      {
+        "condition": "hard_argmax",
+        "mean_development_bleu": 39.338405275669224,
+        "mean_difference_from_original": -0.0677032797638925,
+        "model": "ana_feat_enc",
+        "paired_differences_from_original": [
+          -0.1176695161085135,
+          0.024307950500251252,
+          -0.10974827368341522
+        ],
+        "sample_standard_deviation_development_bleu": 0.3925005839511658
+      },
+      {
+        "condition": "magnitude_one",
+        "mean_development_bleu": 33.79811286201232,
+        "mean_difference_from_original": -5.6079956934208,
+        "model": "ana_feat_enc",
+        "paired_differences_from_original": [
+          -7.3242483010021076,
+          -5.3156450067579115,
+          -4.184093772502379
+        ],
+        "sample_standard_deviation_development_bleu": 1.4432136739393158
+      }
+    ],
+    "modules_across_seeds": [
+      {
+        "effective_number_of_routes": 1.5356955115890967,
+        "gate_strength": 0.4518292148907979,
+        "identity_probability": 0.3158862643335483,
+        "layer": 1,
+        "magnitude": null,
+        "maximum_route_probability": 0.8653237532175415,
+        "mean_route_distribution": [
+          0.3158862643335483,
+          0.10308400373938097,
+          0.09213855868007097,
+          0.04521071886913629,
+          0.10901863667008814,
+          0.08126358244707568,
+          0.10703498958305752,
+          0.1463632460476424
+        ],
+        "model": "ana_d4_enc",
+        "nearest_d4_distance": 0.10065466394474774,
+        "normalized_router_entropy": 0.1683075527818789,
+        "qkv_role_differentiation": 0.8062723200833269,
+        "role": "Q",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.6206428096085397
+      },
+      {
+        "effective_number_of_routes": 1.6183463687873496,
+        "gate_strength": 0.27929188311100006,
+        "identity_probability": 0.21037264971988429,
+        "layer": 1,
+        "magnitude": null,
+        "maximum_route_probability": 0.838343170450995,
+        "mean_route_distribution": [
+          0.21037264971988429,
+          0.14197707467944673,
+          0.05233565214994577,
+          0.12669111936741595,
+          0.029438408397424478,
+          0.21851219557135088,
+          0.13870916538252479,
+          0.08196373504451655
+        ],
+        "model": "ana_d4_enc",
+        "nearest_d4_distance": 0.13357193025688888,
+        "normalized_router_entropy": 0.19818766807134716,
+        "qkv_role_differentiation": 0.8062723200833269,
+        "role": "K",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.6326645789622545
+      },
+      {
+        "effective_number_of_routes": 1.5115338919078534,
+        "gate_strength": 0.744274914264679,
+        "identity_probability": 0.1978790620221497,
+        "layer": 1,
+        "magnitude": null,
+        "maximum_route_probability": 0.8969517833664802,
+        "mean_route_distribution": [
+          0.1978790620221497,
+          0.048145105954887975,
+          0.05838399666478354,
+          0.14375605226615495,
+          0.053948771554621744,
+          0.11449248507260709,
+          0.35788454803204767,
+          0.025509977164670187
+        ],
+        "model": "ana_d4_enc",
+        "nearest_d4_distance": 0.0773802222733182,
+        "normalized_router_entropy": 0.141032044052042,
+        "qkv_role_differentiation": 0.8062723200833269,
+        "role": "V",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.6617624948286385
+      },
+      {
+        "effective_number_of_routes": 1.5110414790758697,
+        "gate_strength": 0.5214947859446207,
+        "identity_probability": 0.052631706971985395,
+        "layer": 2,
+        "magnitude": null,
+        "maximum_route_probability": 0.8631865253208423,
+        "mean_route_distribution": [
+          0.052631706971985395,
+          0.16349115736944886,
+          0.18597898340825003,
+          0.0676623171681554,
+          0.17760389226287054,
+          0.10007928373008697,
+          0.12715203716336043,
+          0.12540062484071302
+        ],
+        "model": "ana_d4_enc",
+        "nearest_d4_distance": 0.11905314630964545,
+        "normalized_router_entropy": 0.164240940574381,
+        "qkv_role_differentiation": 0.8100436118865856,
+        "role": "Q",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.7075063121195955
+      },
+      {
+        "effective_number_of_routes": 1.8080224926569477,
+        "gate_strength": 0.2622769922018051,
+        "identity_probability": 0.1986360327514784,
+        "layer": 2,
+        "magnitude": null,
+        "maximum_route_probability": 0.7805563309886714,
+        "mean_route_distribution": [
+          0.1986360327514784,
+          0.051626546990179156,
+          0.08545416093391764,
+          0.18377576369520052,
+          0.06739054220523245,
+          0.11506450261515344,
+          0.23923645507406235,
+          0.05881599721156192
+        ],
+        "model": "ana_d4_enc",
+        "nearest_d4_distance": 0.18789130608531163,
+        "normalized_router_entropy": 0.2574027491095966,
+        "qkv_role_differentiation": 0.8100436118865856,
+        "role": "K",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.6256294211788772
+      },
+      {
+        "effective_number_of_routes": 1.4838835963668544,
+        "gate_strength": 0.5485022366046906,
+        "identity_probability": 0.07394657521272588,
+        "layer": 2,
+        "magnitude": null,
+        "maximum_route_probability": 0.8898629086703921,
+        "mean_route_distribution": [
+          0.07394657521272588,
+          0.024076573538181545,
+          0.26694464420509695,
+          0.11510652680461077,
+          0.16448341398868782,
+          0.12825736994406833,
+          0.1880226298666314,
+          0.03916226707426867
+        ],
+        "model": "ana_d4_enc",
+        "nearest_d4_distance": 0.08281135582314049,
+        "normalized_router_entropy": 0.1469277521048308,
+        "qkv_role_differentiation": 0.8100436118865856,
+        "role": "V",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.6881522953375373
+      },
+      {
+        "effective_number_of_routes": 1.3266945179526126,
+        "gate_strength": 0.3480127702156703,
+        "identity_probability": 0.08132979432982054,
+        "layer": 3,
+        "magnitude": null,
+        "maximum_route_probability": 0.9160637797062541,
+        "mean_route_distribution": [
+          0.08132979432982054,
+          0.12631195651397542,
+          0.14433603656938956,
+          0.1455224669348491,
+          0.1942721255501928,
+          0.2288649582067813,
+          0.01820112757431047,
+          0.06116153893667746
+        ],
+        "model": "ana_d4_enc",
+        "nearest_d4_distance": 0.060194367138873835,
+        "normalized_router_entropy": 0.10131683356320567,
+        "qkv_role_differentiation": 0.8681887355220546,
+        "role": "Q",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.7100328612892053
+      },
+      {
+        "effective_number_of_routes": 1.349985599246782,
+        "gate_strength": 0.22229393819967905,
+        "identity_probability": 0.23414413359428415,
+        "layer": 3,
+        "magnitude": null,
+        "maximum_route_probability": 0.9021731235319843,
+        "mean_route_distribution": [
+          0.23414413359428415,
+          0.052404814513686955,
+          0.15118194304759386,
+          0.20339793544282558,
+          0.10158433527613198,
+          0.18705682033927165,
+          0.022396749830160427,
+          0.047833272236861846
+        ],
+        "model": "ana_d4_enc",
+        "nearest_d4_distance": 0.0860086000212508,
+        "normalized_router_entropy": 0.1175306895632269,
+        "qkv_role_differentiation": 0.8681887355220546,
+        "role": "K",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.6877932419560318
+      },
+      {
+        "effective_number_of_routes": 1.4845881540698826,
+        "gate_strength": 0.5174551407496134,
+        "identity_probability": 0.04042456073903192,
+        "layer": 3,
+        "magnitude": null,
+        "maximum_route_probability": 0.8746043903383355,
+        "mean_route_distribution": [
+          0.04042456073903192,
+          0.07697272438872875,
+          0.13638771623051163,
+          0.14059684098439823,
+          0.2111771926440948,
+          0.13777228808208594,
+          0.20139852377774048,
+          0.05527015418099367
+        ],
+        "model": "ana_d4_enc",
+        "nearest_d4_distance": 0.09897978047360456,
+        "normalized_router_entropy": 0.15643370823368097,
+        "qkv_role_differentiation": 0.8681887355220546,
+        "role": "V",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.7460919639598771
+      },
+      {
+        "effective_number_of_routes": 1.1165547998562315,
+        "gate_strength": 0.3047260542710622,
+        "identity_probability": 0.09143585641423828,
+        "layer": 4,
+        "magnitude": null,
+        "maximum_route_probability": 0.9673660922621596,
+        "mean_route_distribution": [
+          0.09143585641423828,
+          0.0505564776695598,
+          0.1471798723498634,
+          0.011651881966231547,
+          0.2471766287721877,
+          0.28190082984231246,
+          0.16176991252163223,
+          0.008328542353918653
+        ],
+        "model": "ana_d4_enc",
+        "nearest_d4_distance": 0.02793298564787759,
+        "normalized_router_entropy": 0.04297857910571646,
+        "qkv_role_differentiation": 0.9054003660919896,
+        "role": "Q",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.6080007083681956
+      },
+      {
+        "effective_number_of_routes": 1.1581359615473064,
+        "gate_strength": 0.2684970373908679,
+        "identity_probability": 0.09980445575193603,
+        "layer": 4,
+        "magnitude": null,
+        "maximum_route_probability": 0.9534570369495883,
+        "mean_route_distribution": [
+          0.09980445575193603,
+          0.23397583395792054,
+          0.19039537461675562,
+          0.3059975959162471,
+          0.02869996529412451,
+          0.059073769848894196,
+          0.03352968464019159,
+          0.048523322813132375
+        ],
+        "model": "ana_d4_enc",
+        "nearest_d4_distance": 0.04270723308434682,
+        "normalized_router_entropy": 0.056140300193850856,
+        "qkv_role_differentiation": 0.9054003660919896,
+        "role": "K",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.6508681270205867
+      },
+      {
+        "effective_number_of_routes": 1.3260808612484298,
+        "gate_strength": 0.4868767360846202,
+        "identity_probability": 0.0286543993888272,
+        "layer": 4,
+        "magnitude": null,
+        "maximum_route_probability": 0.9198418137507375,
+        "mean_route_distribution": [
+          0.0286543993888272,
+          0.03928667925515219,
+          0.19838388105380603,
+          0.130493761176749,
+          0.15098842697441897,
+          0.3048117100751865,
+          0.07724234407962216,
+          0.07013879897598496
+        ],
+        "model": "ana_d4_enc",
+        "nearest_d4_distance": 0.06050619941584424,
+        "normalized_router_entropy": 0.10863843616744219,
+        "qkv_role_differentiation": 0.9054003660919896,
+        "role": "V",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.726531392484254
+      },
+      {
+        "effective_number_of_routes": 1.2328190303652256,
+        "gate_strength": 0.4496682087580363,
+        "identity_probability": 0.033395978555181456,
+        "layer": 1,
+        "magnitude": {
+          "mean": 3.624170892650165,
+          "p05": 0.4638440976540248,
+          "p50": 4.637893358866374,
+          "p95": 5.006715297698975,
+          "sample_standard_deviation": 1.6677121509736728
+        },
+        "maximum_route_probability": 0.9334758056937995,
+        "mean_route_distribution": [
+          0.033395978555181456,
+          0.02725175577114335,
+          0.11109098868141114,
+          0.34398360505852915,
+          0.20176728301234226,
+          0.2128930887911313,
+          0.0478378175213338,
+          0.02177949224752561
+        ],
+        "model": "ana_feat_enc",
+        "nearest_d4_distance": 0.05386100746585352,
+        "normalized_router_entropy": 0.08040065118948081,
+        "qkv_role_differentiation": 0.8730767811114257,
+        "role": "Q",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.6278470573917443
+      },
+      {
+        "effective_number_of_routes": 1.4980492248411252,
+        "gate_strength": 0.09664460271596909,
+        "identity_probability": 0.17801673812710103,
+        "layer": 1,
+        "magnitude": {
+          "mean": 2.1604543382515757,
+          "p05": 0.006873214617371559,
+          "p50": 1.0097385073701541,
+          "p95": 5.006715297698975,
+          "sample_standard_deviation": 2.2138324505715756
+        },
+        "maximum_route_probability": 0.8662875176637675,
+        "mean_route_distribution": [
+          0.17801673812710103,
+          0.04807295215325723,
+          0.1350815336776636,
+          0.23860018252197293,
+          0.07401651918861991,
+          0.17281473369745695,
+          0.13149712364065153,
+          0.021900215917559734
+        ],
+        "model": "ana_feat_enc",
+        "nearest_d4_distance": 0.10924650347915259,
+        "normalized_router_entropy": 0.15614633598202413,
+        "qkv_role_differentiation": 0.8730767811114257,
+        "role": "K",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.6435193098191031
+      },
+      {
+        "effective_number_of_routes": 1.1201672503292874,
+        "gate_strength": 0.8891473015149435,
+        "identity_probability": 0.24179383381040756,
+        "layer": 1,
+        "magnitude": {
+          "mean": 0.13064533007430262,
+          "p05": 0.04677678203831116,
+          "p50": 0.11919916421175003,
+          "p95": 0.2634782741467158,
+          "sample_standard_deviation": 0.06477075020762595
+        },
+        "maximum_route_probability": 0.9671411883671304,
+        "mean_route_distribution": [
+          0.24179383381040756,
+          0.0376828712972413,
+          0.039076158249956805,
+          0.06243622385972265,
+          0.22334076023152194,
+          0.26274133275845063,
+          0.11160571732252018,
+          0.021323107604547503
+        ],
+        "model": "ana_feat_enc",
+        "nearest_d4_distance": 0.02634787038724886,
+        "normalized_router_entropy": 0.041656429563327636,
+        "qkv_role_differentiation": 0.8730767811114257,
+        "role": "V",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.7723317433265152
+      },
+      {
+        "effective_number_of_routes": 1.2923238130879993,
+        "gate_strength": 0.339305301507314,
+        "identity_probability": 0.11622101961858755,
+        "layer": 2,
+        "magnitude": {
+          "mean": 3.4323288280780604,
+          "p05": 0.6049122110009193,
+          "p50": 4.293865164120992,
+          "p95": 5.006715297698975,
+          "sample_standard_deviation": 1.647561042194085
+        },
+        "maximum_route_probability": 0.9183803166502915,
+        "mean_route_distribution": [
+          0.11622101961858755,
+          0.07877785696747329,
+          0.18771466781426485,
+          0.21183469146437428,
+          0.09353002411765823,
+          0.12855684871816594,
+          0.1244693319445911,
+          0.05889556316992296
+        ],
+        "model": "ana_feat_enc",
+        "nearest_d4_distance": 0.06491046116403386,
+        "normalized_router_entropy": 0.10050764346470052,
+        "qkv_role_differentiation": 0.8828996262606498,
+        "role": "Q",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.6330940991746405
+      },
+      {
+        "effective_number_of_routes": 1.6183264264235688,
+        "gate_strength": 0.15036273747682571,
+        "identity_probability": 0.22729274506639716,
+        "layer": 2,
+        "magnitude": {
+          "mean": 2.807181570398626,
+          "p05": 0.5459020615865787,
+          "p50": 2.4844926993052163,
+          "p95": 5.006715297698975,
+          "sample_standard_deviation": 1.7634207711749317
+        },
+        "maximum_route_probability": 0.840842991905197,
+        "mean_route_distribution": [
+          0.22729274506639716,
+          0.10910983278304327,
+          0.02323142579395014,
+          0.1253756428451759,
+          0.15816278648651383,
+          0.18911673627544945,
+          0.03427547243683514,
+          0.13343535967882134
+        ],
+        "model": "ana_feat_enc",
+        "nearest_d4_distance": 0.12403958057708679,
+        "normalized_router_entropy": 0.19935088060921366,
+        "qkv_role_differentiation": 0.8828996262606498,
+        "role": "K",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.6336185213738601
+      },
+      {
+        "effective_number_of_routes": 1.4073006472353329,
+        "gate_strength": 0.7669492562611898,
+        "identity_probability": 0.21373897178929022,
+        "layer": 2,
+        "magnitude": {
+          "mean": 0.247519975091443,
+          "p05": 0.10870294546087583,
+          "p50": 0.23015986134608588,
+          "p95": 0.44944684902826926,
+          "sample_standard_deviation": 0.10667517701733874
+        },
+        "maximum_route_probability": 0.9010638993976081,
+        "mean_route_distribution": [
+          0.21373897178929022,
+          0.05649597379187048,
+          0.22117123398495234,
+          0.14502258751170702,
+          0.17727525057254526,
+          0.06115910090949092,
+          0.09228937949030942,
+          0.03284750340166635
+        ],
+        "model": "ana_feat_enc",
+        "nearest_d4_distance": 0.08180388935784523,
+        "normalized_router_entropy": 0.13216619862604675,
+        "qkv_role_differentiation": 0.8828996262606498,
+        "role": "V",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.7391780813314923
+      },
+      {
+        "effective_number_of_routes": 1.1201149262503014,
+        "gate_strength": 0.18745599190394083,
+        "identity_probability": 0.29538886277808263,
+        "layer": 3,
+        "magnitude": {
+          "mean": 3.614260516578259,
+          "p05": 0.846556190152963,
+          "p50": 3.960584203402201,
+          "p95": 5.006715297698975,
+          "sample_standard_deviation": 1.434621129505307
+        },
+        "maximum_route_probability": 0.9661781661064219,
+        "mean_route_distribution": [
+          0.29538886277808263,
+          0.00737121410857609,
+          0.006947092236819017,
+          0.33684769456328795,
+          0.04607022066116947,
+          0.09721084920475713,
+          0.13215215567604904,
+          0.07801191626938905
+        ],
+        "model": "ana_feat_enc",
+        "nearest_d4_distance": 0.02673917542711971,
+        "normalized_router_entropy": 0.04305775794441151,
+        "qkv_role_differentiation": 0.8792726003296047,
+        "role": "Q",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.6517951805855093
+      },
+      {
+        "effective_number_of_routes": 1.249694620396517,
+        "gate_strength": 0.14979061235984167,
+        "identity_probability": 0.1635291259260762,
+        "layer": 3,
+        "magnitude": {
+          "mean": 3.3073600604319497,
+          "p05": 1.1464076618353527,
+          "p50": 3.519887367884318,
+          "p95": 5.006715297698975,
+          "sample_standard_deviation": 1.3229688037248901
+        },
+        "maximum_route_probability": 0.9300215429568552,
+        "mean_route_distribution": [
+          0.1635291259260762,
+          0.11709605256150805,
+          0.3944594359447542,
+          0.06566495582522067,
+          0.11220207871592802,
+          0.026688664990103576,
+          0.10616203906387017,
+          0.014197649304407162
+        ],
+        "model": "ana_feat_enc",
+        "nearest_d4_distance": 0.05857645304668642,
+        "normalized_router_entropy": 0.08701171858572769,
+        "qkv_role_differentiation": 0.8792726003296047,
+        "role": "K",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.6769333178665584
+      },
+      {
+        "effective_number_of_routes": 1.321930416105629,
+        "gate_strength": 0.6916784842809042,
+        "identity_probability": 0.10848998016578924,
+        "layer": 3,
+        "magnitude": {
+          "mean": 0.3974909071277009,
+          "p05": 0.17234659927586715,
+          "p50": 0.3854290892680486,
+          "p95": 0.733770320812861,
+          "sample_standard_deviation": 0.17480919290494096
+        },
+        "maximum_route_probability": 0.9176949120419712,
+        "mean_route_distribution": [
+          0.10848998016578924,
+          0.07078905138809305,
+          0.1777295513885425,
+          0.18699235662266553,
+          0.2331625405016856,
+          0.06132588796036044,
+          0.09409217001439239,
+          0.06741846362529788
+        ],
+        "model": "ana_feat_enc",
+        "nearest_d4_distance": 0.062214471361669056,
+        "normalized_router_entropy": 0.10306198992058004,
+        "qkv_role_differentiation": 0.8792726003296047,
+        "role": "V",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.7707074934701719
+      },
+      {
+        "effective_number_of_routes": 1.3969421045982495,
+        "gate_strength": 0.3774898846944173,
+        "identity_probability": 0.13650785699064608,
+        "layer": 4,
+        "magnitude": {
+          "mean": 3.611513040670342,
+          "p05": 1.4269790266950926,
+          "p50": 3.8704294761021933,
+          "p95": 5.006715297698975,
+          "sample_standard_deviation": 1.1616569005071222
+        },
+        "maximum_route_probability": 0.904966507236792,
+        "mean_route_distribution": [
+          0.13650785699064608,
+          0.12352905307494087,
+          0.12955903390424459,
+          0.15755752755739727,
+          0.1764999506825688,
+          0.05598783050699401,
+          0.12286275668869437,
+          0.09749599235654731
+        ],
+        "model": "ana_feat_enc",
+        "nearest_d4_distance": 0.07803297532655047,
+        "normalized_router_entropy": 0.12446513405955846,
+        "qkv_role_differentiation": 0.868410037525098,
+        "role": "Q",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.6932005012649988
+      },
+      {
+        "effective_number_of_routes": 1.455561153335974,
+        "gate_strength": 0.1571782330671946,
+        "identity_probability": 0.22871833167419725,
+        "layer": 4,
+        "magnitude": {
+          "mean": 2.6580294398750492,
+          "p05": 0.5022074098388354,
+          "p50": 2.744003474712372,
+          "p95": 4.9470269521077475,
+          "sample_standard_deviation": 1.5349569863792443
+        },
+        "maximum_route_probability": 0.8833546355445356,
+        "mean_route_distribution": [
+          0.22871833167419725,
+          0.11562003670849529,
+          0.0526160670918418,
+          0.22199298549328714,
+          0.07284479727131934,
+          0.10230369216864772,
+          0.10054388125811559,
+          0.10536021026829026
+        ],
+        "model": "ana_feat_enc",
+        "nearest_d4_distance": 0.09272297659009344,
+        "normalized_router_entropy": 0.14322314735920177,
+        "qkv_role_differentiation": 0.868410037525098,
+        "role": "K",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.6450289573733845
+      },
+      {
+        "effective_number_of_routes": 1.4912142073290162,
+        "gate_strength": 0.6800724864006042,
+        "identity_probability": 0.07328507309967056,
+        "layer": 4,
+        "magnitude": {
+          "mean": 0.3690449260059522,
+          "p05": 0.12416830348471801,
+          "p50": 0.31046266357103985,
+          "p95": 0.7946130394935607,
+          "sample_standard_deviation": 0.21301625860696974
+        },
+        "maximum_route_probability": 0.885752156823329,
+        "mean_route_distribution": [
+          0.07328507309967056,
+          0.05774030214814735,
+          0.2735919463389617,
+          0.15705243532619295,
+          0.10083741902257076,
+          0.10172198776337066,
+          0.1633474628265955,
+          0.07242337423910977
+        ],
+        "model": "ana_feat_enc",
+        "nearest_d4_distance": 0.08786119549341236,
+        "normalized_router_entropy": 0.15449809585412408,
+        "qkv_role_differentiation": 0.868410037525098,
+        "role": "V",
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "token_conditioned_routing_variation": 0.7442118159586538
+      }
+    ]
+  },
+  "analysis_git_commit": "e2be2b0",
+  "checkpoints": [
+    {
+      "checkpoint_module_mean": {
+        "effective_number_of_routes": 1.3897242019101947,
+        "gate_strength": 0.42432540593047935,
+        "identity_probability": 0.14957507339218,
+        "magnitude": null,
+        "maximum_route_probability": 0.8979619057547306,
+        "mean_route_distribution": [
+          0.14957507339218,
+          0.08097245006850418,
+          0.17127275506552198,
+          0.13518769831460473,
+          0.1201040319419994,
+          0.12948929657726305,
+          0.13896552077850957,
+          0.07443317647386277
+        ],
+        "nearest_d4_distance": 0.07934934370434482,
+        "normalized_router_entropy": 0.1257398455219218,
+        "qkv_role_differentiation": 0.8480457956404692,
+        "token_conditioned_routing_variation": 0.6974370662272323
+      },
+      "interventions": [
+        {
+          "condition": "original",
+          "development_bleu": 39.19704090596687,
+          "difference_from_original": 0.0
+        },
+        {
+          "condition": "gate_zero",
+          "development_bleu": 36.11194602469661,
+          "difference_from_original": -3.0850948812702654
+        },
+        {
+          "condition": "uniform_router",
+          "development_bleu": 37.694003524319974,
+          "difference_from_original": -1.503037381646898
+        },
+        {
+          "condition": "identity_router",
+          "development_bleu": 36.11194602469661,
+          "difference_from_original": -3.0850948812702654
+        },
+        {
+          "condition": "hard_argmax",
+          "development_bleu": 39.17894391458652,
+          "difference_from_original": -0.0180969913803537
+        }
+      ],
+      "model": "ana_d4_enc",
+      "modules": [
+        {
+          "effective_number_of_routes": 1.7252184701749962,
+          "gate_strength": 0.4341048002243042,
+          "identity_probability": 0.4537450517307156,
+          "layer": 1,
+          "magnitude": null,
+          "maximum_route_probability": 0.8275083702171038,
+          "mean_route_distribution": [
+            0.4537450517307156,
+            0.12964325071381036,
+            0.010810722959085632,
+            0.08025847402672723,
+            0.008384455973489196,
+            0.0695733500866179,
+            0.08262447740647917,
+            0.1649602157195106
+          ],
+          "nearest_d4_distance": 0.12958640053269344,
+          "normalized_router_entropy": 0.22070320223393955,
+          "qkv_role_differentiation": 0.7946696347644355,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.5504774266053992
+        },
+        {
+          "effective_number_of_routes": 1.4285938927375152,
+          "gate_strength": 0.3376676142215729,
+          "identity_probability": 0.29003712218739447,
+          "layer": 1,
+          "magnitude": null,
+          "maximum_route_probability": 0.8803888708897543,
+          "mean_route_distribution": [
+            0.29003712218739447,
+            0.1870261926623422,
+            0.03876573837815867,
+            0.09055424831662172,
+            0.014730291222281082,
+            0.0642762950484984,
+            0.1916806919143888,
+            0.12292942183127076
+          ],
+          "nearest_d4_distance": 0.09261690016640815,
+          "normalized_router_entropy": 0.1435743148819037,
+          "qkv_role_differentiation": 0.7946696347644355,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.7359379648674567
+        },
+        {
+          "effective_number_of_routes": 1.3859374033548073,
+          "gate_strength": 0.8258489966392517,
+          "identity_probability": 0.21688422089497547,
+          "layer": 1,
+          "magnitude": null,
+          "maximum_route_probability": 0.914151036289229,
+          "mean_route_distribution": [
+            0.21688422089497547,
+            0.03977430244382478,
+            0.13218625376817925,
+            0.16612141139757855,
+            0.062707516932091,
+            0.08137662722585202,
+            0.27024255172495665,
+            0.030707119736525654
+          ],
+          "nearest_d4_distance": 0.06759336636504941,
+          "normalized_router_entropy": 0.12388621136238241,
+          "qkv_role_differentiation": 0.7946696347644355,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.7723992397746182
+        },
+        {
+          "effective_number_of_routes": 1.394068081631585,
+          "gate_strength": 0.48694175481796265,
+          "identity_probability": 0.030317666696465788,
+          "layer": 2,
+          "magnitude": null,
+          "maximum_route_probability": 0.8947704933157211,
+          "mean_route_distribution": [
+            0.030317666696465788,
+            0.2239651735360687,
+            0.3050440028954261,
+            0.04945422149546702,
+            0.18572889649669685,
+            0.004515166594932414,
+            0.04961287124148888,
+            0.1513620043057075
+          ],
+          "nearest_d4_distance": 0.0834520251684154,
+          "normalized_router_entropy": 0.12670175183859958,
+          "qkv_role_differentiation": 0.827809639302299,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.7022820949224227
+        },
+        {
+          "effective_number_of_routes": 1.6664330132841048,
+          "gate_strength": 0.27816739678382874,
+          "identity_probability": 0.14526644636827457,
+          "layer": 2,
+          "magnitude": null,
+          "maximum_route_probability": 0.8155508526931,
+          "mean_route_distribution": [
+            0.14526644636827457,
+            0.05161587061634189,
+            0.07819177983119784,
+            0.26774780130486464,
+            0.03731599490052737,
+            0.11585994015052854,
+            0.2190638912940885,
+            0.08493827795558023
+          ],
+          "nearest_d4_distance": 0.1502185833149212,
+          "normalized_router_entropy": 0.21641589626549432,
+          "qkv_role_differentiation": 0.827809639302299,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.6972050608122012
+        },
+        {
+          "effective_number_of_routes": 1.3048091632875543,
+          "gate_strength": 0.5536560416221619,
+          "identity_probability": 0.0890363739342177,
+          "layer": 2,
+          "magnitude": null,
+          "maximum_route_probability": 0.9272733012302784,
+          "mean_route_distribution": [
+            0.0890363739342177,
+            0.025730720362083508,
+            0.4122309536000889,
+            0.021458455879501313,
+            0.0586212708246526,
+            0.1562009882038751,
+            0.2183881914793105,
+            0.018333047874519823
+          ],
+          "nearest_d4_distance": 0.05948472249522424,
+          "normalized_router_entropy": 0.09781030054529306,
+          "qkv_role_differentiation": 0.827809639302299,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.6808380296140557
+        },
+        {
+          "effective_number_of_routes": 1.4966467686605511,
+          "gate_strength": 0.40206727385520935,
+          "identity_probability": 0.06912085053083217,
+          "layer": 3,
+          "magnitude": null,
+          "maximum_route_probability": 0.8751869248124191,
+          "mean_route_distribution": [
+            0.06912085053083217,
+            0.061589601992524876,
+            0.09142744857774539,
+            0.29631043296976417,
+            0.25097151119425126,
+            0.15867115437698584,
+            0.00028481733783118504,
+            0.07162418814267228
+          ],
+          "nearest_d4_distance": 0.08255019774535687,
+          "normalized_router_entropy": 0.13942653386446824,
+          "qkv_role_differentiation": 0.8928792100876171,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.7096851571769005
+        },
+        {
+          "effective_number_of_routes": 1.1072405964971024,
+          "gate_strength": 0.2663401961326599,
+          "identity_probability": 0.17412615382379612,
+          "layer": 3,
+          "magnitude": null,
+          "maximum_route_probability": 0.969631814898585,
+          "mean_route_distribution": [
+            0.17412615382379612,
+            0.009124167555083612,
+            0.28832431914312995,
+            0.19430997697294317,
+            1.3103892170029943e-08,
+            0.26320154258939105,
+            0.04040211295039363,
+            0.030511721132594625
+          ],
+          "nearest_d4_distance": 0.024987108727755995,
+          "normalized_router_entropy": 0.037836908938449654,
+          "qkv_role_differentiation": 0.8928792100876171,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.7371751887512705
+        },
+        {
+          "effective_number_of_routes": 1.3875750988903348,
+          "gate_strength": 0.5259280204772949,
+          "identity_probability": 0.021237702045290602,
+          "layer": 3,
+          "magnitude": null,
+          "maximum_route_probability": 0.8918382465766785,
+          "mean_route_distribution": [
+            0.021237702045290602,
+            0.047226851196118094,
+            0.12330918586279628,
+            0.16929610916890972,
+            0.20121829491576995,
+            0.06786799532943427,
+            0.2888011507823458,
+            0.08104271187661798
+          ],
+          "nearest_d4_distance": 0.07920899838390652,
+          "normalized_router_entropy": 0.13297023895556356,
+          "qkv_role_differentiation": 0.8928792100876171,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.7578001080535406
+        },
+        {
+          "effective_number_of_routes": 1.0365789025477457,
+          "gate_strength": 0.41504061222076416,
+          "identity_probability": 0.0002916732229721603,
+          "layer": 4,
+          "magnitude": null,
+          "maximum_route_probability": 0.9884332635951536,
+          "mean_route_distribution": [
+            0.0002916732229721603,
+            0.06143193546442804,
+            0.4387508202265631,
+            0.0009183130961212878,
+            0.3160406151477173,
+            3.776874357097619e-06,
+            0.18256282074437297,
+            4.6828273725982594e-08
+          ],
+          "nearest_d4_distance": 0.009323543999865923,
+          "normalized_router_entropy": 0.013558474147466576,
+          "qkv_role_differentiation": 0.8768246984075251,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.571310722669408
+        },
+        {
+          "effective_number_of_routes": 1.3704191981511924,
+          "gate_strength": 0.0876983031630516,
+          "identity_probability": 0.29556709845432755,
+          "layer": 4,
+          "magnitude": null,
+          "maximum_route_probability": 0.8919066323432504,
+          "mean_route_distribution": [
+            0.29556709845432755,
+            0.11436560125851214,
+            0.056608749962908655,
+            0.16269954322289154,
+            0.08609617582403105,
+            0.1768585575338446,
+            0.07384062134692097,
+            0.03396365483777209
+          ],
+          "nearest_d4_distance": 0.099251762232159,
+          "normalized_router_entropy": 0.12980128548561098,
+          "qkv_role_differentiation": 0.8768246984075251,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.7796047869587298
+        },
+        {
+          "effective_number_of_routes": 1.3731698337048475,
+          "gate_strength": 0.47844386100769043,
+          "identity_probability": 0.009270520816897802,
+          "layer": 4,
+          "magnitude": null,
+          "maximum_route_probability": 0.8989030621954933,
+          "mean_route_distribution": [
+            0.009270520816897802,
+            0.020175733020911968,
+            0.07962308558098392,
+            0.1231233919238662,
+            0.21943334676859294,
+            0.3954661649128395,
+            0.050082051119537986,
+            0.10282570744530806
+          ],
+          "nearest_d4_distance": 0.07391851532038178,
+          "normalized_router_entropy": 0.12619302774388994,
+          "qkv_role_differentiation": 0.8768246984075251,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.6745290145207845
+        }
+      ],
+      "original_reproduction_bleu": 39.19704090596687,
+      "original_reproduction_difference": 0.0,
+      "seed": 42,
+      "selected_step": 20000,
+      "stored_development_bleu": 39.19704090596687
+    },
+    {
+      "checkpoint_module_mean": {
+        "effective_number_of_routes": 1.4470834305360945,
+        "gate_strength": 0.4143710508942604,
+        "identity_probability": 0.12565609604220315,
+        "magnitude": null,
+        "maximum_route_probability": 0.8893238739806658,
+        "mean_route_distribution": [
+          0.12565609604220315,
+          0.08828513466308767,
+          0.1304868682733714,
+          0.11417294712048405,
+          0.1493583427190738,
+          0.1986988460056423,
+          0.14459744035304128,
+          0.04874432727541389
+        ],
+        "nearest_d4_distance": 0.09121330154895589,
+        "normalized_router_entropy": 0.13871433511710551,
+        "qkv_role_differentiation": 0.8369290685247126,
+        "token_conditioned_routing_variation": 0.6406383735577853
+      },
+      "interventions": [
+        {
+          "condition": "original",
+          "development_bleu": 38.893382941452636,
+          "difference_from_original": 0.0
+        },
+        {
+          "condition": "gate_zero",
+          "development_bleu": 37.74621817447667,
+          "difference_from_original": -1.147164766975969
+        },
+        {
+          "condition": "uniform_router",
+          "development_bleu": 37.74264561226489,
+          "difference_from_original": -1.1507373291877485
+        },
+        {
+          "condition": "identity_router",
+          "development_bleu": 37.74621817447667,
+          "difference_from_original": -1.147164766975969
+        },
+        {
+          "condition": "hard_argmax",
+          "development_bleu": 38.77324820937196,
+          "difference_from_original": -0.12013473208067893
+        }
+      ],
+      "model": "ana_d4_enc",
+      "modules": [
+        {
+          "effective_number_of_routes": 1.171544978970006,
+          "gate_strength": 0.5322246551513672,
+          "identity_probability": 0.04889121473180903,
+          "layer": 1,
+          "magnitude": null,
+          "maximum_route_probability": 0.9524033206098699,
+          "mean_route_distribution": [
+            0.04889121473180903,
+            0.04776240865624761,
+            0.2617622851673193,
+            0.03511670472638977,
+            0.2421042776373666,
+            0.12431203441243742,
+            0.20964005409391007,
+            0.030411027372643472
+          ],
+          "nearest_d4_distance": 0.03786724969908033,
+          "normalized_router_entropy": 0.06133117311488031,
+          "qkv_role_differentiation": 0.8014562330350515,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.8031443211224143
+        },
+        {
+          "effective_number_of_routes": 1.749448464471443,
+          "gate_strength": 0.1948457807302475,
+          "identity_probability": 0.283963002623286,
+          "layer": 1,
+          "magnitude": null,
+          "maximum_route_probability": 0.794507291285042,
+          "mean_route_distribution": [
+            0.283963002623286,
+            0.23343025989811564,
+            0.07905817970512787,
+            0.006397281106965422,
+            0.03353081843011525,
+            0.21146035351462972,
+            0.12698195505962032,
+            0.025178153352796415
+          ],
+          "nearest_d4_distance": 0.17440165381483852,
+          "normalized_router_entropy": 0.24408168704740565,
+          "qkv_role_differentiation": 0.8014562330350515,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.5865164951177119
+        },
+        {
+          "effective_number_of_routes": 1.9480865181145801,
+          "gate_strength": 0.6347286701202393,
+          "identity_probability": 0.16401537130643407,
+          "layer": 1,
+          "magnitude": null,
+          "maximum_route_probability": 0.8266265460257118,
+          "mean_route_distribution": [
+            0.16401537130643407,
+            0.060132615850619776,
+            0.0380174220921042,
+            0.054185596712759895,
+            0.0465233006803193,
+            0.0328415545132806,
+            0.5752542772087793,
+            0.029029860545955993
+          ],
+          "nearest_d4_distance": 0.1272455949585853,
+          "normalized_router_entropy": 0.2310144935547822,
+          "qkv_role_differentiation": 0.8014562330350515,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.45357876897395727
+        },
+        {
+          "effective_number_of_routes": 1.3860969831534047,
+          "gate_strength": 0.543241560459137,
+          "identity_probability": 0.11628244553055067,
+          "layer": 2,
+          "magnitude": null,
+          "maximum_route_probability": 0.8961897205348137,
+          "mean_route_distribution": [
+            0.11628244553055067,
+            0.12302576698914178,
+            0.19893642143462412,
+            0.022183646366804352,
+            0.23506750629250162,
+            0.02357190891485341,
+            0.10159250440930621,
+            0.17933980457586277
+          ],
+          "nearest_d4_distance": 0.09081195664028302,
+          "normalized_router_entropy": 0.13381827913654906,
+          "qkv_role_differentiation": 0.7774686824970501,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.7716721653632846
+        },
+        {
+          "effective_number_of_routes": 1.8917769772416926,
+          "gate_strength": 0.3102647066116333,
+          "identity_probability": 0.1929963517225788,
+          "layer": 2,
+          "magnitude": null,
+          "maximum_route_probability": 0.7753961151903642,
+          "mean_route_distribution": [
+            0.1929963517225788,
+            0.009812061135772276,
+            0.05850992079245031,
+            0.17604983517584966,
+            0.08780637770379487,
+            0.22208257714095714,
+            0.24860019594289723,
+            0.004142680969340507
+          ],
+          "nearest_d4_distance": 0.19511677025296656,
+          "normalized_router_entropy": 0.27272898224521375,
+          "qkv_role_differentiation": 0.7774686824970501,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.569455761400068
+        },
+        {
+          "effective_number_of_routes": 1.4781309492550292,
+          "gate_strength": 0.6223247051239014,
+          "identity_probability": 0.06724721427964139,
+          "layer": 2,
+          "magnitude": null,
+          "maximum_route_probability": 0.885250819179521,
+          "mean_route_distribution": [
+            0.06724721427964139,
+            0.022084762042144004,
+            0.05890823795603882,
+            0.27591009969375446,
+            0.24097042128436513,
+            0.1254661509883391,
+            0.12582841534439207,
+            0.08358469920448769
+          ],
+          "nearest_d4_distance": 0.08024970947897536,
+          "normalized_router_entropy": 0.1465540432497028,
+          "qkv_role_differentiation": 0.7774686824970501,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.7476542664545973
+        },
+        {
+          "effective_number_of_routes": 1.1688715647838002,
+          "gate_strength": 0.41661033034324646,
+          "identity_probability": 0.0008418314579252161,
+          "layer": 3,
+          "magnitude": null,
+          "maximum_route_probability": 0.9509653293549216,
+          "mean_route_distribution": [
+            0.0008418314579252161,
+            0.021844502651720554,
+            0.23411192578139542,
+            2.931483891889811e-07,
+            0.2510927579146862,
+            0.40658311279308834,
+            0.019677499446689794,
+            0.06584808198798367
+          ],
+          "nearest_d4_distance": 0.039415752002005165,
+          "normalized_router_entropy": 0.05874587561003006,
+          "qkv_role_differentiation": 0.8529944509304107,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.6139110293584371
+        },
+        {
+          "effective_number_of_routes": 1.715467345671009,
+          "gate_strength": 0.15154974162578583,
+          "identity_probability": 0.47898634558795417,
+          "layer": 3,
+          "magnitude": null,
+          "maximum_route_probability": 0.8020758774045323,
+          "mean_route_distribution": [
+            0.47898634558795417,
+            0.02631563965485786,
+            0.06870639589025043,
+            0.2189953951743993,
+            0.06963371252670912,
+            0.09475805839792374,
+            0.015430491843663694,
+            0.02717396358799948
+          ],
+          "nearest_d4_distance": 0.17773519903965904,
+          "normalized_router_entropy": 0.23607460026208638,
+          "qkv_role_differentiation": 0.8529944509304107,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.5026097802895875
+        },
+        {
+          "effective_number_of_routes": 1.51448360912402,
+          "gate_strength": 0.4792950749397278,
+          "identity_probability": 0.05709325717255736,
+          "layer": 3,
+          "magnitude": null,
+          "maximum_route_probability": 0.8786619513972813,
+          "mean_route_distribution": [
+            0.05709325717255736,
+            0.025750340686300374,
+            0.23872606282424796,
+            0.12344174385008971,
+            0.19427285506928962,
+            0.18805922590918248,
+            0.10675628775540191,
+            0.06590022793683092
+          ],
+          "nearest_d4_distance": 0.09651754009883383,
+          "normalized_router_entropy": 0.1624683895150873,
+          "qkv_role_differentiation": 0.8529944509304107,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.7553305792928503
+        },
+        {
+          "effective_number_of_routes": 1.072191604075275,
+          "gate_strength": 0.3175213634967804,
+          "identity_probability": 0.05714456963416415,
+          "layer": 4,
+          "magnitude": null,
+          "maximum_route_probability": 0.9806595480543687,
+          "mean_route_distribution": [
+            0.05714456963416415,
+            0.004000538491310128,
+            6.931070779320544e-07,
+            1.7618843353746588e-08,
+            0.2662786304201914,
+            0.5607553152393929,
+            0.11045046015231696,
+            0.0013697768286470775
+          ],
+          "nearest_d4_distance": 0.017406769385436567,
+          "normalized_router_entropy": 0.02762507559657728,
+          "qkv_role_differentiation": 0.9157969076363381,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.5084581597797893
+        },
+        {
+          "effective_number_of_routes": 1.070343627186263,
+          "gate_strength": 0.2889551818370819,
+          "identity_probability": 0.0005125012255778088,
+          "layer": 4,
+          "magnitude": null,
+          "maximum_route_probability": 0.9784957421101839,
+          "mean_route_distribution": [
+            0.0005125012255778088,
+            0.4049979946909118,
+            0.21741845820673744,
+            0.33133354820800587,
+            2.87456074045323e-06,
+            0.0003606270802654922,
+            0.02629426830672213,
+            0.019079731176607724
+          ],
+          "nearest_d4_distance": 0.01987036996578909,
+          "normalized_router_entropy": 0.02595080693604764,
+          "qkv_role_differentiation": 0.9157969076363381,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.5712384114279238
+        },
+        {
+          "effective_number_of_routes": 1.1985585443866094,
+          "gate_strength": 0.48089084029197693,
+          "identity_probability": 0.03989904723395928,
+          "layer": 4,
+          "magnitude": null,
+          "maximum_route_probability": 0.9506542266213792,
+          "mean_route_distribution": [
+            0.03989904723395928,
+            0.08026472520991022,
+            0.11168641632308293,
+            0.1264612036635576,
+            0.125016580108806,
+            0.39413523316335713,
+            0.06866287467279578,
+            0.053873919765810976
+          ],
+          "nearest_d4_distance": 0.0379210532510179,
+          "normalized_router_entropy": 0.06417861513690362,
+          "qkv_role_differentiation": 0.9157969076363381,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.8040907441128026
+        }
+      ],
+      "original_reproduction_bleu": 38.893382941452636,
+      "original_reproduction_difference": 0.0,
+      "seed": 43,
+      "selected_step": 19000,
+      "stored_development_bleu": 38.893382941452636
+    },
+    {
+      "checkpoint_module_mean": {
+        "effective_number_of_routes": 1.4708331761300153,
+        "gate_strength": 0.4001864691575368,
+        "identity_probability": 0.13105520337309434,
+        "magnitude": null,
+        "maximum_route_probability": 0.8796468974030991,
+        "mean_route_distribution": [
+          0.13105520337309434,
+          0.10871965241104539,
+          0.12551558163860288,
+          0.15560509971290484,
+          0.11448321023644578,
+          0.16109930636081327,
+          0.13458158074978452,
+          0.06894036547095876
+        ],
+        "nearest_d4_distance": 0.09886030236541184,
+        "normalized_router_entropy": 0.15033013274127258,
+        "qkv_role_differentiation": 0.8574539110227857,
+        "token_conditioned_routing_variation": 0.6783436119933807
+      },
+      "interventions": [
+        {
+          "condition": "original",
+          "development_bleu": 39.99550998350379,
+          "difference_from_original": 0.0
+        },
+        {
+          "condition": "gate_zero",
+          "development_bleu": 37.740780367708865,
+          "difference_from_original": -2.254729615794922
+        },
+        {
+          "condition": "uniform_router",
+          "development_bleu": 38.641605378309784,
+          "difference_from_original": -1.3539046051940034
+        },
+        {
+          "condition": "identity_router",
+          "development_bleu": 37.740780367708865,
+          "difference_from_original": -2.254729615794922
+        },
+        {
+          "condition": "hard_argmax",
+          "development_bleu": 39.89306643316205,
+          "difference_from_original": -0.10244355034173935
+        }
+      ],
+      "model": "ana_d4_enc",
+      "modules": [
+        {
+          "effective_number_of_routes": 1.710323085622288,
+          "gate_strength": 0.3891581892967224,
+          "identity_probability": 0.44502252653812024,
+          "layer": 1,
+          "magnitude": null,
+          "maximum_route_probability": 0.8160595688256509,
+          "mean_route_distribution": [
+            0.44502252653812024,
+            0.13184635184808494,
+            0.0038426679138079487,
+            0.02025697785429185,
+            0.07656717639940862,
+            0.049905362842171744,
+            0.028840437248783306,
+            0.24371849505077306
+          ],
+          "nearest_d4_distance": 0.13451034160246947,
+          "normalized_router_entropy": 0.2228882829968168,
+          "qkv_role_differentiation": 0.8226910924504939,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.5083066810978054
+        },
+        {
+          "effective_number_of_routes": 1.6769967491530908,
+          "gate_strength": 0.3053622543811798,
+          "identity_probability": 0.05711782434897238,
+          "layer": 1,
+          "magnitude": null,
+          "maximum_route_probability": 0.8401333491781887,
+          "mean_route_distribution": [
+            0.05711782434897238,
+            0.005474771477882402,
+            0.03918303836655076,
+            0.2831218286786607,
+            0.0400541155398771,
+            0.37979993815092455,
+            0.09746484917356527,
+            0.0977836299494825
+          ],
+          "nearest_d4_distance": 0.13369723678941994,
+          "normalized_router_entropy": 0.20690700228473213,
+          "qkv_role_differentiation": 0.8226910924504939,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.575539276901595
+        },
+        {
+          "effective_number_of_routes": 1.2005777542541727,
+          "gate_strength": 0.7722470760345459,
+          "identity_probability": 0.21273759386503954,
+          "layer": 1,
+          "magnitude": null,
+          "maximum_route_probability": 0.9500777677844997,
+          "mean_route_distribution": [
+            0.21273759386503954,
+            0.044528399570219375,
+            0.004948314134067166,
+            0.21096114868812646,
+            0.05261549705145493,
+            0.22925927347868863,
+            0.2281568151624071,
+            0.016792951211528913
+          ],
+          "nearest_d4_distance": 0.0373017054963199,
+          "normalized_router_entropy": 0.06819542723896138,
+          "qkv_role_differentiation": 0.8226910924504939,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.7593094757373401
+        },
+        {
+          "effective_number_of_routes": 1.7529593724426196,
+          "gate_strength": 0.5343010425567627,
+          "identity_probability": 0.011295008688939727,
+          "layer": 2,
+          "magnitude": null,
+          "maximum_route_probability": 0.7985993621119919,
+          "mean_route_distribution": [
+            0.011295008688939727,
+            0.14348253158313612,
+            0.05395652589469989,
+            0.13134908364219483,
+            0.11201527399941313,
+            0.2721507756804751,
+            0.23025073583928624,
+            0.045500065640568806
+          ],
+          "nearest_d4_distance": 0.18289545712023791,
+          "normalized_router_entropy": 0.23220279074799435,
+          "qkv_role_differentiation": 0.8248525138604075,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.648564676073079
+        },
+        {
+          "effective_number_of_routes": 1.865857487445046,
+          "gate_strength": 0.1983988732099533,
+          "identity_probability": 0.2576453001635818,
+          "layer": 2,
+          "magnitude": null,
+          "maximum_route_probability": 0.7507220250825498,
+          "mean_route_distribution": [
+            0.2576453001635818,
+            0.0934517092184233,
+            0.11966078217810479,
+            0.10752965460488724,
+            0.0770492540113751,
+            0.007250990553974636,
+            0.2500452779852013,
+            0.08736703270976504
+          ],
+          "nearest_d4_distance": 0.21833856468804716,
+          "normalized_router_entropy": 0.28306336881808164,
+          "qkv_role_differentiation": 0.8248525138604075,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.6102274413243622
+        },
+        {
+          "effective_number_of_routes": 1.66871067655798,
+          "gate_strength": 0.4695259630680084,
+          "identity_probability": 0.06555613742431853,
+          "layer": 2,
+          "magnitude": null,
+          "maximum_route_probability": 0.857064605601377,
+          "mean_route_distribution": [
+            0.06555613742431853,
+            0.02441423821031712,
+            0.3296947410591632,
+            0.04795102484057652,
+            0.19385854985704573,
+            0.10310497063999081,
+            0.21985128277619168,
+            0.015569054143798486
+          ],
+          "nearest_d4_distance": 0.10869963549522187,
+          "normalized_router_entropy": 0.19641891251949656,
+          "qkv_role_differentiation": 0.8248525138604075,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.6359645899439589
+        },
+        {
+          "effective_number_of_routes": 1.3145652204134868,
+          "gate_strength": 0.225360706448555,
+          "identity_probability": 0.17402670100070425,
+          "layer": 3,
+          "magnitude": null,
+          "maximum_route_probability": 0.9220390849514216,
+          "mean_route_distribution": [
+            0.17402670100070425,
+            0.2955017648976809,
+            0.10746873534902786,
+            0.1402566746863939,
+            0.08075210754164092,
+            0.1213406074502697,
+            0.03464106593841043,
+            0.04601234667937642
+          ],
+          "nearest_d4_distance": 0.05861715166925948,
+          "normalized_router_entropy": 0.10577809121511873,
+          "qkv_role_differentiation": 0.8586925455481359,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.8065023973322782
+        },
+        {
+          "effective_number_of_routes": 1.2272488555722347,
+          "gate_strength": 0.24899187684059143,
+          "identity_probability": 0.0493199013711022,
+          "layer": 3,
+          "magnitude": null,
+          "maximum_route_probability": 0.9348116782928355,
+          "mean_route_distribution": [
+            0.0493199013711022,
+            0.1217746363311194,
+            0.09651511410940117,
+            0.1968884341811343,
+            0.23511928019779466,
+            0.20321086003050018,
+            0.011357644696423959,
+            0.08581413198999144
+          ],
+          "nearest_d4_distance": 0.05530349229633735,
+          "normalized_router_entropy": 0.07868055948914467,
+          "qkv_role_differentiation": 0.8586925455481359,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.8235947568272374
+        },
+        {
+          "effective_number_of_routes": 1.5517057541952934,
+          "gate_strength": 0.5471423268318176,
+          "identity_probability": 0.0429427229992478,
+          "layer": 3,
+          "magnitude": null,
+          "maximum_route_probability": 0.8533129730410466,
+          "mean_route_distribution": [
+            0.0429427229992478,
+            0.1579409812837678,
+            0.04712790000449063,
+            0.12905266993419526,
+            0.2380404279472248,
+            0.15738964300764105,
+            0.20863813279547375,
+            0.018867522729532127
+          ],
+          "nearest_d4_distance": 0.12121280293807334,
+          "normalized_router_entropy": 0.17386249623039202,
+          "qkv_role_differentiation": 0.8586925455481359,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.7251452045332404
+        },
+        {
+          "effective_number_of_routes": 1.240893892945674,
+          "gate_strength": 0.1816161870956421,
+          "identity_probability": 0.21687132638557854,
+          "layer": 4,
+          "magnitude": null,
+          "maximum_route_probability": 0.9330054651369566,
+          "mean_route_distribution": [
+            0.21687132638557854,
+            0.08623695905294122,
+            0.0027881037159491876,
+            0.03403731518373,
+            0.15921064074865443,
+            0.2849433974131874,
+            0.19229645666820672,
+            0.023615803404835153
+          ],
+          "nearest_d4_distance": 0.05706864355833028,
+          "normalized_router_entropy": 0.08775218757310552,
+          "qkv_role_differentiation": 0.9235794922321054,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.7442332426553898
+        },
+        {
+          "effective_number_of_routes": 1.033645059304464,
+          "gate_strength": 0.4288376271724701,
+          "identity_probability": 0.003333767575902719,
+          "layer": 4,
+          "magnitude": null,
+          "maximum_route_probability": 0.9899687363953306,
+          "mean_route_distribution": [
+            0.003333767575902719,
+            0.18256390592433772,
+            0.29715891568062075,
+            0.42395969631784386,
+            8.454976020239147e-07,
+            2.124932572487713e-06,
+            0.0004541642669316769,
+            0.09252658242501731
+          ],
+          "nearest_d4_distance": 0.008999567055092368,
+          "normalized_router_entropy": 0.01266880815989394,
+          "qkv_role_differentiation": 0.9235794922321054,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.6017611826751066
+        },
+        {
+          "effective_number_of_routes": 1.406514205653833,
+          "gate_strength": 0.5012955069541931,
+          "identity_probability": 0.03679363011562452,
+          "layer": 4,
+          "magnitude": null,
+          "maximum_route_probability": 0.9099681524353399,
+          "mean_route_distribution": [
+            0.03679363011562452,
+            0.01741957953463438,
+            0.40384214125735124,
+            0.14189668794282315,
+            0.10851535404585794,
+            0.12483373214936282,
+            0.1129821064465327,
+            0.05371676971683586
+          ],
+          "nearest_d4_distance": 0.06967902967613304,
+          "normalized_router_entropy": 0.13554366562153303,
+          "qkv_role_differentiation": 0.9235794922321054,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.7009744188191749
+        }
+      ],
+      "original_reproduction_bleu": 39.99550998350379,
+      "original_reproduction_difference": 0.0,
+      "seed": 44,
+      "selected_step": 20000,
+      "stored_development_bleu": 39.99550998350379
+    },
+    {
+      "checkpoint_module_mean": {
+        "effective_number_of_routes": 1.376215687177552,
+        "gate_strength": 0.4243008767565091,
+        "identity_probability": 0.1768536967450288,
+        "magnitude": {
+          "mean": 2.167261543505237,
+          "p05": 0.587621366411137,
+          "p50": 2.200406306733688,
+          "p95": 3.49268695799013,
+          "sample_standard_deviation": 1.04293823671113
+        },
+        "maximum_route_probability": 0.9017893848117173,
+        "mean_route_distribution": [
+          0.1768536967450288,
+          0.061997498424068716,
+          0.17027768293159237,
+          0.22380380622795654,
+          0.10071643565964707,
+          0.12050293330918262,
+          0.10545783273002776,
+          0.04039011591739498
+        ],
+        "nearest_d4_distance": 0.07844606722654776,
+        "normalized_router_entropy": 0.12223861590990127,
+        "qkv_role_differentiation": 0.8701547620357462,
+        "token_conditioned_routing_variation": 0.6631902413632872
+      },
+      "interventions": [
+        {
+          "condition": "original",
+          "development_bleu": 39.804717815846686,
+          "difference_from_original": 0.0
+        },
+        {
+          "condition": "gate_zero",
+          "development_bleu": 26.890320701487664,
+          "difference_from_original": -12.914397114359023
+        },
+        {
+          "condition": "uniform_router",
+          "development_bleu": 37.2667566833269,
+          "difference_from_original": -2.537961132519783
+        },
+        {
+          "condition": "identity_router",
+          "development_bleu": 34.710420492089185,
+          "difference_from_original": -5.094297323757502
+        },
+        {
+          "condition": "hard_argmax",
+          "development_bleu": 39.68704829973817,
+          "difference_from_original": -0.1176695161085135
+        },
+        {
+          "condition": "magnitude_one",
+          "development_bleu": 32.48046951484458,
+          "difference_from_original": -7.3242483010021076
+        }
+      ],
+      "model": "ana_feat_enc",
+      "modules": [
+        {
+          "effective_number_of_routes": 1.2666983173477229,
+          "gate_strength": 0.4125450551509857,
+          "identity_probability": 0.059288045366594246,
+          "layer": 1,
+          "magnitude": {
+            "mean": 3.693014509138372,
+            "p05": 0.4723593920469285,
+            "p50": 4.57777214050293,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 1.6275618277608426
+          },
+          "maximum_route_probability": 0.9294722767317629,
+          "mean_route_distribution": [
+            0.059288045366594246,
+            0.02594201797145899,
+            0.2100188765421369,
+            0.23430417584331603,
+            0.11403154488559696,
+            0.3213246219260164,
+            0.014395454706331043,
+            0.02069526808298082
+          ],
+          "nearest_d4_distance": 0.06026659720417352,
+          "normalized_router_entropy": 0.09109146975569055,
+          "qkv_role_differentiation": 0.8710367739418392,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.7185960010246002
+        },
+        {
+          "effective_number_of_routes": 1.357405802161046,
+          "gate_strength": 0.12852872908115387,
+          "identity_probability": 0.07659993739238664,
+          "layer": 1,
+          "magnitude": {
+            "mean": 1.916429761664326,
+            "p05": 0.006715348456054926,
+            "p50": 1.075706958770752,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 1.992524041055425
+          },
+          "maximum_route_probability": 0.8923105869455837,
+          "mean_route_distribution": [
+            0.07659993739238664,
+            0.021734986884597983,
+            0.0007531817026848448,
+            0.3884746159921857,
+            0.03066451031213352,
+            0.36504271796948035,
+            0.106488192159431,
+            0.010241853623187885
+          ],
+          "nearest_d4_distance": 0.08971328874743667,
+          "normalized_router_entropy": 0.11941607304681891,
+          "qkv_role_differentiation": 0.8710367739418392,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.5600427262587
+        },
+        {
+          "effective_number_of_routes": 1.145236518293002,
+          "gate_strength": 0.8922533988952637,
+          "identity_probability": 0.2453657093478554,
+          "layer": 1,
+          "magnitude": {
+            "mean": 0.13855160237289965,
+            "p05": 0.04599473010748625,
+            "p50": 0.13249456882476807,
+            "p95": 0.2572730779647827,
+            "sample_standard_deviation": 0.06651318572610403
+          },
+          "maximum_route_probability": 0.9598869240095206,
+          "mean_route_distribution": [
+            0.2453657093478554,
+            0.04918198065062938,
+            0.0480364646581954,
+            0.009890773340232074,
+            0.06866308295627463,
+            0.31163050836901934,
+            0.22861231010748495,
+            0.03861917488050678
+          ],
+          "nearest_d4_distance": 0.030926550901182966,
+          "normalized_router_entropy": 0.04958192740666963,
+          "qkv_role_differentiation": 0.8710367739418392,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.7653815244443162
+        },
+        {
+          "effective_number_of_routes": 1.359629171280855,
+          "gate_strength": 0.4853566288948059,
+          "identity_probability": 0.024245451716275995,
+          "layer": 2,
+          "magnitude": {
+            "mean": 3.391241673222685,
+            "p05": 0.796771565079689,
+            "p50": 3.99327552318573,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 1.476193635591278
+          },
+          "maximum_route_probability": 0.8988722045006328,
+          "mean_route_distribution": [
+            0.024245451716275995,
+            0.22773995513747372,
+            0.5264955955792454,
+            0.07899477608675012,
+            0.10054586222107313,
+            0.024376765856953597,
+            0.004840552741144031,
+            0.012761043612206965
+          ],
+          "nearest_d4_distance": 0.07545731575857853,
+          "normalized_router_entropy": 0.1187946802755908,
+          "qkv_role_differentiation": 0.8492122970748325,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.5392529819500983
+        },
+        {
+          "effective_number_of_routes": 1.8052802249662188,
+          "gate_strength": 0.09383491426706314,
+          "identity_probability": 0.31722439474146946,
+          "layer": 2,
+          "magnitude": {
+            "mean": 2.0709849753352985,
+            "p05": 0.027095627412199976,
+            "p50": 1.0978643894195557,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 2.0153079617927503
+          },
+          "maximum_route_probability": 0.7934532360676291,
+          "mean_route_distribution": [
+            0.31722439474146946,
+            0.14523605126082992,
+            0.023077817961801275,
+            0.16721155676403227,
+            0.07785102283887388,
+            0.04832269856795532,
+            0.08687526322190595,
+            0.13420119572547612
+          ],
+          "nearest_d4_distance": 0.1648439279572537,
+          "normalized_router_entropy": 0.251455685068153,
+          "qkv_role_differentiation": 0.8492122970748325,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.641777360033113
+        },
+        {
+          "effective_number_of_routes": 1.2850992144678746,
+          "gate_strength": 0.8518267273902893,
+          "identity_probability": 0.24931948579274596,
+          "layer": 2,
+          "magnitude": {
+            "mean": 0.26218335743671356,
+            "p05": 0.15943923965096474,
+            "p50": 0.2565072625875473,
+            "p95": 0.38661724179983137,
+            "sample_standard_deviation": 0.06834767381464234
+          },
+          "maximum_route_probability": 0.9322751248507204,
+          "mean_route_distribution": [
+            0.24931948579274596,
+            0.005769395215559217,
+            0.18271468309579994,
+            0.2143138917276065,
+            0.22814483073967584,
+            0.06339255990452893,
+            0.0393454177759864,
+            0.016999736934461634
+          ],
+          "nearest_d4_distance": 0.055990453178786766,
+          "normalized_router_entropy": 0.09492486609632046,
+          "qkv_role_differentiation": 0.8492122970748325,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.7347783547600797
+        },
+        {
+          "effective_number_of_routes": 1.083738780979988,
+          "gate_strength": 0.22675688564777374,
+          "identity_probability": 0.3162323498125192,
+          "layer": 3,
+          "magnitude": {
+            "mean": 4.084196808500426,
+            "p05": 1.7116614520549773,
+            "p50": 4.506835460662842,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 1.0998008353295083
+          },
+          "maximum_route_probability": 0.9779166645602971,
+          "mean_route_distribution": [
+            0.3162323498125192,
+            1.609175594403682e-05,
+            0.015023523022746002,
+            0.5907347921372385,
+            0.002738472465482274,
+            0.0002466817419886329,
+            0.007742894998057626,
+            0.06726519923155115
+          ],
+          "nearest_d4_distance": 0.017803240751668392,
+          "normalized_router_entropy": 0.029400296606807045,
+          "qkv_role_differentiation": 0.8524303478096928,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.4398012516760859
+        },
+        {
+          "effective_number_of_routes": 1.3720627816092228,
+          "gate_strength": 0.11123869568109512,
+          "identity_probability": 0.18499653542483782,
+          "layer": 3,
+          "magnitude": {
+            "mean": 3.8067726267186357,
+            "p05": 1.554173892736435,
+            "p50": 4.265872955322266,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 1.2624917883816877
+          },
+          "maximum_route_probability": 0.8993027513994224,
+          "mean_route_distribution": [
+            0.18499653542483782,
+            0.02391454444288228,
+            0.3162646135403297,
+            0.07134139962371876,
+            0.25946440720096203,
+            0.06623735977488987,
+            0.04484344804547034,
+            0.03293769393932594
+          ],
+          "nearest_d4_distance": 0.08715095636179619,
+          "normalized_router_entropy": 0.12365510153700782,
+          "qkv_role_differentiation": 0.8524303478096928,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.710885749094501
+        },
+        {
+          "effective_number_of_routes": 1.4586916013989466,
+          "gate_strength": 0.7129484415054321,
+          "identity_probability": 0.16381609983418915,
+          "layer": 3,
+          "magnitude": {
+            "mean": 0.3547486857124281,
+            "p05": 0.11522716991603375,
+            "p50": 0.35366205871105194,
+            "p95": 0.7121210217475887,
+            "sample_standard_deviation": 0.19031755408085446
+          },
+          "maximum_route_probability": 0.8765773220271345,
+          "mean_route_distribution": [
+            0.16381609983418915,
+            0.06275935441779822,
+            0.21385246672217806,
+            0.1457448649911037,
+            0.11105969162722669,
+            0.09581033901284393,
+            0.14283419967378846,
+            0.06412298484452225
+          ],
+          "nearest_d4_distance": 0.09304480175153056,
+          "normalized_router_entropy": 0.14862384818241767,
+          "qkv_role_differentiation": 0.8524303478096928,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.8148734962579937
+        },
+        {
+          "effective_number_of_routes": 1.3146703257775627,
+          "gate_strength": 0.37445518374443054,
+          "identity_probability": 0.08475208948732914,
+          "layer": 4,
+          "magnitude": {
+            "mean": 4.217169061342161,
+            "p05": 1.7949350357055665,
+            "p50": 4.7479729652404785,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 1.0979642263185991
+          },
+          "maximum_route_probability": 0.9198591727141776,
+          "mean_route_distribution": [
+            0.08475208948732914,
+            0.09816716378913413,
+            0.22136322087006224,
+            0.3273506136672996,
+            0.0035674636991489873,
+            0.0255663937475938,
+            0.23700342400546215,
+            0.0022296317012518822
+          ],
+          "nearest_d4_distance": 0.06343296401828855,
+          "normalized_router_entropy": 0.10578808880472172,
+          "qkv_role_differentiation": 0.9079396293166203,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.6660811571012565
+        },
+        {
+          "effective_number_of_routes": 1.5736474133583283,
+          "gate_strength": 0.17601923644542694,
+          "identity_probability": 0.3376406517547999,
+          "layer": 4,
+          "magnitude": {
+            "mean": 1.7274242514755744,
+            "p05": 0.2396997705101967,
+            "p50": 1.0597698092460632,
+            "p95": 4.827650260925292,
+            "sample_standard_deviation": 1.4505640490966727
+          },
+          "maximum_route_probability": 0.8521362694985393,
+          "mean_route_distribution": [
+            0.3376406517547999,
+            0.06721362291460636,
+            0.013136130882580735,
+            0.21153883220172162,
+            0.06727577396318636,
+            0.0393718784031257,
+            0.2247503909527445,
+            0.039072720920015874
+          ],
+          "nearest_d4_distance": 0.11857894706958394,
+          "normalized_router_entropy": 0.1773626205542087,
+          "qkv_role_differentiation": 0.9079396293166203,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.6424202697060137
+        },
+        {
+          "effective_number_of_routes": 1.492428094489856,
+          "gate_strength": 0.6258466243743896,
+          "identity_probability": 0.06276361026934248,
+          "layer": 4,
+          "magnitude": {
+            "mean": 0.34442120914332724,
+            "p05": 0.12738317325711251,
+            "p50": 0.33714158833026886,
+            "p95": 0.681574809551239,
+            "sample_standard_deviation": 0.16767206158519585
+          },
+          "maximum_route_probability": 0.8894100844351877,
+          "mean_route_distribution": [
+            0.06276361026934248,
+            0.016294816647910375,
+            0.272595620601348,
+            0.24574538236027357,
+            0.14459056500613046,
+            0.08471267443579547,
+            0.12776244437252662,
+            0.04553488751325239
+          ],
+          "nearest_d4_distance": 0.0841437630182933,
+          "normalized_router_entropy": 0.15676873358440896,
+          "qkv_role_differentiation": 0.9079396293166203,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.7243920240526882
+        }
+      ],
+      "original_reproduction_bleu": 39.804717815846686,
+      "original_reproduction_difference": 0.0,
+      "seed": 42,
+      "selected_step": 20000,
+      "stored_development_bleu": 39.804717815846686
+    },
+    {
+      "checkpoint_module_mean": {
+        "effective_number_of_routes": 1.377781764133839,
+        "gate_strength": 0.40964837931096554,
+        "identity_probability": 0.13015388272924097,
+        "magnitude": {
+          "mean": 2.1034718673354234,
+          "p05": 0.476930578929993,
+          "p50": 2.0097066598633924,
+          "p95": 3.519415432711442,
+          "sample_standard_deviation": 1.1165090277509584
+        },
+        "maximum_route_probability": 0.905934732540129,
+        "mean_route_distribution": [
+          0.13015388272924097,
+          0.08888883218446676,
+          0.15490758677892613,
+          0.13456174562396425,
+          0.17915886865441985,
+          0.15448489063039503,
+          0.10340668336743068,
+          0.05443751261337859
+        ],
+        "nearest_d4_distance": 0.07568781185188866,
+        "normalized_router_entropy": 0.1190834811307318,
+        "qkv_role_differentiation": 0.8662184284317073,
+        "token_conditioned_routing_variation": 0.6789791773451622
+      },
+      "interventions": [
+        {
+          "condition": "original",
+          "development_bleu": 38.88899156377252,
+          "difference_from_original": 0.0
+        },
+        {
+          "condition": "gate_zero",
+          "development_bleu": 25.079100476813018,
+          "difference_from_original": -13.809891086959503
+        },
+        {
+          "condition": "uniform_router",
+          "development_bleu": 37.15630906862704,
+          "difference_from_original": -1.7326824951454824
+        },
+        {
+          "condition": "identity_router",
+          "development_bleu": 35.69313010740746,
+          "difference_from_original": -3.1958614563650585
+        },
+        {
+          "condition": "hard_argmax",
+          "development_bleu": 38.91329951427277,
+          "difference_from_original": 0.024307950500251252
+        },
+        {
+          "condition": "magnitude_one",
+          "development_bleu": 33.57334655701461,
+          "difference_from_original": -5.3156450067579115
+        }
+      ],
+      "model": "ana_feat_enc",
+      "modules": [
+        {
+          "effective_number_of_routes": 1.1988644301383127,
+          "gate_strength": 0.5225719809532166,
+          "identity_probability": 0.004656921152384868,
+          "layer": 1,
+          "magnitude": {
+            "mean": 3.586416926968221,
+            "p05": 0.5907576620578766,
+            "p50": 4.453376770019531,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 1.5946069672257959
+          },
+          "maximum_route_probability": 0.9371541756224545,
+          "mean_route_distribution": [
+            0.004656921152384868,
+            0.05429511218046875,
+            0.12174195505894313,
+            0.32972277305800046,
+            0.36199921133710133,
+            0.0023804156329412926,
+            0.1249163896286242,
+            0.00028723039798446935
+          ],
+          "nearest_d4_distance": 0.05006917112492179,
+          "normalized_router_entropy": 0.06980242117432796,
+          "qkv_role_differentiation": 0.8505731524561558,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.6273925925486293
+        },
+        {
+          "effective_number_of_routes": 1.7198243376979294,
+          "gate_strength": 0.09287760406732559,
+          "identity_probability": 0.11770865151279127,
+          "layer": 1,
+          "magnitude": {
+            "mean": 2.056114864815537,
+            "p05": 0.006715348456054926,
+            "p50": 0.04506213217973709,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 2.396140596936625
+          },
+          "maximum_route_probability": 0.820692484736007,
+          "mean_route_distribution": [
+            0.11770865151279127,
+            0.03119928759052117,
+            0.13054147938286179,
+            0.20527540959349475,
+            0.08449005938511836,
+            0.1267220764196525,
+            0.27059168850357584,
+            0.03347135262108037
+          ],
+          "nearest_d4_distance": 0.14376058868891428,
+          "normalized_router_entropy": 0.2138061730067014,
+          "qkv_role_differentiation": 0.8505731524561558,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.6945221026726199
+        },
+        {
+          "effective_number_of_routes": 1.1182591279154137,
+          "gate_strength": 0.877658486366272,
+          "identity_probability": 0.2159637492050509,
+          "layer": 1,
+          "magnitude": {
+            "mean": 0.11774569550862629,
+            "p05": 0.02922513373196125,
+            "p50": 0.09616408497095108,
+            "p95": 0.3101944029331207,
+            "sample_standard_deviation": 0.08022494068893711
+          },
+          "maximum_route_probability": 0.9674763483193847,
+          "mean_route_distribution": [
+            0.2159637492050509,
+            0.042870567169706796,
+            0.02965472128163732,
+            0.08388589657195704,
+            0.2874669571404856,
+            0.27334271465218724,
+            0.05374658388490434,
+            0.013068809702158908
+          ],
+          "nearest_d4_distance": 0.026610043859075252,
+          "normalized_router_entropy": 0.041359937469008304,
+          "qkv_role_differentiation": 0.8505731524561558,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.7785522646682466
+        },
+        {
+          "effective_number_of_routes": 1.2329660190298846,
+          "gate_strength": 0.2688024342060089,
+          "identity_probability": 0.11830852631734386,
+          "layer": 2,
+          "magnitude": {
+            "mean": 3.257501813178955,
+            "p05": 0.3457323119044304,
+            "p50": 3.8816046714782715,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 1.7970288538566905
+          },
+          "maximum_route_probability": 0.9375271387135068,
+          "mean_route_distribution": [
+            0.11830852631734386,
+            0.0046120407504256005,
+            0.005421119733285161,
+            0.40781356607627384,
+            0.01972379208042954,
+            0.3256013377121687,
+            0.09468745924037092,
+            0.023832162199241055
+          ],
+          "nearest_d4_distance": 0.05051922629724612,
+          "normalized_router_entropy": 0.07775425755199535,
+          "qkv_role_differentiation": 0.9016792120799949,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.6082176624211335
+        },
+        {
+          "effective_number_of_routes": 1.427410654493139,
+          "gate_strength": 0.10587675869464874,
+          "identity_probability": 0.20327405977834564,
+          "layer": 2,
+          "magnitude": {
+            "mean": 2.801097026203921,
+            "p05": 0.1734354265034199,
+            "p50": 2.870691418647766,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 1.878409108759784
+          },
+          "maximum_route_probability": 0.8885240524607948,
+          "mean_route_distribution": [
+            0.20327405977834564,
+            0.1453856633682669,
+            0.026031927735020072,
+            0.20115493546819632,
+            0.07040687331620393,
+            0.3093581088860479,
+            0.002378765831249484,
+            0.04200966689867609
+          ],
+          "nearest_d4_distance": 0.0943390076111063,
+          "normalized_router_entropy": 0.14069043426790193,
+          "qkv_role_differentiation": 0.9016792120799949,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.6860171907936161
+        },
+        {
+          "effective_number_of_routes": 1.3037605573721547,
+          "gate_strength": 0.859435498714447,
+          "identity_probability": 0.2403275719991405,
+          "layer": 2,
+          "magnitude": {
+            "mean": 0.2576465041599555,
+            "p05": 0.09467443488538266,
+            "p50": 0.2191888988018036,
+            "p95": 0.5208173394203183,
+            "sample_standard_deviation": 0.14017762346763016
+          },
+          "maximum_route_probability": 0.9261529604206713,
+          "mean_route_distribution": [
+            0.2403275719991405,
+            0.03782708886824575,
+            0.3044097901350061,
+            0.03698973946956593,
+            0.19730089068463302,
+            0.10017436852283253,
+            0.06328190024475425,
+            0.019688650972363705
+          ],
+          "nearest_d4_distance": 0.05816135197405983,
+          "normalized_router_entropy": 0.09905822844581924,
+          "qkv_role_differentiation": 0.9016792120799949,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.7440761749241516
+        },
+        {
+          "effective_number_of_routes": 1.1429964202620662,
+          "gate_strength": 0.18441656231880188,
+          "identity_probability": 0.29038705720487396,
+          "layer": 3,
+          "magnitude": {
+            "mean": 3.190589287847929,
+            "p05": 0.5212112486362457,
+            "p50": 2.8839443922042847,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 1.5325543643371555
+          },
+          "maximum_route_probability": 0.9593113814434093,
+          "mean_route_distribution": [
+            0.29038705720487396,
+            0.016670545054517608,
+            0.00280790133944966,
+            0.18584776321771726,
+            0.03744413605786624,
+            0.25165441644562025,
+            0.16188634504714441,
+            0.0533018396172351
+          ],
+          "nearest_d4_distance": 0.030610937090651852,
+          "normalized_router_entropy": 0.0517670252630722,
+          "qkv_role_differentiation": 0.898185322955523,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.755095344695129
+        },
+        {
+          "effective_number_of_routes": 1.1415407503711175,
+          "gate_strength": 0.17265494167804718,
+          "identity_probability": 0.12345754682708383,
+          "layer": 3,
+          "magnitude": {
+            "mean": 3.0679056423318083,
+            "p05": 0.9818610727787018,
+            "p50": 3.2066367864608765,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 1.2994247243444337
+          },
+          "maximum_route_probability": 0.9581607832542726,
+          "mean_route_distribution": [
+            0.12345754682708383,
+            0.18363989291987035,
+            0.495935891235974,
+            0.010781547653860545,
+            0.0746205284708297,
+            0.0003961182727909365,
+            0.10813154939053493,
+            0.0030369274968021125
+          ],
+          "nearest_d4_distance": 0.035891877022207724,
+          "normalized_router_entropy": 0.05198667281833852,
+          "qkv_role_differentiation": 0.898185322955523,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.6313844564368393
+        },
+        {
+          "effective_number_of_routes": 1.3065914697681942,
+          "gate_strength": 0.606544554233551,
+          "identity_probability": 0.06685441930910077,
+          "layer": 3,
+          "magnitude": {
+            "mean": 0.4454226548560009,
+            "p05": 0.21965187564492225,
+            "p50": 0.450458288192749,
+            "p95": 0.7646284580230712,
+            "sample_standard_deviation": 0.16784854745711567
+          },
+          "maximum_route_probability": 0.9273695784277225,
+          "mean_route_distribution": [
+            0.06685441930910077,
+            0.04422608012380058,
+            0.23816800662914592,
+            0.04198266823866779,
+            0.4210818027239679,
+            0.03634462371553792,
+            0.11799937817189654,
+            0.03334302334614459
+          ],
+          "nearest_d4_distance": 0.05653878083037401,
+          "normalized_router_entropy": 0.09424099101554974,
+          "qkv_role_differentiation": 0.898185322955523,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.6962815622154445
+        },
+        {
+          "effective_number_of_routes": 1.7116121354840705,
+          "gate_strength": 0.43174925446510315,
+          "identity_probability": 0.06299277195871307,
+          "layer": 4,
+          "magnitude": {
+            "mean": 3.5042671555070144,
+            "p05": 1.9945987582206726,
+            "p50": 3.3507593870162964,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 0.9053924186628208
+          },
+          "maximum_route_probability": 0.8395424734805591,
+          "mean_route_distribution": [
+            0.06299277195871307,
+            0.17488402813448453,
+            0.14324890247901595,
+            0.017721597828379378,
+            0.44969113493583573,
+            0.0005584263544626008,
+            0.0541866429936577,
+            0.09671649675369948
+          ],
+          "nearest_d4_distance": 0.13357387175658733,
+          "normalized_router_entropy": 0.21092849834790228,
+          "qkv_role_differentiation": 0.8144360262351553,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.5471555618286247
+        },
+        {
+          "effective_number_of_routes": 1.4987638968352714,
+          "gate_strength": 0.10062220692634583,
+          "identity_probability": 0.078897992968109,
+          "layer": 4,
+          "magnitude": {
+            "mean": 2.6612805513404174,
+            "p05": 0.6446560353040696,
+            "p50": 2.4175974130630493,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 1.4628166179738165
+          },
+          "maximum_route_probability": 0.874489425306053,
+          "mean_route_distribution": [
+            0.078897992968109,
+            0.2504209733821887,
+            0.07706454655189986,
+            0.015108730984522952,
+            0.009141245320818978,
+            0.2436837546680773,
+            0.06979421691356735,
+            0.2558885408765101
+          ],
+          "nearest_d4_distance": 0.0999848524923011,
+          "normalized_router_entropy": 0.15578854615202065,
+          "qkv_role_differentiation": 0.8144360262351553,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.6759396716730663
+        },
+        {
+          "effective_number_of_routes": 1.7307913702385145,
+          "gate_strength": 0.6925702691078186,
+          "identity_probability": 0.03901732451795399,
+          "layer": 4,
+          "magnitude": {
+            "mean": 0.2956742853066917,
+            "p05": 0.12064763903617859,
+            "p50": 0.24099567532539368,
+            "p95": 0.583622610569,
+            "sample_standard_deviation": 0.14348356930069475
+          },
+          "maximum_route_probability": 0.8348159882967132,
+          "mean_route_distribution": [
+            0.03901732451795399,
+            0.08063470667110445,
+            0.2838647997848746,
+            0.07845631932693466,
+            0.13653979239974803,
+            0.18360232628242112,
+            0.11927928055888826,
+            0.07860545047864713
+          ],
+          "nearest_d4_distance": 0.12819403347521838,
+          "normalized_router_entropy": 0.22181858805614407,
+          "qkv_role_differentiation": 0.8144360262351553,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.7031155432644458
+        }
+      ],
+      "original_reproduction_bleu": 38.88899156377252,
+      "original_reproduction_difference": 0.0,
+      "seed": 43,
+      "selected_step": 20000,
+      "stored_development_bleu": 38.88899156377252
+    },
+    {
+      "checkpoint_module_mean": {
+        "effective_number_of_routes": 1.2971135037631656,
+        "gate_strength": 0.39998651916782063,
+        "identity_probability": 0.19708704992608697,
+        "magnitude": {
+          "mean": 2.319266545467696,
+          "p05": 0.4343671805690974,
+          "p50": 2.681423290943106,
+          "p95": 3.546733239168922,
+          "sample_standard_deviation": 1.1670531389798378
+        },
+        "maximum_route_probability": 0.9210657927450783,
+        "mean_route_distribution": [
+          0.19708704992608697,
+          0.06149790757991192,
+          0.11288201406632217,
+          0.20497467031046257,
+          0.13755210330204393,
+          0.09314236449651705,
+          0.10641931087353113,
+          0.08644458348999766
+        ],
+        "nearest_d4_distance": 0.062455260840751654,
+        "normalized_router_entropy": 0.1000643987489662,
+        "qkv_role_differentiation": 0.8913710934526302,
+        "token_conditioned_routing_variation": 0.7156971010257086
+      },
+      "interventions": [
+        {
+          "condition": "original",
+          "development_bleu": 39.524616286680136,
+          "difference_from_original": 0.0
+        },
+        {
+          "condition": "gate_zero",
+          "development_bleu": 31.483444028149446,
+          "difference_from_original": -8.04117225853069
+        },
+        {
+          "condition": "uniform_router",
+          "development_bleu": 37.24346892787656,
+          "difference_from_original": -2.2811473588035724
+        },
+        {
+          "condition": "identity_router",
+          "development_bleu": 36.68981544357094,
+          "difference_from_original": -2.8348008431091927
+        },
+        {
+          "condition": "hard_argmax",
+          "development_bleu": 39.41486801299672,
+          "difference_from_original": -0.10974827368341522
+        },
+        {
+          "condition": "magnitude_one",
+          "development_bleu": 35.340522514177756,
+          "difference_from_original": -4.184093772502379
+        }
+      ],
+      "model": "ana_feat_enc",
+      "modules": [
+        {
+          "effective_number_of_routes": 1.2328943436096413,
+          "gate_strength": 0.4138875901699066,
+          "identity_probability": 0.03624296914656525,
+          "layer": 1,
+          "magnitude": {
+            "mean": 3.593081241843901,
+            "p05": 0.3284152388572693,
+            "p50": 4.88253116607666,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 1.7809676579343796
+          },
+          "maximum_route_probability": 0.933800964727181,
+          "mean_route_distribution": [
+            0.03624296914656525,
+            0.0015181371615023082,
+            0.0015121344431533728,
+            0.4679238662742709,
+            0.1292710928143285,
+            0.3149742288144362,
+            0.004201608229046152,
+            0.044355978261611535
+          ],
+          "nearest_d4_distance": 0.05124725406846524,
+          "normalized_router_entropy": 0.08030806263842392,
+          "qkv_role_differentiation": 0.897620416936282,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.5375525786020032
+        },
+        {
+          "effective_number_of_routes": 1.4169175346644003,
+          "gate_strength": 0.0685274749994278,
+          "identity_probability": 0.3397416254761252,
+          "layer": 1,
+          "magnitude": {
+            "mean": 2.508818388274864,
+            "p05": 0.007188946940004826,
+            "p50": 1.9084464311599731,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 2.252832713722677
+          },
+          "maximum_route_probability": 0.8858594813097118,
+          "mean_route_distribution": [
+            0.3397416254761252,
+            0.09128458198465254,
+            0.27394993994744415,
+            0.12205052198023833,
+            0.10689498786860788,
+            0.026679406703237984,
+            0.01741149025894775,
+            0.02198744150841095
+          ],
+          "nearest_d4_distance": 0.09426563300110681,
+          "normalized_router_entropy": 0.13521676189255208,
+          "qkv_role_differentiation": 0.897620416936282,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.6759931005259893
+        },
+        {
+          "effective_number_of_routes": 1.0970061047794468,
+          "gate_strength": 0.8975300192832947,
+          "identity_probability": 0.26405204287831635,
+          "layer": 1,
+          "magnitude": {
+            "mean": 0.1356386923413819,
+            "p05": 0.06511048227548599,
+            "p50": 0.12893883883953094,
+            "p95": 0.22296734154224396,
+            "sample_standard_deviation": 0.04757412420783669
+          },
+          "maximum_route_probability": 0.974060292772486,
+          "mean_route_distribution": [
+            0.26405204287831635,
+            0.02099606607138773,
+            0.0395372888100377,
+            0.09353200166697884,
+            0.3138922405978056,
+            0.20325077525414537,
+            0.05245825797517126,
+            0.012281338230976827
+          ],
+          "nearest_d4_distance": 0.021507016401488367,
+          "normalized_router_entropy": 0.034027423814304965,
+          "qkv_role_differentiation": 0.897620416936282,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.773061440866983
+        },
+        {
+          "effective_number_of_routes": 1.2843762489532582,
+          "gate_strength": 0.2637568414211273,
+          "identity_probability": 0.2061090808221428,
+          "layer": 2,
+          "magnitude": {
+            "mean": 3.6482429978325417,
+            "p05": 0.6722327560186386,
+            "p50": 5.006715297698975,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 1.6694606371342866
+          },
+          "maximum_route_probability": 0.9187416067367349,
+          "mean_route_distribution": [
+            0.2061090808221428,
+            0.003981575014520545,
+            0.03122728813026401,
+            0.14869573223009888,
+            0.16032041805147204,
+            0.03569244258537552,
+            0.27387998385225837,
+            0.14009348369832086
+          ],
+          "nearest_d4_distance": 0.06875484143627691,
+          "normalized_router_entropy": 0.10497399256651543,
+          "qkv_role_differentiation": 0.897807369627122,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.7518116531526899
+        },
+        {
+          "effective_number_of_routes": 1.6222883998113486,
+          "gate_strength": 0.25137653946876526,
+          "identity_probability": 0.1613797806793764,
+          "layer": 2,
+          "magnitude": {
+            "mean": 3.549462709656659,
+            "p05": 1.4371751308441163,
+            "p50": 3.4849222898483276,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 1.396545242972261
+          },
+          "maximum_route_probability": 0.840551687187167,
+          "mean_route_distribution": [
+            0.1613797806793764,
+            0.036707783720033,
+            0.020584531685029078,
+            0.007760436303299143,
+            0.32623046330446365,
+            0.20966940137234508,
+            0.013572388257349995,
+            0.22409521641231178
+          ],
+          "nearest_d4_distance": 0.11293580616290037,
+          "normalized_router_entropy": 0.20590652249158603,
+          "qkv_role_differentiation": 0.897807369627122,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.5730610132948512
+        },
+        {
+          "effective_number_of_routes": 1.6330421698659694,
+          "gate_strength": 0.589585542678833,
+          "identity_probability": 0.1515698575759842,
+          "layer": 2,
+          "magnitude": {
+            "mean": 0.22273006367765993,
+            "p05": 0.0719951618462801,
+            "p50": 0.2147834226489067,
+            "p95": 0.4409059658646582,
+            "sample_standard_deviation": 0.11150023376974373
+          },
+          "maximum_route_probability": 0.8447636129214325,
+          "mean_route_distribution": [
+            0.1515698575759842,
+            0.12589143729180646,
+            0.17638922872405102,
+            0.1837641313379486,
+            0.10638003029332688,
+            0.019910374301111314,
+            0.17424082045018763,
+            0.061854122298173726
+          ],
+          "nearest_d4_distance": 0.13125986292068909,
+          "normalized_router_entropy": 0.20251550133600058,
+          "qkv_role_differentiation": 0.897807369627122,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.7386797143102456
+        },
+        {
+          "effective_number_of_routes": 1.1336095775088497,
+          "gate_strength": 0.1511945277452469,
+          "identity_probability": 0.2795471813168547,
+          "layer": 3,
+          "magnitude": {
+            "mean": 3.5679954533864224,
+            "p05": 0.3067958697676659,
+            "p50": 4.4909727573394775,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 1.6715081888492571
+          },
+          "maximum_route_probability": 0.9613064523155593,
+          "mean_route_distribution": [
+            0.2795471813168547,
+            0.005427005515266627,
+            0.0030098523482613884,
+            0.23396052833490819,
+            0.09802805346015989,
+            0.03973144942666251,
+            0.22682722698294508,
+            0.11346870995938091
+          ],
+          "nearest_d4_distance": 0.03180334843903889,
+          "normalized_router_entropy": 0.048005951963355276,
+          "qkv_role_differentiation": 0.8872021302235983,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.7604889453853131
+        },
+        {
+          "effective_number_of_routes": 1.2354803292092105,
+          "gate_strength": 0.1654781997203827,
+          "identity_probability": 0.18213329552630697,
+          "layer": 3,
+          "magnitude": {
+            "mean": 3.047401912245405,
+            "p05": 0.903188019990921,
+            "p50": 3.087152361869812,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 1.406989898448549
+          },
+          "maximum_route_probability": 0.9326010942168707,
+          "mean_route_distribution": [
+            0.18213329552630697,
+            0.14373372032177154,
+            0.37117780305795894,
+            0.1148719201980827,
+            0.002521300475992345,
+            0.013432516922629928,
+            0.16551111975560526,
+            0.0066183264770934315
+          ],
+          "nearest_d4_distance": 0.05268652575605534,
+          "normalized_router_entropy": 0.08539338140183675,
+          "qkv_role_differentiation": 0.8872021302235983,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.6885297480683349
+        },
+        {
+          "effective_number_of_routes": 1.200508177149746,
+          "gate_strength": 0.7555424571037292,
+          "identity_probability": 0.09479942135407779,
+          "layer": 3,
+          "magnitude": {
+            "mean": 0.39230138081467364,
+            "p05": 0.18216075226664544,
+            "p50": 0.35216692090034485,
+            "p95": 0.7245614826679229,
+            "sample_standard_deviation": 0.16626147717685275
+          },
+          "maximum_route_probability": 0.9491378356710566,
+          "mean_route_distribution": [
+            0.09479942135407779,
+            0.10538171962268034,
+            0.08116818081430352,
+            0.37324953663822513,
+            0.1673461271538623,
+            0.05182270115269948,
+            0.02144293219749216,
+            0.10478938268522678
+          ],
+          "nearest_d4_distance": 0.03705983150310261,
+          "normalized_router_entropy": 0.06632113056377271,
+          "qkv_role_differentiation": 0.8872021302235983,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.8009674219370774
+        },
+        {
+          "effective_number_of_routes": 1.164543852533115,
+          "gate_strength": 0.32626521587371826,
+          "identity_probability": 0.26177870952589605,
+          "layer": 4,
+          "magnitude": {
+            "mean": 3.1131029051618513,
+            "p05": 0.49140328615903855,
+            "p50": 3.5125560760498047,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 1.4816140565399467
+          },
+          "maximum_route_probability": 0.9554978755156393,
+          "mean_route_distribution": [
+            0.26177870952589605,
+            0.09753596730120395,
+            0.024064978363655568,
+            0.12760037117651282,
+            0.07624125341272164,
+            0.14183867141892564,
+            0.07739820306696328,
+            0.19354184861469056
+          ],
+          "nearest_d4_distance": 0.03709209020477555,
+          "normalized_router_entropy": 0.05667881502605138,
+          "qkv_role_differentiation": 0.8828544570235184,
+          "real_token_count": 16420,
+          "role": "Q",
+          "token_conditioned_routing_variation": 0.866364784865115
+        },
+        {
+          "effective_number_of_routes": 1.2942721498143224,
+          "gate_strength": 0.1948932558298111,
+          "identity_probability": 0.2696163502996829,
+          "layer": 4,
+          "magnitude": {
+            "mean": 3.5853835168091557,
+            "p05": 0.6222664237022401,
+            "p50": 4.754643201828003,
+            "p95": 5.006715297698975,
+            "sample_standard_deviation": 1.6914902920672437
+          },
+          "maximum_route_probability": 0.9234382118290148,
+          "mean_route_distribution": [
+            0.2696163502996829,
+            0.029225513828690767,
+            0.0676475238410448,
+            0.4393313932936168,
+            0.14211737252995268,
+            0.023855443434740168,
+            0.007087035908034926,
+            0.021119369008344817
+          ],
+          "nearest_d4_distance": 0.059605130208395286,
+          "normalized_router_entropy": 0.09651827537137596,
+          "qkv_role_differentiation": 0.8828544570235184,
+          "real_token_count": 16420,
+          "role": "K",
+          "token_conditioned_routing_variation": 0.6167269307410735
+        },
+        {
+          "effective_number_of_routes": 1.2504231572586784,
+          "gate_strength": 0.7218005657196045,
+          "identity_probability": 0.11807428451171521,
+          "layer": 4,
+          "magnitude": {
+            "mean": 0.46703928356783764,
+            "p05": 0.12447409816086293,
+            "p50": 0.35325072705745697,
+            "p95": 1.118641698360443,
+            "sample_standard_deviation": 0.32789314493501864
+          },
+          "maximum_route_probability": 0.9330303977380862,
+          "mean_route_distribution": [
+            0.11807428451171521,
+            0.07629138312542723,
+            0.2643154186306625,
+            0.1469556042913706,
+            0.021381899661833785,
+            0.0368509625718954,
+            0.2430006635483717,
+            0.09312978472542978
+          ],
+          "nearest_d4_distance": 0.05124578998672541,
+          "normalized_router_entropy": 0.08490696592181918,
+          "qkv_role_differentiation": 0.8828544570235184,
+          "real_token_count": 16420,
+          "role": "V",
+          "token_conditioned_routing_variation": 0.8051278805588274
+        }
+      ],
+      "original_reproduction_bleu": 39.524616286680136,
+      "original_reproduction_difference": 0.0,
+      "seed": 44,
+      "selected_step": 19000,
+      "stored_development_bleu": 39.524616286680136
+    }
+  ],
+  "corpus": "multi30k",
+  "d4_order": [
+    {
+      "index": 0,
+      "permutation": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "index": 1,
+      "permutation": [
+        0,
+        2,
+        1,
+        3
+      ]
+    },
+    {
+      "index": 2,
+      "permutation": [
+        3,
+        2,
+        1,
+        0
+      ]
+    },
+    {
+      "index": 3,
+      "permutation": [
+        2,
+        0,
+        3,
+        1
+      ]
+    },
+    {
+      "index": 4,
+      "permutation": [
+        1,
+        0,
+        3,
+        2
+      ]
+    },
+    {
+      "index": 5,
+      "permutation": [
+        1,
+        3,
+        0,
+        2
+      ]
+    },
+    {
+      "index": 6,
+      "permutation": [
+        2,
+        3,
+        0,
+        1
+      ]
+    },
+    {
+      "index": 7,
+      "permutation": [
+        3,
+        1,
+        2,
+        0
+      ]
+    }
+  ],
+  "decode_count": 33,
+  "definitions": {
+    "effective_number_of_routes": "mean_token exp(H(p))",
+    "gate_strength": "sigmoid(gate)",
+    "identity_probability": "mean_token p_0, where D4 element 0 is identity",
+    "magnitude": "positive softplus magnitude over real source tokens: mean, sample standard deviation, p05, p50, p95",
+    "maximum_route_probability": "mean_token max_k p_k",
+    "mean_route_distribution": "mean_token p in the fixed D4 order",
+    "nearest_d4_distance": "mean_token min_k ||sum_j p_j P_j - P_k||_F / sqrt(8)",
+    "normalized_router_entropy": "mean_token H(p) / log(8)",
+    "qkv_role_differentiation": "mean_token mean_pair JS(p_Q, p_K, p_V) / log(2), over Q-K, Q-V, and K-V",
+    "token_conditioned_routing_variation": "(H(mean_token p) - mean_token H(p)) / log(8)"
+  },
+  "models": [
+    "ana_d4_enc",
+    "ana_feat_enc"
+  ],
+  "reproduction_tolerance_bleu": 0.05,
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "source_experiment_commit": "447cdf1",
+  "source_factorial_study": "multi30k_factorial_v1",
+  "split": "dev",
+  "study_id": "multi30k_d4_checkpoint_diagnostic_v1"
+}

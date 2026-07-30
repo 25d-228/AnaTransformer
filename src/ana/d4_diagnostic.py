@@ -762,6 +762,19 @@ def markdown_report(artifact: dict[str, Any]) -> str:
         f"mean BLEU by "
         f"{delta('ana_feat_enc', 'magnitude_one')['mean_difference_from_original']:+.2f}.",
         "",
+        "## Interpretation for the next discussion",
+        "",
+        "Descriptively, this matches the first decision pattern: hard argmax retains nearly all "
+        "BLEU, routing is strongly token- and role-differentiated, the soft matrices lie near "
+        "individual D4 forms, and gate/router interventions matter on every seed. Exact "
+        "analogy-equivalent routing therefore remains a live direction for a later comparison "
+        "with random permutation families and generic local mixers. Those comparisons are not "
+        "implemented here.",
+        "",
+        "The combined checkpoints also rely heavily on their learned magnitudes, but the "
+        "factorial screen did not show a useful combined-model advantage. Checkpoint reliance "
+        "therefore demonstrates co-adaptation, not that the magnifier improves the architecture.",
+        "",
         "These three-seed effects are descriptive screening evidence. No p-values or bootstrap "
         "significance tests are reported.",
         "",
