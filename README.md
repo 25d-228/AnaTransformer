@@ -17,7 +17,7 @@ pip install -e ".[dev]"
 
 pytest                                             # 85 tests, CPU, about 10 seconds
 python tools/prepare_data.py --verify              # the 16 data files against their hashes
-ana train --model all --corpus synthetic --smoke   # all eight models, about a minute
+ana train --model all --corpus synthetic --smoke   # all registered models
 ```
 
 If all three pass, the machine can run the study. The data check matters when the repository
@@ -40,6 +40,16 @@ Then repeat `tune` and `run` for `multi30k` and `iwslt14` (one seed each, so 8 r
 **59 runs in total** — 3 checking the published recipes, 56 in the grid. How long one takes has not
 been measured; the first `ana tune` prints the step rate and the time remaining, so the budget
 becomes knowable after one run rather than being guessed at here.
+
+The preregistered follow-up is a separate 15-cell Multi30k screen:
+
+```bash
+ana factorial --dry-run                  # inspect the exact fixed matrix
+ana factorial --gpu-ids 0                # five models x seeds 42, 43, 44
+```
+
+It writes under `runs/multi30k_factorial_v1` by default, scores both development and test BLEU,
+and never reuses the old one-seed pilot cells.
 
 `tune` and `run` start their jobs in the background and return immediately. Watch them with
 `tail -f logs/*.out`. A cell that already has a results file is skipped, so a machine that dies
@@ -96,7 +106,7 @@ the same **diagonal** Kowsher uses. Send `α → 0` and what remains is exactly 
 the two are nested rather than merely comparable. The block was designed as one thing and is
 tested as one thing.
 
-## The eight models
+## The original eight models
 
 | model | projection | per-role operator | role in the argument |
 |---|---|---|---|
@@ -108,6 +118,14 @@ tested as one thing.
 | `ana_feat_1_enc` | shared | D₄, cuts 4 **channels**, routed per channel-**group** | ours |
 | `ana_feat_2_enc` | shared | `ana_feat_1_enc`, and a routed **exponent** per group per token | ours |
 | `ana_feat_all` | shared | `ana_feat_enc`, at every attention site | ours |
+
+The Multi30k follow-up registers two encoder-only ablations through the same construction and
+parameter-counting paths, without adding them to the completed COGS/IWSLT pilot grids:
+
+| model | dynamic magnifier | routed D₄ mixer | factorial cell |
+|---|---|---|---|
+| `ana_mag_enc` | yes | no | 10 |
+| `ana_d4_enc` | no | yes | 01 |
 
 ### The `ana_*` models vary two things, and the grid holds them apart
 

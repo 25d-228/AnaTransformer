@@ -36,6 +36,21 @@ def _inverse_softplus(y: float) -> float:
     return math.log(math.expm1(y))
 
 
+def _positive_magnitude(layer: nn.Linear, readout: Tensor) -> Tensor:
+    logits = layer(readout).clamp(-MAGNITUDE_CLAMP, MAGNITUDE_CLAMP)
+    return F.softplus(logits)
+
+
+def _d4_matrix(router: nn.Linear, readout: Tensor, permutations: Tensor) -> Tensor:
+    weights = F.softmax(router(readout), dim=-1)
+    return torch.einsum("bnc,cji->bnji", weights, permutations)
+
+
+def _gated_residual(z: Tensor, mixed: Tensor, gate: Tensor, scale: Tensor) -> Tensor:
+    gated = z + torch.sigmoid(gate) * (mixed - z)
+    return gated * scale
+
+
 def signed_power(z: Tensor, exponent: Tensor) -> Tensor:
     """sign(z) * |z| ** exponent above POWER_FLOOR, and linear in |z| below it.
 
@@ -97,6 +112,86 @@ class DiagonalRescale(RoleTransform):
 
     def forward(self, z: Tensor, pad_mask: Tensor) -> Tensor:
         return z * self.scale
+
+
+class DynamicMagnification(RoleTransform):
+    """The input-dependent positive magnifier from `D4Mixing`, with identity mixing.
+
+    This is the magnitude-only factorial cell. It retains the current feature/token readout,
+    gate, residual blend and learned diagonal scale, but has no permutation router or D4
+    matrices:
+
+        role = scale * (z + sigmoid(gate) * (magnitude(z) * z - z))
+    """
+
+    def __init__(self, d_model: int, grouping: Grouping, gate_init: float = -2.0) -> None:
+        super().__init__()
+        width = grouping.readout_width(d_model)
+
+        self.grouping = grouping
+        self.magnitude = nn.Linear(width, 1)
+        self.gate = nn.Parameter(torch.tensor(float(gate_init)))
+        self.scale = nn.Parameter(torch.ones(d_model))
+        self.reset_role_parameters()
+
+    @staticmethod
+    def extra_parameters(d_model: int, grouping: Grouping | None) -> int:
+        """Magnitude (w + 1) and gate (1); the diagonal replaces `DiagonalRescale`."""
+        width = grouping.readout_width(d_model)
+        return width + 2
+
+    def reset_role_parameters(self) -> None:
+        nn.init.zeros_(self.magnitude.weight)
+        nn.init.constant_(self.magnitude.bias, _inverse_softplus(1.0))
+        nn.init.ones_(self.scale)
+
+    def forward(self, z: Tensor, pad_mask: Tensor) -> Tensor:
+        readout = self.grouping.router_readout(z, pad_mask)
+        magnitude = _positive_magnitude(self.magnitude, readout)
+        mixed = magnitude * z
+        return _gated_residual(z, mixed, self.gate, self.scale)
+
+
+class D4MixingWithoutMagnitude(RoleTransform):
+    """The routed D4 mixer from `D4Mixing`, with magnitude fixed to exactly one.
+
+    This is the D4-only factorial cell. It retains the current feature/token router, gate,
+    residual blend and learned diagonal scale, but contains no learned magnitude layer:
+
+        role = scale * (z + sigmoid(gate) * (mix_D4(z, router(z)) - z))
+    """
+
+    def __init__(self, d_model: int, grouping: Grouping, gate_init: float = -2.0) -> None:
+        super().__init__()
+        if d_model % GROUP_SIZE:
+            raise ValueError(f"d_model {d_model} is not divisible by the group size {GROUP_SIZE}")
+
+        width = grouping.readout_width(d_model)
+
+        self.grouping = grouping
+        self.router = nn.Linear(width, N_PERMUTATIONS)
+        self.gate = nn.Parameter(torch.tensor(float(gate_init)))
+        self.scale = nn.Parameter(torch.ones(d_model))
+        self.register_buffer("permutations", permutation_matrices(), persistent=False)
+        self.reset_role_parameters()
+
+    @staticmethod
+    def extra_parameters(d_model: int, grouping: Grouping | None) -> int:
+        """Router (8w + 8) and gate (1); the diagonal replaces `DiagonalRescale`."""
+        width = grouping.readout_width(d_model)
+        return N_PERMUTATIONS * width + N_PERMUTATIONS + 1
+
+    def reset_role_parameters(self) -> None:
+        nn.init.zeros_(self.router.weight)
+        nn.init.zeros_(self.router.bias)
+        nn.init.ones_(self.scale)
+
+    def forward(self, z: Tensor, pad_mask: Tensor) -> Tensor:
+        readout = self.grouping.router_readout(z, pad_mask)
+        matrix = _d4_matrix(self.router, readout, self.permutations)
+        magnitude = torch.ones_like(readout[..., :1])
+        mixed = self.grouping.mix(z, matrix, magnitude, pad_mask)
+        return _gated_residual(z, mixed, self.gate, self.scale)
 
 
 class D4Mixing(RoleTransform):
@@ -181,15 +276,11 @@ class D4Mixing(RoleTransform):
     def forward(self, z: Tensor, pad_mask: Tensor) -> Tensor:
         readout = self.grouping.router_readout(z, pad_mask)
 
-        weights = F.softmax(self.router(readout), dim=-1)
-        matrix = torch.einsum("bnc,cji->bnji", weights, self.permutations)
-
-        logits = self.magnitude(readout).clamp(-MAGNITUDE_CLAMP, MAGNITUDE_CLAMP)
-        magnitude = F.softplus(logits)
+        matrix = _d4_matrix(self.router, readout, self.permutations)
+        magnitude = _positive_magnitude(self.magnitude, readout)
 
         mixed = self.grouping.mix(z, matrix, magnitude, pad_mask)
-        gated = z + torch.sigmoid(self.gate) * (mixed - z)
-        return gated * self.scale
+        return _gated_residual(z, mixed, self.gate, self.scale)
 
 
 class D4MixingPowered(D4Mixing):
@@ -259,11 +350,8 @@ class D4MixingPowered(D4Mixing):
     def forward(self, z: Tensor, pad_mask: Tensor) -> Tensor:
         readout = self.grouping.router_readout(z, pad_mask)
 
-        weights = F.softmax(self.router(readout), dim=-1)
-        matrix = torch.einsum("bnc,cji->bnji", weights, self.permutations)
-
-        logits = self.magnitude(readout).clamp(-MAGNITUDE_CLAMP, MAGNITUDE_CLAMP)
-        magnitude = F.softplus(logits)
+        matrix = _d4_matrix(self.router, readout, self.permutations)
+        magnitude = _positive_magnitude(self.magnitude, readout)
 
         batch, length, d_model = z.shape
         groups = d_model // GROUP_SIZE
@@ -284,5 +372,4 @@ class D4MixingPowered(D4Mixing):
         restored = unbent * largest * magnitude.view(batch, 1, groups, 1)
 
         mixed = restored.reshape(batch, length, d_model)
-        gated = z + torch.sigmoid(self.gate) * (mixed - z)
-        return gated * self.scale
+        return _gated_residual(z, mixed, self.gate, self.scale)
