@@ -65,8 +65,12 @@ def test_compact_record_preserves_all_fifteen_configs() -> None:
 def test_markdown_report_contains_paired_and_factorial_results() -> None:
     report = markdown_report(_records())
 
-    assert "Magnitude alone changes development BLEU by +2.00" in report
+    assert "Magnitude alone reproduces 50% of the combined model's mean" in report
     assert "D4 mixing without the magnifier changes development BLEU by +1.00" in report
+    assert (
+        "averages +2.00 development BLEU versus magnitude alone and +3.00 versus D4 alone" in report
+    )
+    assert "better single-component model on each seed, it averages +2.00" in report
     assert "| **mean** | **+2.50** | **+1.50** | **+1.00**" in report
     assert "positive on 3/3 seeds" in report
     assert "No p-values" in report

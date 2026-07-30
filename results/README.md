@@ -9,3 +9,8 @@ The two carry different marks, so a symbol names the test it came from: `*` is p
 - [multi30k](multi30k.md)
 - [iwslt14](iwslt14.md)
 - [cogs](cogs.md)
+
+## Follow-up screens
+
+- [Multi30k magnitude × routed-D4 factorial screen](multi30k_factorial_v1.md) — a fresh,
+  pre-construction-seeded 3-seed study with development BLEU as the primary signal.

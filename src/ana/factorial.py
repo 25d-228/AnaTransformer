@@ -276,6 +276,25 @@ def markdown_report(records: list[dict]) -> str:
         cells[("ana_feat_enc", seed)]["scores"]["dev"] - best
         for seed, best in zip(SEEDS, best_single, strict=True)
     ]
+    combined_over_magnitude = [
+        _difference(cells, "ana_feat_enc", "ana_mag_enc", seed, "dev") for seed in SEEDS
+    ]
+    combined_over_d4 = [
+        _difference(cells, "ana_feat_enc", "ana_d4_enc", seed, "dev") for seed in SEEDS
+    ]
+    mean_combined = _mean(combined)
+    mean_magnitude = _mean(magnitude)
+    if abs(mean_combined) > 1e-12:
+        magnitude_share = 100.0 * mean_magnitude / mean_combined
+        magnitude_summary = (
+            f"Magnitude alone reproduces {magnitude_share:.0f}% of the combined model's mean "
+            f"development gain over `shared_qkv` ({mean_magnitude:+.2f} of {mean_combined:+.2f})."
+        )
+    else:
+        magnitude_summary = (
+            "The combined model has no mean development gain over `shared_qkv`; magnitude alone "
+            f"changes development BLEU by {mean_magnitude:+.2f}."
+        )
     best_shared_model = max(
         ("shared_qkv", "ana_mag_enc", "ana_d4_enc", "ana_feat_enc"),
         key=lambda model: _mean([cells[(model, seed)]["scores"]["dev"] for seed in SEEDS]),
@@ -287,12 +306,16 @@ def markdown_report(records: list[dict]) -> str:
         "",
         "## Screening questions",
         "",
-        f"- Magnitude alone changes development BLEU by {_mean(magnitude):+.2f} versus "
-        f"`shared_qkv`; the combined model changes it by {_mean(combined):+.2f}.",
+        f"- {magnitude_summary}",
         f"- D4 mixing without the magnifier changes development BLEU by {_mean(d4):+.2f} versus "
-        "`shared_qkv`.",
-        f"- The combined model is {_mean(combined_over_single):+.2f} development BLEU above the "
-        "better single-component model on the same seed, on average.",
+        f"`shared_qkv`; the paired difference is positive on "
+        f"{sum(value > 0 for value in d4)}/{len(SEEDS)} seeds: "
+        f"{', '.join(f'{value:+.2f}' for value in d4)}.",
+        f"- The combined model averages {_mean(combined_over_magnitude):+.2f} development BLEU "
+        f"versus magnitude alone and {_mean(combined_over_d4):+.2f} versus D4 alone. Against the "
+        f"better single-component model on each seed, it averages "
+        f"{_mean(combined_over_single):+.2f} and is positive on "
+        f"{sum(value > 0 for value in combined_over_single)}/{len(SEEDS)} seeds.",
         f"- The combined gain over `shared_qkv` is positive on "
         f"{sum(value > 0 for value in combined)}/{len(SEEDS)} seeds: "
         f"{', '.join(f'{value:+.2f}' for value in combined)}.",
