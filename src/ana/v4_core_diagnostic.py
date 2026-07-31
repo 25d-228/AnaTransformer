@@ -420,7 +420,7 @@ def _state_dict_sha256(model: torch.nn.Module) -> str:
         digest.update(name.encode())
         digest.update(str(value.dtype).encode())
         digest.update(json.dumps(list(value.shape)).encode())
-        digest.update(value.view(torch.uint8).numpy().tobytes())
+        digest.update(value.numpy().tobytes())
     return digest.hexdigest()
 
 

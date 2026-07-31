@@ -27,6 +27,7 @@ from ana.permutation_family import FAMILIES, FAMILY_MODELS, SEEDS
 from ana.v4_core_diagnostic import (
     CONDITIONS,
     CoreUsageAccumulator,
+    _state_dict_sha256,
     build_artifact,
     centroid_metadata,
     core_definition,
@@ -118,6 +119,7 @@ def test_subset_intervention_restores_default_output_and_state_after_exceptions(
     mask = torch.ones(2, 3, dtype=torch.long)
     before_output = role(z, mask)
     before_state = {name: value.clone() for name, value in role.state_dict().items()}
+    before_hash = _state_dict_sha256(role)
 
     with temporary_family_subset_intervention(role, "core_soft"):
         assert role._d4_intervention == "core_soft"
@@ -133,6 +135,7 @@ def test_subset_intervention_restores_default_output_and_state_after_exceptions(
     assert role._d4_intervention == "original"
     for name, value in role.state_dict().items():
         assert torch.equal(value, before_state[name])
+    assert _state_dict_sha256(role) == before_hash
 
 
 def test_core_usage_excludes_padding_and_handles_zero_subset_mass() -> None:
