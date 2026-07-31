@@ -20,3 +20,6 @@ The two carry different marks, so a symbol names the test it came from: `*` is p
 - [Multi30k permutation-family specificity screen](multi30k_permutation_family_v1.md) —
   nine development-only control runs comparing D4 with three cycle-type-matched non-closed
   permutation families.
+- [Multi30k shared-V4-core diagnostic](multi30k_v4_core_diagnostic_v1.md) —
+  development-only core-usage statistics and 60 subset interventions over the 12 trained
+  permutation-family checkpoints.
