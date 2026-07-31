@@ -1,0 +1,268 @@
+{
+  "comparisons": {
+    "ana_d4_enc": {
+      "mean_difference_bleu": -0.029428850815866287,
+      "paired_differences_bleu": [
+        0.16758245335022792,
+        0.5208658961516761,
+        -0.7767349019495029
+      ]
+    },
+    "baseline_matched": {
+      "mean_difference_bleu": -1.0573514347402266,
+      "paired_differences_bleu": [
+        -1.4927342485469453,
+        -0.5144544238244535,
+        -1.1648656318492812
+      ]
+    },
+    "perm_ctrl_b_enc": {
+      "mean_difference_bleu": -0.09445327465373292,
+      "paired_differences_bleu": [
+        -0.32696290985268917,
+        0.5089078587337852,
+        -0.46530477284229477
+      ]
+    },
+    "shared_qkv": {
+      "mean_difference_bleu": 0.2877818222455417,
+      "paired_differences_bleu": [
+        0.2896889653229451,
+        0.508680003549614,
+        0.06497649786406612
+      ]
+    }
+  },
+  "corpus": "multi30k",
+  "decision": {
+    "continue_checks": {
+      "at_least_two_seeds_reach_39_90": false,
+      "beats_perm_ctrl_b_on_at_least_two_seeds": false,
+      "mean_development_bleu_at_least_39_90": false,
+      "runtime_at_most_1_5x_perm_ctrl_b": true
+    },
+    "outcome": "stop_fixed_permutation_expansion",
+    "perm_ctrl_b_seed_wins": 1,
+    "promising": false,
+    "runtime_ratio_vs_perm_ctrl_b": 1.007414921624037,
+    "seeds_reaching_39_90": 0,
+    "stop_checks": {
+      "gain_over_perm_ctrl_b_on_at_most_one_seed": true,
+      "mean_gain_over_perm_ctrl_b_below_0_20": true,
+      "mean_gap_to_baseline_matched_at_most_minus_0_80": true
+    }
+  },
+  "evaluated_splits": [
+    "dev"
+  ],
+  "model": "s4_enc",
+  "references": {
+    "ana_d4_enc": {
+      "development_bleu_by_seed": {
+        "42": 39.19704090596687,
+        "43": 38.893382941452636,
+        "44": 39.99550998350379
+      },
+      "mean_development_bleu": 39.3619779436411,
+      "mean_wall_clock_seconds": 1386.2333333333333,
+      "parameters": 2226284,
+      "sample_standard_deviation_development_bleu": 0.5692751303215932
+    },
+    "baseline_matched": {
+      "development_bleu_by_seed": {
+        "42": 40.857357607864046,
+        "43": 39.928703261428765,
+        "44": 40.383640713403565
+      },
+      "mean_development_bleu": 40.38990052756546,
+      "mean_wall_clock_seconds": 1153.2666666666667,
+      "parameters": 2249936,
+      "sample_standard_deviation_development_bleu": 0.46435881895716213
+    },
+    "perm_ctrl_b_enc": {
+      "development_bleu_by_seed": {
+        "42": 39.69158626916979,
+        "43": 38.90534097887053,
+        "44": 39.68407985439658
+      },
+      "mean_development_bleu": 39.42700236747896,
+      "mean_wall_clock_seconds": 1380.1,
+      "parameters": 2226284,
+      "sample_standard_deviation_development_bleu": 0.4517876047871942
+    },
+    "shared_qkv": {
+      "development_bleu_by_seed": {
+        "42": 39.074934393994155,
+        "43": 38.9055688340547,
+        "44": 39.15379858369022
+      },
+      "mean_development_bleu": 39.04476727057969,
+      "mean_wall_clock_seconds": 1126.6666666666667,
+      "parameters": 2213888,
+      "sample_standard_deviation_development_bleu": 0.12683470996677496
+    }
+  },
+  "runs": [
+    {
+      "development_bleu": 39.3646233593171,
+      "development_loss": 2.8701442209691455,
+      "model_configuration": {
+        "bos_id": 1,
+        "d_ff": 256,
+        "d_model": 128,
+        "dropout": 0.3,
+        "eos_id": 2,
+        "label_smoothing": 0.1,
+        "max_positions": 256,
+        "n_decoder_layers": 4,
+        "n_encoder_layers": 4,
+        "n_heads": 4,
+        "pad_id": 0,
+        "unk_id": 3,
+        "vocab_size": 10000
+      },
+      "paired_differences_bleu": {
+        "ana_d4_enc": 0.16758245335022792,
+        "baseline_matched": -1.4927342485469453,
+        "perm_ctrl_b_enc": -0.32696290985268917,
+        "shared_qkv": 0.2896889653229451
+      },
+      "parameters": 2251052,
+      "run_commit": "0cd69df",
+      "seed": 42,
+      "selected_step": 20000,
+      "training_configuration": {
+        "adam_betas": [
+          0.9,
+          0.98
+        ],
+        "adam_eps": 1e-09,
+        "batch_size": 256,
+        "beam_size": 5,
+        "decode_batch_size": 32,
+        "eval_every": 1000,
+        "learning_rate": 0.005,
+        "max_grad_norm": 1.0,
+        "max_steps": 20000,
+        "schedule": "inverse_sqrt",
+        "seed": 42,
+        "selection": "best_dev_loss",
+        "warmup_steps": 2000,
+        "weight_decay": 0.0
+      },
+      "wall_clock_seconds": 1404.4
+    },
+    {
+      "development_bleu": 39.41424883760431,
+      "development_loss": 2.896021370821921,
+      "model_configuration": {
+        "bos_id": 1,
+        "d_ff": 256,
+        "d_model": 128,
+        "dropout": 0.3,
+        "eos_id": 2,
+        "label_smoothing": 0.1,
+        "max_positions": 256,
+        "n_decoder_layers": 4,
+        "n_encoder_layers": 4,
+        "n_heads": 4,
+        "pad_id": 0,
+        "unk_id": 3,
+        "vocab_size": 10000
+      },
+      "paired_differences_bleu": {
+        "ana_d4_enc": 0.5208658961516761,
+        "baseline_matched": -0.5144544238244535,
+        "perm_ctrl_b_enc": 0.5089078587337852,
+        "shared_qkv": 0.508680003549614
+      },
+      "parameters": 2251052,
+      "run_commit": "0cd69df",
+      "seed": 43,
+      "selected_step": 20000,
+      "training_configuration": {
+        "adam_betas": [
+          0.9,
+          0.98
+        ],
+        "adam_eps": 1e-09,
+        "batch_size": 256,
+        "beam_size": 5,
+        "decode_batch_size": 32,
+        "eval_every": 1000,
+        "learning_rate": 0.005,
+        "max_grad_norm": 1.0,
+        "max_steps": 20000,
+        "schedule": "inverse_sqrt",
+        "seed": 43,
+        "selection": "best_dev_loss",
+        "warmup_steps": 2000,
+        "weight_decay": 0.0
+      },
+      "wall_clock_seconds": 1400.0
+    },
+    {
+      "development_bleu": 39.218775081554284,
+      "development_loss": 2.878709463913295,
+      "model_configuration": {
+        "bos_id": 1,
+        "d_ff": 256,
+        "d_model": 128,
+        "dropout": 0.3,
+        "eos_id": 2,
+        "label_smoothing": 0.1,
+        "max_positions": 256,
+        "n_decoder_layers": 4,
+        "n_encoder_layers": 4,
+        "n_heads": 4,
+        "pad_id": 0,
+        "unk_id": 3,
+        "vocab_size": 10000
+      },
+      "paired_differences_bleu": {
+        "ana_d4_enc": -0.7767349019495029,
+        "baseline_matched": -1.1648656318492812,
+        "perm_ctrl_b_enc": -0.46530477284229477,
+        "shared_qkv": 0.06497649786406612
+      },
+      "parameters": 2251052,
+      "run_commit": "0cd69df",
+      "seed": 44,
+      "selected_step": 20000,
+      "training_configuration": {
+        "adam_betas": [
+          0.9,
+          0.98
+        ],
+        "adam_eps": 1e-09,
+        "batch_size": 256,
+        "beam_size": 5,
+        "decode_batch_size": 32,
+        "eval_every": 1000,
+        "learning_rate": 0.005,
+        "max_grad_norm": 1.0,
+        "max_steps": 20000,
+        "schedule": "inverse_sqrt",
+        "seed": 44,
+        "selection": "best_dev_loss",
+        "warmup_steps": 2000,
+        "weight_decay": 0.0
+      },
+      "wall_clock_seconds": 1366.6
+    }
+  ],
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "source_artifact": "results/multi30k_permutation_family_v1.json",
+  "study_id": "multi30k_s4_v1",
+  "summary": {
+    "mean_development_bleu": 39.33254909282523,
+    "mean_wall_clock_seconds": 1390.3333333333333,
+    "parameters": 2251052,
+    "sample_standard_deviation_development_bleu": 0.10160741239850553
+  },
+  "test_split_evaluated": false
+}

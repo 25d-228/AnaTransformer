@@ -25,6 +25,7 @@ and is still not positionwise, because its ROUTING pools over the sentence.
 
 from __future__ import annotations
 
+import itertools
 from abc import ABC, abstractmethod
 
 import torch
@@ -49,6 +50,10 @@ D4_PERMUTATIONS: PermutationFamily = (
     (2, 3, 0, 1),  # c:d::a:b   exchange the ratios
     (3, 1, 2, 0),  # d:b::c:a
 )
+
+# The complete symmetric group on four positions, in the fixed lexicographic order used by the
+# three-seed S4 screen.
+S4_PERMUTATIONS = tuple(itertools.permutations((0, 1, 2, 3)))
 
 # The four permutations shared by D4 and every preregistered matched control family.
 # Keep this order fixed: issue #8 reports conditional core distributions in this order.

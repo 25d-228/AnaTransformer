@@ -22,6 +22,7 @@ from ana.nn.grouping import (
     D4_PERMUTATIONS,
     GROUP_SIZE,
     N_PERMUTATIONS,
+    S4_PERMUTATIONS,
     V4_CORE,
     Grouping,
     PerGroupFeatureGrouping,
@@ -219,14 +220,15 @@ class D4RoleTransform(RoleTransform, ABC):
             return _masked_probabilities(logits, noncore, hard=True)
 
         learned = self.learned_route_probabilities(readout)
+        n_routes = self.router.out_features
         if self._d4_intervention == "uniform_router":
-            return torch.full_like(learned, 1.0 / N_PERMUTATIONS)
+            return torch.full_like(learned, 1.0 / n_routes)
         if self._d4_intervention == "identity_router":
             identity = torch.zeros_like(learned)
             identity[..., 0] = 1.0
             return identity
         if self._d4_intervention == "hard_argmax":
-            return F.one_hot(learned.argmax(dim=-1), N_PERMUTATIONS).to(learned.dtype)
+            return F.one_hot(learned.argmax(dim=-1), n_routes).to(learned.dtype)
         return learned
 
     def gate_strength(self) -> Tensor:
@@ -358,7 +360,7 @@ class D4MixingWithoutMagnitude(D4RoleTransform):
         width = grouping.readout_width(d_model)
 
         self.grouping = grouping
-        self.router = nn.Linear(width, N_PERMUTATIONS)
+        self.router = nn.Linear(width, len(permutations))
         self.gate = nn.Parameter(torch.tensor(float(gate_init)))
         self.scale = nn.Parameter(torch.ones(d_model))
         self.register_buffer("permutations", permutation_matrices(permutations), persistent=False)
@@ -381,6 +383,30 @@ class D4MixingWithoutMagnitude(D4RoleTransform):
         magnitude = self.routed_magnitude(readout)
         mixed = self.grouping.mix(z, matrix, magnitude, pad_mask)
         return _gated_residual(z, mixed, self.gate, self.scale, self.gate_strength())
+
+
+class S4MixingWithoutMagnitude(D4MixingWithoutMagnitude):
+    """The permutation-only role over all 24 elements of S4."""
+
+    def __init__(
+        self,
+        d_model: int,
+        grouping: Grouping,
+        gate_init: float = -2.0,
+    ) -> None:
+        super().__init__(
+            d_model,
+            grouping,
+            gate_init=gate_init,
+            permutations=S4_PERMUTATIONS,
+        )
+
+    @staticmethod
+    def extra_parameters(d_model: int, grouping: Grouping | None) -> int:
+        """Router (24w + 24) and gate (1); the diagonal replaces `DiagonalRescale`."""
+        width = grouping.readout_width(d_model)
+        n_routes = len(S4_PERMUTATIONS)
+        return n_routes * width + n_routes + 1
 
 
 class D4Mixing(D4RoleTransform):

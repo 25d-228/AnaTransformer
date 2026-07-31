@@ -84,6 +84,7 @@ from ana.nn.roles import (
     DiagonalRescale,
     DynamicMagnification,
     RoleTransform,
+    S4MixingWithoutMagnitude,
 )
 
 Mixer = Callable[[int, Grouping], RoleTransform]
@@ -190,6 +191,15 @@ REGISTRY: dict[str, ModelSpec] = {
             grouping=FEATURE,
             sites=ENCODER_ONLY,
             permutations=PERM_CONTROL_C,
+        ),
+        ModelSpec(
+            name="s4_enc",
+            purpose="the ana_d4_enc permutation-only role expanded to all 24 permutations "
+            "of four channels; the Multi30k full-S4 screening model",
+            shared=True,
+            mixer=S4MixingWithoutMagnitude,
+            grouping=FEATURE,
+            sites=ENCODER_ONLY,
         ),
         ModelSpec(
             name="ana_seq_enc",
