@@ -78,6 +78,21 @@ then verifies identical same-seed trainable initialization across D4 and the thr
 Only after both guards pass does it start the nine new runs. Training and post-training
 evaluation load and score development data only; the test split is not evaluated.
 
+After the family screen, the shared-V4-core diagnostic reuses all 12 trained permutation
+checkpoints and launches no training:
+
+```bash
+ana diagnose-v4-core \
+  --d4-run-dir runs/multi30k_factorial_v1 \
+  --family-run-dir runs/multi30k_permutation_family_v1 \
+  --device cuda:0
+```
+
+It first reproduces all 12 original development scores within 0.05. Only after every guard
+passes does it run the five tuple-derived core/non-core interventions per checkpoint. Existing
+all-family hard-argmax results and router statistics are loaded from the committed artifacts;
+the test split is never loaded or decoded.
+
 `tune` and `run` start their jobs in the background and return immediately. Watch them with
 `tail -f logs/*.out`. A cell that already has a results file is skipped, so a machine that dies
 part way through can be restarted and will resume **at the granularity of a whole cell** — a run

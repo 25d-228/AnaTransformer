@@ -22,6 +22,7 @@ from ana.nn.grouping import (
     D4_PERMUTATIONS,
     GROUP_SIZE,
     N_PERMUTATIONS,
+    V4_CORE,
     Grouping,
     PerGroupFeatureGrouping,
     PermutationFamily,
@@ -36,6 +37,11 @@ D4Intervention = Literal[
     "identity_router",
     "hard_argmax",
     "magnitude_one",
+    "core_soft",
+    "core_hard",
+    "core_uniform",
+    "noncore_soft",
+    "noncore_hard",
 ]
 D4_INTERVENTIONS: tuple[D4Intervention, ...] = (
     "original",
@@ -44,6 +50,18 @@ D4_INTERVENTIONS: tuple[D4Intervention, ...] = (
     "identity_router",
     "hard_argmax",
     "magnitude_one",
+    "core_soft",
+    "core_hard",
+    "core_uniform",
+    "noncore_soft",
+    "noncore_hard",
+)
+FAMILY_SUBSET_INTERVENTIONS: tuple[D4Intervention, ...] = (
+    "core_soft",
+    "core_hard",
+    "core_uniform",
+    "noncore_soft",
+    "noncore_hard",
 )
 
 # The exponent the powered mixer routes, and the floor held under |z| before it is raised to
@@ -64,6 +82,51 @@ def _positive_magnitude(layer: nn.Linear, readout: Tensor) -> Tensor:
 
 def _d4_matrix(weights: Tensor, permutations: Tensor) -> Tensor:
     return torch.einsum("bnc,cji->bnji", weights, permutations)
+
+
+def family_subset_masks(permutations: Tensor) -> tuple[Tensor, Tensor]:
+    """Return tuple-derived V4-core and complement masks for one live family buffer."""
+    expected_shape = (N_PERMUTATIONS, GROUP_SIZE, GROUP_SIZE)
+    if tuple(permutations.shape) != expected_shape:
+        raise ValueError(
+            f"permutation buffer has shape {tuple(permutations.shape)}, expected {expected_shape}"
+        )
+    core_matrices = permutation_matrices(V4_CORE).to(
+        device=permutations.device,
+        dtype=permutations.dtype,
+    )
+    matches = (permutations[:, None] == core_matrices[None]).all(dim=(-1, -2))
+    if not torch.equal(
+        matches.sum(dim=0),
+        torch.ones(len(V4_CORE), dtype=torch.long, device=permutations.device),
+    ):
+        raise ValueError("the active permutation family does not contain each V4 core member once")
+    core = matches.any(dim=1)
+    noncore = ~core
+    if int(core.sum()) != 4 or int(noncore.sum()) != 4:
+        raise ValueError("the active family must partition into four core and four non-core routes")
+    return core, noncore
+
+
+def _masked_probabilities(
+    logits: Tensor,
+    active: Tensor,
+    *,
+    hard: bool,
+    uniform: bool = False,
+) -> Tensor:
+    """Normalize or select logits over a tuple-derived four-member subset."""
+    if tuple(active.shape) != (N_PERMUTATIONS,) or active.dtype != torch.bool:
+        raise ValueError("a family subset mask must be a Boolean vector of length eight")
+    if int(active.sum()) != 4:
+        raise ValueError("a family subset intervention requires exactly four active routes")
+    if uniform:
+        view = (1,) * (logits.ndim - 1) + (N_PERMUTATIONS,)
+        return active.to(dtype=logits.dtype).view(view).expand_as(logits) / 4.0
+    masked = logits.masked_fill(~active, -torch.inf)
+    if hard:
+        return F.one_hot(masked.argmax(dim=-1), N_PERMUTATIONS).to(logits.dtype)
+    return F.softmax(masked, dim=-1)
 
 
 def _gated_residual(
@@ -142,6 +205,19 @@ class D4RoleTransform(RoleTransform, ABC):
 
     def route_probabilities(self, readout: Tensor) -> Tensor:
         """Router probabilities after applying the one active inference condition."""
+        if self._d4_intervention in FAMILY_SUBSET_INTERVENTIONS:
+            logits = self.router(readout)
+            core, noncore = family_subset_masks(self.permutations)
+            if self._d4_intervention == "core_soft":
+                return _masked_probabilities(logits, core, hard=False)
+            if self._d4_intervention == "core_hard":
+                return _masked_probabilities(logits, core, hard=True)
+            if self._d4_intervention == "core_uniform":
+                return _masked_probabilities(logits, core, hard=False, uniform=True)
+            if self._d4_intervention == "noncore_soft":
+                return _masked_probabilities(logits, noncore, hard=False)
+            return _masked_probabilities(logits, noncore, hard=True)
+
         learned = self.learned_route_probabilities(readout)
         if self._d4_intervention == "uniform_router":
             return torch.full_like(learned, 1.0 / N_PERMUTATIONS)
@@ -187,6 +263,21 @@ def temporary_d4_intervention(model: nn.Module, condition: D4Intervention) -> It
     finally:
         for module, restored in zip(modules, previous, strict=True):
             module._d4_intervention = restored
+
+
+@contextmanager
+def temporary_family_subset_intervention(
+    model: nn.Module,
+    condition: D4Intervention,
+) -> Iterator[None]:
+    """Apply one of the five V4-subset diagnostics without changing persistent state."""
+    if condition not in FAMILY_SUBSET_INTERVENTIONS:
+        raise ValueError(
+            f"unknown family-subset intervention {condition!r}; choose from "
+            f"{', '.join(FAMILY_SUBSET_INTERVENTIONS)}"
+        )
+    with temporary_d4_intervention(model, condition):
+        yield
 
 
 class DiagonalRescale(RoleTransform):

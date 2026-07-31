@@ -50,6 +50,15 @@ D4_PERMUTATIONS: PermutationFamily = (
     (3, 1, 2, 0),  # d:b::c:a
 )
 
+# The four permutations shared by D4 and every preregistered matched control family.
+# Keep this order fixed: issue #8 reports conditional core distributions in this order.
+V4_CORE: PermutationFamily = (
+    (0, 1, 2, 3),
+    (1, 0, 3, 2),
+    (2, 3, 0, 1),
+    (3, 2, 1, 0),
+)
+
 PERM_CONTROL_A: PermutationFamily = (
     (0, 1, 2, 3),
     (0, 1, 3, 2),
@@ -104,15 +113,15 @@ assert _is_closed_group(D4_PERMUTATIONS), "the eight forms are not a closed grou
 
 
 def permutation_matrices(permutations: PermutationFamily = D4_PERMUTATIONS) -> Tensor:
-    """The eight permutations as (8, 4, 4) matrices, so a blend of them is one matmul.
+    """Permutation tuples as (members, 4, 4) matrices, so a blend is one matmul.
 
     A convex combination of permutation matrices is doubly stochastic: every row and
     every column sums to one. That is the whole reason a softmax over these eight is
     a meaningful operator and not just a shuffle.
     """
-    if len(permutations) != N_PERMUTATIONS:
-        raise ValueError(f"a permutation family must contain {N_PERMUTATIONS} members")
-    matrices = torch.zeros(N_PERMUTATIONS, GROUP_SIZE, GROUP_SIZE)
+    if not permutations:
+        raise ValueError("a permutation collection must not be empty")
+    matrices = torch.zeros(len(permutations), GROUP_SIZE, GROUP_SIZE)
     for c, perm in enumerate(permutations):
         if tuple(sorted(perm)) != tuple(range(GROUP_SIZE)):
             raise ValueError(f"family member {perm!r} is not a permutation of four positions")
