@@ -17,3 +17,6 @@ The two carry different marks, so a symbol names the test it came from: `*` is p
 - [Multi30k trained-D4 checkpoint diagnostic](multi30k_d4_checkpoint_diagnostic_v1.md) —
   development-only router statistics and 33 inference interventions over the six factorial
   D4 checkpoints.
+- [Multi30k permutation-family specificity screen](multi30k_permutation_family_v1.md) —
+  nine development-only control runs comparing D4 with three cycle-type-matched non-closed
+  permutation families.

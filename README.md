@@ -62,6 +62,22 @@ does it run the prescribed gate, router, hard-selection, and magnitude intervent
 outputs are compact JSON and Markdown artifacts under `results/`; checkpoint parameters and
 default state dictionaries are never changed.
 
+The family-specificity screen then compares the existing D4-only checkpoints with three fixed,
+cycle-type-matched non-closed permutation families:
+
+```bash
+ana permutation-family --dry-run
+ana permutation-family --gpu-ids 0,1,2 \
+  --source-run-dir runs/multi30k_factorial_v1
+ana permutation-family --analyze \
+  --source-run-dir runs/multi30k_factorial_v1
+```
+
+The live launcher first strictly loads and reproduces all six prior diagnostic checkpoints,
+then verifies identical same-seed trainable initialization across D4 and the three controls.
+Only after both guards pass does it start the nine new runs. Training and post-training
+evaluation load and score development data only; the test split is not evaluated.
+
 `tune` and `run` start their jobs in the background and return immediately. Watch them with
 `tail -f logs/*.out`. A cell that already has a results file is skipped, so a machine that dies
 part way through can be restarted and will resume **at the granularity of a whole cell** — a run

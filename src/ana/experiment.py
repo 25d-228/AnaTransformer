@@ -60,8 +60,18 @@ def encode_split(
     ]
 
 
-def prepare(corpus: Corpus, smoke: bool) -> tuple[Tokenizer, dict[str, list[Example]]]:
-    splits = corpus.load()
+def prepare(
+    corpus: Corpus,
+    smoke: bool,
+    evaluated_splits: tuple[str, ...] | None = None,
+) -> tuple[Tokenizer, dict[str, list[Example]]]:
+    if evaluated_splits is None:
+        splits = corpus.load()
+    else:
+        if not evaluated_splits or "train" in evaluated_splits:
+            raise ValueError("evaluated_splits must name one or more non-training splits")
+        required = tuple(dict.fromkeys(("train", "dev", *evaluated_splits)))
+        splits = {split: corpus.load_split(split) for split in required}
     if smoke:
         splits = {name: rows[:SMOKE_EXAMPLES] for name, rows in splits.items()}
 
@@ -127,6 +137,7 @@ def run_cell(
     device: torch.device | None = None,
     study_id: str | None = None,
     score_dev: bool = False,
+    evaluated_splits: tuple[str, ...] | None = None,
 ) -> dict:
     if device is None:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -137,7 +148,7 @@ def run_cell(
     set_seed(train_config.seed)
 
     corpus = build_corpus(corpus_name)
-    tokenizer, splits = prepare(corpus, smoke)
+    tokenizer, splits = prepare(corpus, smoke, evaluated_splits)
 
     if smoke:
         train_config = replace(
@@ -192,7 +203,11 @@ def run_cell(
     scores: dict[str, float] = {}
     hypotheses: dict[str, list[str]] = {}
     for split in splits:
-        if split == "train" or (split == "dev" and not score_dev):
+        if evaluated_splits is not None:
+            should_score = split in evaluated_splits
+        else:
+            should_score = split != "train" and (split != "dev" or score_dev)
+        if not should_score:
             continue
         value, generated = score_split(
             model,
@@ -275,6 +290,7 @@ def run_cell(
             "model_config": asdict(shape),
             "smoke": smoke,
             "score_dev": score_dev,
+            "evaluated_splits": list(scores),
             "device": str(device),
             "python": platform.python_version(),
             "torch": torch.__version__,

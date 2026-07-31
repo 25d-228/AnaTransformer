@@ -61,6 +61,13 @@ from ana.factorial import CORPUS as FACTORIAL_CORPUS
 from ana.factorial import MODELS as FACTORIAL_MODELS
 from ana.factorial import SEEDS as FACTORIAL_SEEDS
 from ana.factorial import STUDY_ID as FACTORIAL_STUDY_ID
+from ana.permutation_family import (
+    CONTROL_MODELS as PERMUTATION_FAMILY_MODELS,
+)
+from ana.permutation_family import SEEDS as PERMUTATION_FAMILY_SEEDS
+from ana.permutation_family import STUDY_ID as PERMUTATION_FAMILY_STUDY_ID
+from ana.permutation_family import run_analysis as run_permutation_family_analysis
+from ana.permutation_family import run_compatibility_preflight
 from ana.registry import PILOT_MODELS, REGISTRY
 from ana.stats import across_seed_test, bootstrap_score, paired_bootstrap
 
@@ -126,6 +133,11 @@ def _train(args: argparse.Namespace) -> None:
     # asked for a specific directory. `_report` refuses to read them either -- one guard would
     # do, but this is the kind of mistake that is invisible until it is in a table.
     out = os.path.join(args.out, "smoke") if args.smoke and args.out == "runs" else args.out
+    evaluated_splits = (
+        tuple(split.strip() for split in args.evaluated_splits.split(",") if split.strip())
+        if args.evaluated_splits
+        else None
+    )
 
     for name in models:
         record = run_cell(
@@ -136,6 +148,7 @@ def _train(args: argparse.Namespace) -> None:
             smoke=args.smoke,
             study_id=args.study_id,
             score_dev=args.score_dev,
+            evaluated_splits=evaluated_splits,
         )
         scores = "  ".join(f"{k} {v:.2f}" for k, v in record["scores"].items())
         print(
@@ -473,6 +486,72 @@ def _d4_diagnostic(args: argparse.Namespace) -> None:
     )
 
 
+def _permutation_family(args: argparse.Namespace) -> None:
+    """Preflight, launch, or analyze the nine-cell fixed-family screen."""
+    device = torch.device(args.device)
+    if device.type == "cuda" and not torch.cuda.is_available() and not args.dry_run:
+        raise SystemExit(f"requested {device}, but CUDA is unavailable")
+
+    if args.analyze:
+        artifact = run_permutation_family_analysis(
+            args.out,
+            args.factorial_artifact,
+            args.diagnostic_artifact,
+            args.json,
+            args.markdown,
+            device,
+        )
+        print(
+            f"{artifact['study_id']}: wrote nine new cells and reused references to "
+            f"{args.json} and {args.markdown}",
+            flush=True,
+        )
+        return
+
+    recipe = _recipe(FACTORIAL_CORPUS)
+    if not recipe.verified:
+        raise SystemExit(
+            f"{FACTORIAL_CORPUS} has no confirmed recipe; the family screen cannot start"
+        )
+    gpu_ids = (
+        [int(value) for value in args.gpu_ids.split(",")]
+        if args.gpu_ids
+        else list(range(args.gpus))
+    )
+    if not gpu_ids or len(gpu_ids) != len(set(gpu_ids)) or min(gpu_ids) < 0:
+        raise SystemExit("--gpu-ids must be a non-empty comma-separated list of unique integers")
+
+    jobs = []
+    for seed in PERMUTATION_FAMILY_SEEDS:
+        for model in PERMUTATION_FAMILY_MODELS:
+            done = os.path.join(args.out, f"{FACTORIAL_CORPUS}_{model}_seed{seed}", "results.json")
+            if os.path.exists(done):
+                continue
+            jobs.append(
+                f"{args.python} -m ana.cli.__main__ train --model {model} "
+                f"--corpus {FACTORIAL_CORPUS} --seed {seed} --out {args.out} "
+                f"--study-id {PERMUTATION_FAMILY_STUDY_ID} --score-dev "
+                f"--evaluated-splits dev"
+            )
+
+    total = len(PERMUTATION_FAMILY_MODELS) * len(PERMUTATION_FAMILY_SEEDS)
+    print(
+        f"{PERMUTATION_FAMILY_STUDY_ID}: {len(PERMUTATION_FAMILY_MODELS)} controls x "
+        f"{len(PERMUTATION_FAMILY_SEEDS)} seeds = {total} new runs, "
+        f"{len(jobs)} still to do\n"
+    )
+    if args.dry_run:
+        print("dry run: compatibility preflight is deferred because no training will start")
+    elif jobs:
+        run_compatibility_preflight(args.source_run_dir, args.out, device)
+    _shard(jobs, gpu_ids, PERMUTATION_FAMILY_STUDY_ID, args.dry_run)
+    if jobs and not args.dry_run:
+        print(
+            "then rerun with --analyze after all nine results files exist",
+            flush=True,
+        )
+
+
 def _report(args: argparse.Namespace) -> None:
     records, smoked = [], 0
     for path in sorted(glob.glob(os.path.join(args.out, "*", "results.json"))):
@@ -767,6 +846,44 @@ def main() -> None:
     diagnostic.add_argument("--device", default="cuda:0")
     diagnostic.set_defaults(handler=_d4_diagnostic)
 
+    family = sub.add_parser(
+        "permutation-family",
+        help="run or analyze the nine-cell Multi30k fixed-permutation-family screen",
+    )
+    family.add_argument("--gpus", type=int, default=1)
+    family.add_argument(
+        "--gpu-ids",
+        default=None,
+        help="specific visible GPU indices, comma-separated; overrides --gpus",
+    )
+    family.add_argument("--out", default=f"runs/{PERMUTATION_FAMILY_STUDY_ID}")
+    family.add_argument("--python", default="python3")
+    family.add_argument(
+        "--source-run-dir",
+        default=f"runs/{FACTORIAL_STUDY_ID}",
+        help="private factorial checkpoint directory used by the mandatory preflight",
+    )
+    family.add_argument(
+        "--factorial-artifact",
+        default=f"results/{FACTORIAL_STUDY_ID}.json",
+    )
+    family.add_argument(
+        "--diagnostic-artifact",
+        default=f"results/{D4_DIAGNOSTIC_STUDY_ID}.json",
+    )
+    family.add_argument(
+        "--json",
+        default=f"results/{PERMUTATION_FAMILY_STUDY_ID}.json",
+    )
+    family.add_argument(
+        "--markdown",
+        default=f"results/{PERMUTATION_FAMILY_STUDY_ID}.md",
+    )
+    family.add_argument("--device", default="cuda:0")
+    family.add_argument("--analyze", action="store_true")
+    family.add_argument("--dry-run", action="store_true", help="write scripts, start nothing")
+    family.set_defaults(handler=_permutation_family)
+
     report = sub.add_parser("report", help="[3] read the runs and print the comparison")
     report.add_argument("--out", default="runs")
     report.add_argument(
@@ -796,6 +913,12 @@ def main() -> None:
         "--score-dev",
         action="store_true",
         help="decode and score the development split as well as outcome splits",
+    )
+    train.add_argument(
+        "--evaluated-splits",
+        default=None,
+        help="comma-separated explicit scoring splits; also limits data loading to train/dev plus "
+        "these splits",
     )
     train.set_defaults(handler=_train)
 

@@ -57,4 +57,5 @@ def test_run_cell_seeds_model_initialisation_and_marks_the_record(tmp_path, monk
     assert record["manifest"]["seeded_before_model_init"] is True
     assert record["manifest"]["study_id"] == "seed_test"
     assert record["manifest"]["score_dev"] is True
+    assert record["manifest"]["evaluated_splits"] == ["dev", "test"]
     assert set(record["scores"]) == {"dev", "test"}
