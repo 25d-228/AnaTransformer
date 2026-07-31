@@ -70,6 +70,8 @@ from ana.permutation_family import run_analysis as run_permutation_family_analys
 from ana.permutation_family import run_compatibility_preflight
 from ana.registry import PILOT_MODELS, REGISTRY
 from ana.stats import across_seed_test, bootstrap_score, paired_bootstrap
+from ana.v4_core_diagnostic import STUDY_ID as V4_CORE_DIAGNOSTIC_STUDY_ID
+from ana.v4_core_diagnostic import run_diagnostic as run_v4_core_diagnostic
 
 # One run, at the rate the paper used. The recipe comes from the paper, so there is nothing to
 # search for -- there is only something to CHECK, and one run checks it.
@@ -552,6 +554,27 @@ def _permutation_family(args: argparse.Namespace) -> None:
         )
 
 
+def _v4_core_diagnostic(args: argparse.Namespace) -> None:
+    """Analyze the common V4 core in 12 existing checkpoints without training."""
+    device = torch.device(args.device)
+    if device.type == "cuda" and not torch.cuda.is_available():
+        raise SystemExit(f"requested {device}, but CUDA is unavailable")
+    artifact = run_v4_core_diagnostic(
+        args.d4_run_dir,
+        args.family_run_dir,
+        args.d4_artifact,
+        args.family_artifact,
+        args.json,
+        args.markdown,
+        device,
+    )
+    print(
+        f"{artifact['study_id']}: reproduced 12 checkpoints and wrote 60 new development-only "
+        f"interventions to {args.json} and {args.markdown}",
+        flush=True,
+    )
+
+
 def _report(args: argparse.Namespace) -> None:
     records, smoked = [], 0
     for path in sorted(glob.glob(os.path.join(args.out, "*", "results.json"))):
@@ -883,6 +906,39 @@ def main() -> None:
     family.add_argument("--analyze", action="store_true")
     family.add_argument("--dry-run", action="store_true", help="write scripts, start nothing")
     family.set_defaults(handler=_permutation_family)
+
+    core = sub.add_parser(
+        "diagnose-v4-core",
+        help="run the inference-only 12-checkpoint shared-V4-core diagnostic",
+    )
+    core.add_argument(
+        "--d4-run-dir",
+        default=f"runs/{FACTORIAL_STUDY_ID}",
+        help="private factorial directory containing the three D4-only checkpoints",
+    )
+    core.add_argument(
+        "--family-run-dir",
+        default=f"runs/{PERMUTATION_FAMILY_STUDY_ID}",
+        help="private permutation-family directory containing the nine control checkpoints",
+    )
+    core.add_argument(
+        "--d4-artifact",
+        default=f"results/{D4_DIAGNOSTIC_STUDY_ID}.json",
+    )
+    core.add_argument(
+        "--family-artifact",
+        default=f"results/{PERMUTATION_FAMILY_STUDY_ID}.json",
+    )
+    core.add_argument(
+        "--json",
+        default=f"results/{V4_CORE_DIAGNOSTIC_STUDY_ID}.json",
+    )
+    core.add_argument(
+        "--markdown",
+        default=f"results/{V4_CORE_DIAGNOSTIC_STUDY_ID}.md",
+    )
+    core.add_argument("--device", default="cuda:0")
+    core.set_defaults(handler=_v4_core_diagnostic)
 
     report = sub.add_parser("report", help="[3] read the runs and print the comparison")
     report.add_argument("--out", default="runs")
