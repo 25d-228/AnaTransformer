@@ -69,6 +69,11 @@ from ana.permutation_family import STUDY_ID as PERMUTATION_FAMILY_STUDY_ID
 from ana.permutation_family import run_analysis as run_permutation_family_analysis
 from ana.permutation_family import run_compatibility_preflight
 from ana.registry import PILOT_MODELS, REGISTRY
+from ana.s4_screen import CORPUS as S4_CORPUS
+from ana.s4_screen import MODEL as S4_MODEL
+from ana.s4_screen import SEEDS as S4_SEEDS
+from ana.s4_screen import STUDY_ID as S4_STUDY_ID
+from ana.s4_screen import write_results as write_s4_results
 from ana.stats import across_seed_test, bootstrap_score, paired_bootstrap
 from ana.v4_core_diagnostic import STUDY_ID as V4_CORE_DIAGNOSTIC_STUDY_ID
 from ana.v4_core_diagnostic import run_diagnostic as run_v4_core_diagnostic
@@ -554,6 +559,50 @@ def _permutation_family(args: argparse.Namespace) -> None:
         )
 
 
+def _s4_screen(args: argparse.Namespace) -> None:
+    """Launch or summarize exactly three development-only full-S4 cells."""
+    if args.analyze:
+        artifact = write_s4_results(
+            args.out,
+            args.reference_artifact,
+            args.json,
+            args.markdown,
+        )
+        print(
+            f"{artifact['study_id']}: wrote three development-only cells to "
+            f"{args.json} and {args.markdown}",
+            flush=True,
+        )
+        return
+
+    recipe = _recipe(S4_CORPUS)
+    if not recipe.verified:
+        raise SystemExit(f"{S4_CORPUS} has no confirmed recipe; the S4 screen cannot start")
+    gpu_ids = (
+        [int(value) for value in args.gpu_ids.split(",")]
+        if args.gpu_ids
+        else list(range(args.gpus))
+    )
+    if not gpu_ids or len(gpu_ids) != len(set(gpu_ids)) or min(gpu_ids) < 0:
+        raise SystemExit("--gpu-ids must be a non-empty comma-separated list of unique integers")
+
+    jobs = []
+    for seed in S4_SEEDS:
+        done = os.path.join(args.out, f"{S4_CORPUS}_{S4_MODEL}_seed{seed}", "results.json")
+        if os.path.exists(done):
+            continue
+        jobs.append(
+            f"{args.python} -m ana.cli.__main__ train --model {S4_MODEL} "
+            f"--corpus {S4_CORPUS} --seed {seed} --out {args.out} "
+            f"--study-id {S4_STUDY_ID} --score-dev --evaluated-splits dev"
+        )
+
+    print(f"{S4_STUDY_ID}: one model x three seeds = 3 runs, {len(jobs)} still to do\n")
+    _shard(jobs, gpu_ids, S4_STUDY_ID, args.dry_run)
+    if jobs and not args.dry_run:
+        print("then rerun with --analyze after all three results files exist", flush=True)
+
+
 def _v4_core_diagnostic(args: argparse.Namespace) -> None:
     """Analyze the common V4 core in 12 existing checkpoints without training."""
     device = torch.device(args.device)
@@ -906,6 +955,28 @@ def main() -> None:
     family.add_argument("--analyze", action="store_true")
     family.add_argument("--dry-run", action="store_true", help="write scripts, start nothing")
     family.set_defaults(handler=_permutation_family)
+
+    s4 = sub.add_parser(
+        "s4-screen",
+        help="run or summarize the three-cell development-only full-S4 screen",
+    )
+    s4.add_argument("--gpus", type=int, default=1)
+    s4.add_argument(
+        "--gpu-ids",
+        default=None,
+        help="specific visible GPU indices, comma-separated; overrides --gpus",
+    )
+    s4.add_argument("--out", default=f"runs/{S4_STUDY_ID}")
+    s4.add_argument("--python", default="python3")
+    s4.add_argument(
+        "--reference-artifact",
+        default=f"results/{PERMUTATION_FAMILY_STUDY_ID}.json",
+    )
+    s4.add_argument("--json", default=f"results/{S4_STUDY_ID}.json")
+    s4.add_argument("--markdown", default=f"results/{S4_STUDY_ID}.md")
+    s4.add_argument("--analyze", action="store_true")
+    s4.add_argument("--dry-run", action="store_true", help="write scripts, start nothing")
+    s4.set_defaults(handler=_s4_screen)
 
     core = sub.add_parser(
         "diagnose-v4-core",
