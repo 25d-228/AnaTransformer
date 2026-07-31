@@ -186,6 +186,13 @@ def validate_family_partitions() -> None:
 
 
 def centroid_metadata() -> list[dict[str, Any]]:
+    def canonical(value: float) -> float:
+        numeric = float(value)
+        return 0.0 if abs(numeric) < 5e-13 else round(numeric, 12)
+
+    def canonical_matrix(matrix: Tensor) -> list[list[float]]:
+        return [[canonical(value) for value in row] for row in matrix.tolist()]
+
     reference = permutation_matrices(D4_PERMUTATIONS).to(torch.float64).mean(dim=0)
     identity = torch.eye(GROUP_SIZE, dtype=torch.float64)
     gate = float(torch.sigmoid(torch.tensor(GATE_INITIAL_LOGIT, dtype=torch.float64)))
@@ -196,13 +203,17 @@ def centroid_metadata() -> list[dict[str, Any]]:
         rows.append(
             {
                 "model": model,
-                "uniform_router_centroid": centroid.tolist(),
-                "frobenius_distance_from_d4_all_quarters": float(
+                "uniform_router_centroid": canonical_matrix(centroid),
+                "frobenius_distance_from_d4_all_quarters": canonical(
                     torch.linalg.matrix_norm(centroid - reference)
                 ),
-                "singular_values": torch.linalg.svdvals(centroid).tolist(),
-                "initial_gate_strength": gate,
-                "initial_effective_residual_matrix_before_diagonal_scale": effective.tolist(),
+                "singular_values": [
+                    canonical(value) for value in torch.linalg.svdvals(centroid).tolist()
+                ],
+                "initial_gate_strength": canonical(gate),
+                "initial_effective_residual_matrix_before_diagonal_scale": canonical_matrix(
+                    effective
+                ),
             }
         )
     return rows

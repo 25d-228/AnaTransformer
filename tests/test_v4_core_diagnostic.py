@@ -165,6 +165,13 @@ def test_centroids_record_the_initial_function_difference() -> None:
     d4 = rows["ana_d4_enc"]
     assert d4["frobenius_distance_from_d4_all_quarters"] == pytest.approx(0.0)
     assert d4["uniform_router_centroid"] == [[0.25] * 4 for _ in range(4)]
+    assert d4["singular_values"] == [1.0, 0.0, 0.0, 0.0]
+    assert rows["perm_ctrl_a_enc"]["singular_values"] == [
+        1.0,
+        0.353553390593,
+        0.0,
+        0.0,
+    ]
     for model in FAMILY_MODELS[1:]:
         assert rows[model]["frobenius_distance_from_d4_all_quarters"] > 0
         assert len(rows[model]["singular_values"]) == 4
