@@ -17,6 +17,9 @@ attention sites the operator runs.
     ana_feat_2_enc     ours: ana_feat_1_enc, and a routed exponent per group per token
     ana_feat_all       ours: ana_feat_enc, at every attention site
 
+The descriptive key-value projection sharing models keep the query projection independent and
+replace separate key and value projections only at the sites named by each model identifier.
+
 WHAT EACH COMPARISON AMONG THE ana_* MODELS ACTUALLY ISOLATES
 
 The names are short and the distinction they turn on is not, so it is written here rather than
@@ -76,7 +79,7 @@ from ana.nn.grouping import (
     Grouping,
     PermutationFamily,
 )
-from ana.nn.projection import SeparateQKV, SharedQKV
+from ana.nn.projection import SeparateQKV, SharedKeyValueProjection, SharedQKV
 from ana.nn.roles import (
     D4Mixing,
     D4MixingPowered,
@@ -102,8 +105,11 @@ class ModelSpec:
     grouping: Grouping | None = None
     sites: frozenset[Site] = ALL_SITES
     permutations: PermutationFamily | None = None
+    key_value_sharing_sites: frozenset[Site] = frozenset()
 
     def __post_init__(self) -> None:
+        if self.shared and self.key_value_sharing_sites:
+            raise ValueError(f"{self.name}: full sharing and key-value sharing are exclusive")
         if self.mixer is None:
             return
         if self.grouping is None:
@@ -200,6 +206,30 @@ REGISTRY: dict[str, ModelSpec] = {
             mixer=S4MixingWithoutMagnitude,
             grouping=FEATURE,
             sites=ENCODER_ONLY,
+        ),
+        ModelSpec(
+            name="encoder_self_attention_key_value_sharing",
+            purpose="Encoder self-attention key–value projection sharing model",
+            shared=False,
+            key_value_sharing_sites=frozenset({Site.ENCODER_SELF}),
+        ),
+        ModelSpec(
+            name="decoder_self_attention_key_value_sharing",
+            purpose="Decoder self-attention key–value projection sharing model",
+            shared=False,
+            key_value_sharing_sites=frozenset({Site.DECODER_SELF}),
+        ),
+        ModelSpec(
+            name="cross_attention_key_value_sharing",
+            purpose="Cross-attention key–value projection sharing model",
+            shared=False,
+            key_value_sharing_sites=frozenset({Site.CROSS}),
+        ),
+        ModelSpec(
+            name="all_attention_key_value_sharing",
+            purpose="All-attention-site key–value projection sharing model",
+            shared=False,
+            key_value_sharing_sites=ALL_SITES,
         ),
         ModelSpec(
             name="ana_seq_enc",
@@ -304,6 +334,19 @@ def mixing_sites(spec: ModelSpec, config: ModelConfig) -> int:
     return count
 
 
+def key_value_sharing_parameters(spec: ModelSpec, config: ModelConfig) -> int:
+    """Parameter count when one key-value projection replaces a pair at selected sites."""
+    count = 0
+    if Site.ENCODER_SELF in spec.key_value_sharing_sites:
+        count += config.n_encoder_layers
+    if Site.DECODER_SELF in spec.key_value_sharing_sites:
+        count += config.n_decoder_layers
+    if Site.CROSS in spec.key_value_sharing_sites:
+        count += config.n_decoder_layers
+    per_site_saving = config.d_model * config.d_model + config.d_model
+    return baseline_parameters(config) - count * per_site_saving
+
+
 def shared_parameters(spec: ModelSpec, config: ModelConfig) -> int:
     """A shared-projection model's parameter count, without building it.
 
@@ -356,6 +399,8 @@ def model_parameters(name: str, config: ModelConfig) -> int:
     spec = REGISTRY[name]
     if spec.matched:
         return baseline_parameters(matched_config(config))
+    if spec.key_value_sharing_sites:
+        return key_value_sharing_parameters(spec, config)
     if not spec.shared:
         return baseline_parameters(config)
     return shared_parameters(spec, config)
@@ -365,7 +410,9 @@ def _attention_factory(
     spec: ModelSpec, config: ModelConfig
 ) -> Callable[[Site], MultiHeadAttention]:
     def build(site: Site) -> MultiHeadAttention:
-        if not spec.shared:
+        if site in spec.key_value_sharing_sites:
+            projection = SharedKeyValueProjection(config.d_model)
+        elif not spec.shared:
             projection = SeparateQKV(config.d_model)
         else:
             mixes_here = spec.mixer is not None and site in spec.sites

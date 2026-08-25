@@ -1,8 +1,9 @@
 """How an attention block produces its queries, keys and values.
 
-Two schemes. The ordinary one keeps three full projection matrices. The shared one
-keeps a single matrix and recovers the three roles with a small per-role operator.
-Every parameter the experiment saves is saved here, and nowhere else.
+The ordinary scheme keeps three full projection matrices. The fully shared scheme keeps a
+single matrix and recovers the three roles with a small per-role operator. The key-value
+sharing scheme keeps the query independent and produces one exact tensor for both key and
+value. Every projection parameter an experiment saves is saved here, and nowhere else.
 """
 
 from __future__ import annotations
@@ -24,6 +25,8 @@ class QKVProjection(nn.Module, ABC):
     decoder wants a query for the token it has just produced, while the keys and values of
     the encoder output were computed once and have not changed since.
     """
+
+    shares_key_value_cache = False
 
     @abstractmethod
     def query_only(self, query_input: Tensor, query_mask: Tensor) -> Tensor: ...
@@ -64,6 +67,34 @@ class SeparateQKV(QKVProjection):
         kv_mask: Tensor,
     ) -> tuple[Tensor, Tensor, Tensor]:
         return self.query(query_input), self.key(kv_input), self.value(kv_input)
+
+
+class SharedKeyValueProjection(QKVProjection):
+    """An independent query projection and one exact shared key-value projection."""
+
+    shares_key_value_cache = True
+
+    def __init__(self, d_model: int) -> None:
+        super().__init__()
+        self.query = nn.Linear(d_model, d_model)
+        self.shared_key_value = nn.Linear(d_model, d_model)
+
+    def query_only(self, query_input: Tensor, query_mask: Tensor) -> Tensor:
+        return self.query(query_input)
+
+    def key_value(self, kv_input: Tensor, kv_mask: Tensor) -> tuple[Tensor, Tensor]:
+        shared_key_value = self.shared_key_value(kv_input)
+        return shared_key_value, shared_key_value
+
+    def forward(
+        self,
+        query_input: Tensor,
+        kv_input: Tensor,
+        query_mask: Tensor,
+        kv_mask: Tensor,
+    ) -> tuple[Tensor, Tensor, Tensor]:
+        shared_key_value = self.shared_key_value(kv_input)
+        return self.query(query_input), shared_key_value, shared_key_value
 
 
 class SharedQKV(QKVProjection):

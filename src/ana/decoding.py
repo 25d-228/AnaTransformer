@@ -140,6 +140,7 @@ def beam_decode(
             for held in (self_cache, cross_cache):
                 if held.key is not None:
                     held.key = held.key[source_beam]
+                if held.value is not None:
                     held.value = held.value[source_beam]
 
         if bool(finished.all()):

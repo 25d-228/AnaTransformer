@@ -45,7 +45,9 @@ import argparse
 import glob
 import json
 import os
+import shlex
 import subprocess
+import sys
 from collections import defaultdict
 from dataclasses import replace
 
@@ -61,6 +63,24 @@ from ana.factorial import CORPUS as FACTORIAL_CORPUS
 from ana.factorial import MODELS as FACTORIAL_MODELS
 from ana.factorial import SEEDS as FACTORIAL_SEEDS
 from ana.factorial import STUDY_ID as FACTORIAL_STUDY_ID
+from ana.key_value_projection_sharing_screen import (
+    MODELS as KEY_VALUE_PROJECTION_SHARING_MODELS,
+)
+from ana.key_value_projection_sharing_screen import (
+    SEEDS as KEY_VALUE_PROJECTION_SHARING_SEEDS,
+)
+from ana.key_value_projection_sharing_screen import (
+    STUDY_ID as KEY_VALUE_PROJECTION_SHARING_STUDY_ID,
+)
+from ana.key_value_projection_sharing_screen import (
+    run_screen_cell as run_key_value_projection_sharing_cell,
+)
+from ana.key_value_projection_sharing_screen import (
+    run_server_preflight as run_key_value_projection_sharing_preflight,
+)
+from ana.key_value_projection_sharing_screen import (
+    write_results as write_key_value_projection_sharing_results,
+)
 from ana.permutation_family import (
     CONTROL_MODELS as PERMUTATION_FAMILY_MODELS,
 )
@@ -603,6 +623,52 @@ def _s4_screen(args: argparse.Namespace) -> None:
         print("then rerun with --analyze after all three results files exist", flush=True)
 
 
+def _key_value_projection_sharing_screen(args: argparse.Namespace) -> None:
+    """Preflight, run one approved cell, or report the fixed development-only screen."""
+    if args.preflight:
+        if args.seed is not None:
+            raise SystemExit("--seed is valid only together with --model")
+        artifact = run_key_value_projection_sharing_preflight(
+            args.out,
+            torch.device(args.device),
+        )
+        print(
+            f"{artifact['study_id']}: server preflight passed at "
+            f"{artifact['implementation_git_commit']}",
+            flush=True,
+        )
+        return
+
+    if args.report:
+        if args.seed is not None:
+            raise SystemExit("--seed is valid only together with --model")
+        artifact = write_key_value_projection_sharing_results(
+            args.out,
+            args.json,
+            args.markdown,
+        )
+        print(
+            f"{artifact['study_id']}: wrote fifteen development-only cells to "
+            f"{args.json} and {args.markdown}",
+            flush=True,
+        )
+        return
+
+    if args.seed is None:
+        raise SystemExit("--model requires one approved --seed")
+    record = run_key_value_projection_sharing_cell(
+        args.model,
+        args.seed,
+        args.out,
+        torch.device(args.device),
+        shlex.join(["ana", *sys.argv[1:]]),
+    )
+    print(
+        f"{record['model']}/seed{record['manifest']['seed']}: completed development-only run",
+        flush=True,
+    )
+
+
 def _v4_core_diagnostic(args: argparse.Namespace) -> None:
     """Analyze the common V4 core in 12 existing checkpoints without training."""
     device = torch.device(args.device)
@@ -977,6 +1043,49 @@ def main() -> None:
     s4.add_argument("--analyze", action="store_true")
     s4.add_argument("--dry-run", action="store_true", help="write scripts, start nothing")
     s4.set_defaults(handler=_s4_screen)
+
+    key_value_projection_sharing = sub.add_parser(
+        "key-value-projection-sharing-screen",
+        help="preflight, run, or report the fixed Multi30k site-specific key-value sharing screen",
+    )
+    key_value_projection_sharing_mode = key_value_projection_sharing.add_mutually_exclusive_group(
+        required=True
+    )
+    key_value_projection_sharing_mode.add_argument(
+        "--preflight",
+        action="store_true",
+        help="run the mandatory exact-commit server validation before training",
+    )
+    key_value_projection_sharing_mode.add_argument(
+        "--model",
+        choices=KEY_VALUE_PROJECTION_SHARING_MODELS,
+        help="run one approved model cell; requires --seed",
+    )
+    key_value_projection_sharing_mode.add_argument(
+        "--report",
+        action="store_true",
+        help="validate all fifteen manifests and write deterministic compact results",
+    )
+    key_value_projection_sharing.add_argument(
+        "--seed",
+        type=int,
+        choices=KEY_VALUE_PROJECTION_SHARING_SEEDS,
+        default=None,
+    )
+    key_value_projection_sharing.add_argument(
+        "--out",
+        default=f"runs/{KEY_VALUE_PROJECTION_SHARING_STUDY_ID}",
+    )
+    key_value_projection_sharing.add_argument("--device", default="cuda")
+    key_value_projection_sharing.add_argument(
+        "--json",
+        default=f"results/{KEY_VALUE_PROJECTION_SHARING_STUDY_ID}.json",
+    )
+    key_value_projection_sharing.add_argument(
+        "--markdown",
+        default=f"results/{KEY_VALUE_PROJECTION_SHARING_STUDY_ID}.md",
+    )
+    key_value_projection_sharing.set_defaults(handler=_key_value_projection_sharing_screen)
 
     core = sub.add_parser(
         "diagnose-v4-core",

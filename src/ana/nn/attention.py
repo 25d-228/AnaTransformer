@@ -27,7 +27,8 @@ class AttentionCache:
     """Keys and values kept between generation steps, already split into heads.
 
     For decoder self-attention the pair grows by one position each step. For cross-attention
-    it is computed once from the encoder output and never changes.
+    it is computed once from the encoder output and never changes. A shared key-value
+    projection stores its one tensor in `key` and leaves `value` empty.
     """
 
     key: Tensor | None = None
@@ -112,19 +113,32 @@ class MultiHeadAttention(nn.Module):
         """
         query = self._split_heads(self.projection.query_only(query_input, query_mask))
 
-        if self.site is Site.CROSS:
-            if cache.key is None:
-                key, value = self.projection.key_value(kv_input, kv_mask)
-                cache.key = self._split_heads(key)
-                cache.value = self._split_heads(value)
-        else:
-            key, value = self.projection.key_value(query_input, query_mask)
-            key = self._split_heads(key)
-            value = self._split_heads(value)
-            if cache.key is None:
-                cache.key, cache.value = key, value
+        if self.projection.shares_key_value_cache:
+            cache.value = None
+            if self.site is Site.CROSS:
+                if cache.key is None:
+                    key, _ = self.projection.key_value(kv_input, kv_mask)
+                    cache.key = self._split_heads(key)
             else:
-                cache.key = torch.cat([cache.key, key], dim=2)
-                cache.value = torch.cat([cache.value, value], dim=2)
+                key, _ = self.projection.key_value(query_input, query_mask)
+                key = self._split_heads(key)
+                cache.key = key if cache.key is None else torch.cat([cache.key, key], dim=2)
+            cached_value = cache.key
+        else:
+            if self.site is Site.CROSS:
+                if cache.key is None:
+                    key, value = self.projection.key_value(kv_input, kv_mask)
+                    cache.key = self._split_heads(key)
+                    cache.value = self._split_heads(value)
+            else:
+                key, value = self.projection.key_value(query_input, query_mask)
+                key = self._split_heads(key)
+                value = self._split_heads(value)
+                if cache.key is None:
+                    cache.key, cache.value = key, value
+                else:
+                    cache.key = torch.cat([cache.key, key], dim=2)
+                    cache.value = torch.cat([cache.value, value], dim=2)
+            cached_value = cache.value
 
-        return self._attend(query, cache.key, cache.value, blocked)
+        return self._attend(query, cache.key, cached_value, blocked)
