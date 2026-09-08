@@ -11,6 +11,7 @@ attention sites the operator runs.
     shared_qkv         Kowsher et al. 2024: one projection, a diagonal per role. PRIOR WORK.
     ana_mag_enc        factorial ablation: input-dependent magnitude, no D4 router
     ana_d4_enc         factorial ablation: routed D4 mixer, magnitude fixed to one
+    ana_shuffle_benes_enc  variant: learned global K/V Beneš permutations before local D4
     ana_seq_enc        ours: cuts 4 tokens,   routed per token-GROUP
     ana_feat_enc       ours: cuts 4 channels, routed per TOKEN
     ana_feat_1_enc     ours: cuts 4 channels, routed per channel-GROUP
@@ -86,6 +87,7 @@ from ana.nn.roles import (
     RoleTransform,
     S4MixingWithoutMagnitude,
 )
+from ana.nn.shuffle import ShuffledD4QKV
 
 Mixer = Callable[[int, Grouping], RoleTransform]
 
@@ -102,8 +104,19 @@ class ModelSpec:
     grouping: Grouping | None = None
     sites: frozenset[Site] = ALL_SITES
     permutations: PermutationFamily | None = None
+    shuffle_topology: str | None = None
 
     def __post_init__(self) -> None:
+        if self.shuffle_topology is not None:
+            if self.shuffle_topology not in ("butterfly", "benes"):
+                raise ValueError(f"{self.name}: unknown shuffle topology {self.shuffle_topology!r}")
+            if (
+                not self.shared
+                or self.mixer is not D4MixingWithoutMagnitude
+                or self.grouping is not FEATURE
+                or self.permutations is not None
+            ):
+                raise ValueError(f"{self.name}: global shuffles require shared feature D4 mixing")
         if self.mixer is None:
             return
         if self.grouping is None:
@@ -161,6 +174,16 @@ REGISTRY: dict[str, ModelSpec] = {
             mixer=D4MixingWithoutMagnitude,
             grouping=FEATURE,
             sites=ENCODER_ONLY,
+        ),
+        ModelSpec(
+            name="ana_shuffle_benes_enc",
+            purpose="static learned hard K/V feature shuffles through a complete Benes network, "
+            "followed by the existing token-conditioned local D4 mixer; all permutations possible",
+            shared=True,
+            mixer=D4MixingWithoutMagnitude,
+            grouping=FEATURE,
+            sites=ENCODER_ONLY,
+            shuffle_topology="benes",
         ),
         ModelSpec(
             name="perm_ctrl_a_enc",
@@ -316,7 +339,11 @@ def shared_parameters(spec: ModelSpec, config: ModelConfig) -> int:
     members. A `D4MixingPowered` costs a further GROUP_SIZE + 1 for its exponent router.
     """
     extra = 0
-    if spec.mixer is not None:
+    if spec.shuffle_topology is not None:
+        extra = mixing_sites(spec, config) * ShuffledD4QKV.extra_parameters(
+            config.d_model, spec.shuffle_topology
+        )
+    elif spec.mixer is not None:
         per_role = spec.mixer.extra_parameters(config.d_model, spec.grouping)
         extra = mixing_sites(spec, config) * 3 * per_role
 
@@ -367,6 +394,8 @@ def _attention_factory(
     def build(site: Site) -> MultiHeadAttention:
         if not spec.shared:
             projection = SeparateQKV(config.d_model)
+        elif spec.shuffle_topology is not None and site in spec.sites:
+            projection = ShuffledD4QKV(config.d_model, topology=spec.shuffle_topology)
         else:
             mixes_here = spec.mixer is not None and site in spec.sites
 
