@@ -1,0 +1,122 @@
+{
+  "study_id": "benes_all_corpora_v1",
+  "model": "ana_shuffle_benes_enc",
+  "recorded_date": "2026-09-09",
+  "uncertainty": {
+    "method": "percentile bootstrap",
+    "confidence": 0.95,
+    "resamples": 1000,
+    "bootstrap_seed": 12345,
+    "what_varies": "evaluation examples, fixed checkpoint",
+    "display": "score ± half_width",
+    "half_width_definition": "(high - low) / 2, computed before rounding",
+    "note": "The ± display summarizes interval width; score ± half_width need not reproduce the exact endpoints. These are not training-seed standard deviations, including for COGS."
+  },
+  "corpora": {
+    "multi30k": {
+      "metric": "BLEU/13a",
+      "seed": 44,
+      "parameters": 2232940,
+      "baseline_parameters": 2605568,
+      "saved_fraction": 0.14301219542149735,
+      "training": {
+        "steps_run": 20000,
+        "scored_step": 19000,
+        "selection": "best_dev_loss",
+        "beam_size": 5,
+        "python": "3.12.13",
+        "torch": "2.5.1+cu121",
+        "training_seconds": 2273.4,
+        "reused_training": true,
+        "source_study": "multi30k_shuffle_v1",
+        "run_choice": "Highest development BLEU among existing Beneš seeds 42, 43, 44, before test inspection.",
+        "seeded_before_model_init": true
+      },
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-benes/runs/benes_all_corpora_v1/multi30k_ana_shuffle_benes_enc_seed44/results.json",
+      "bootstrap_provenance": "Existing saved bootstrap report; no recomputation to record this artifact.",
+      "splits": {
+        "test": {
+          "score": 38.873811103527295,
+          "low": 37.25763646077422,
+          "high": 40.463571969534335,
+          "minus": 1.616174642753073,
+          "plus": 1.5897608660070404,
+          "half_width": 1.6029677543800567,
+          "n": 1000
+        }
+      }
+    },
+    "iwslt14": {
+      "metric": "BLEU/13a",
+      "seed": 42,
+      "parameters": 27363490,
+      "baseline_parameters": 36665344,
+      "saved_fraction": 0.25369607878218736,
+      "training": {
+        "steps_run": 50000,
+        "scored_step": 50000,
+        "selection": "best_dev_loss",
+        "beam_size": 5,
+        "python": "3.12.13",
+        "torch": "2.5.1+cu121",
+        "training_seconds": 47877.4,
+        "reused_training": false,
+        "seeded_before_model_init": true
+      },
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-benes/runs/benes_all_corpora_v1/iwslt14_ana_shuffle_benes_enc_seed42/results.json",
+      "bootstrap_provenance": "Interval computed read-only on exp17 on 2026-09-09 using the existing ana.stats.bootstrap_score and ana.metrics.Bleu over saved NAS hypotheses/references. No training, decoding, CUDA initialization, or exp15 access. Both text files contain 6750 examples; the point score agrees with saved results.json within 1e-8. This is not a copy of the original exp15 bootstrap report.",
+      "splits": {
+        "test": {
+          "score": 32.213973715709685,
+          "low": 31.708892543734734,
+          "high": 32.70533132465018,
+          "minus": 0.5050811719749504,
+          "plus": 0.49135760894049696,
+          "n": 6750,
+          "half_width": 0.4982193904577237
+        }
+      }
+    },
+    "cogs": {
+      "metric": "exact match",
+      "seed": 42,
+      "parameters": 5744182,
+      "baseline_parameters": 8844800,
+      "saved_fraction": 0.3505582941389291,
+      "training": {
+        "steps_run": 50000,
+        "scored_step": 50000,
+        "best_dev_step_diagnostic_only": 31000,
+        "selection": "final",
+        "beam_size": 5,
+        "python": "3.11.15",
+        "torch": "2.11.0+cu128",
+        "training_seconds": 6477.3,
+        "reused_training": false,
+        "seeded_before_model_init": true
+      },
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-benes/runs/benes_all_corpora_v1/cogs_ana_shuffle_benes_enc_seed42/results.json",
+      "bootstrap_provenance": "Existing saved bootstrap report; no recomputation to record this artifact.",
+      "splits": {
+        "gen": {
+          "score": 76.04285714285714,
+          "low": 75.5047619047619,
+          "high": 76.6,
+          "minus": 0.538095238095238,
+          "plus": 0.5571428571428498,
+          "half_width": 0.5476190476190439,
+          "n": 21000
+        },
+        "test": {
+          "score": 99.73333333333333,
+          "low": 99.53333333333333,
+          "high": 99.93333333333334,
+          "minus": 0.20000000000000284,
+          "plus": 0.20000000000000284,
+          "half_width": 0.20000000000000284,
+          "n": 3000
+        }
+      }
+    }
+  }
+}
