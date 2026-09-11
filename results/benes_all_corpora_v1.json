@@ -12,6 +12,16 @@
     "half_width_definition": "(high - low) / 2, computed before rounding",
     "note": "The ± display summarizes interval width; score ± half_width need not reproduce the exact endpoints. These are not training-seed standard deviations, including for COGS."
   },
+  "comparisons": {
+    "status": "not_computed",
+    "checked_date": "2026-09-11",
+    "references": ["baseline", "shared_qkv"],
+    "corpora": ["multi30k", "iwslt14", "cogs"],
+    "table_marker": "NT",
+    "reason": "Original table reference predictions were not located in the local repository or checked exp14–18 task directories/shared storage. Beneš predictions are available; later studies with different baseline scores are not substituted.",
+    "required_inputs": "Aligned original reference hypotheses and gold references for translation test and COGS generalization; a compatible aggregate-reference comparison must be specified for COGS.",
+    "note": "Not computed does not mean nonsignificant. Individual score intervals cannot supply paired significance marks. Existing scores and intervals are unchanged."
+  },
   "corpora": {
     "multi30k": {
       "metric": "BLEU/13a",

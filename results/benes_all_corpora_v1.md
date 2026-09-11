@@ -24,6 +24,25 @@ checkpoint; they do not measure training-seed variation. In particular,
 the original COGS table's five-seed standard deviations are a different
 quantity. No paired significance tests or improvement claims are made here.
 
+## Comparison status
+
+As of September 11, the comparisons against the original table's `baseline`
+and `shared_qkv` are **not computed** for all three datasets. The combined
+table labels these cells `NT`; an absent star or dagger must not be read as
+a completed test finding no significant difference.
+
+The saved Beneš predictions are available, but the corresponding original
+reference predictions were not located in the local repository or the
+checked exp14–18 task directories/shared storage. Later studies' baseline
+scores differ from the original table and are not substitutes for these
+missing references. Paired tests require aligned predictions and references;
+scores and individual ± intervals are insufficient.
+
+Once those artifacts are available, comparisons can be computed without
+retraining. COGS also requires an explicitly compatible comparison with the
+displayed aggregate reference scores; its historical statistical test cannot
+be applied directly to Beneš's example-bootstrap summary.
+
 ## Training and checkpoint protocol
 
 | Dataset | Training seed | Scored checkpoint | Parameters | Ordinary Transformer parameters | Parameter saving |
