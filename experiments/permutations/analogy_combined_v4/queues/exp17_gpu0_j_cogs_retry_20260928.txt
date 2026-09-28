@@ -1,0 +1,2 @@
+# Restart only J's failed-to-start COGS run. Earlier exp15 queue has ended.
+cogs shared_bottleneck

@@ -1,0 +1,5 @@
+multi30k combo
+multi30k_enfr combo
+multi30k combo_wide
+multi30k_enfr combo_wide
+iwslt14 compact_qkv

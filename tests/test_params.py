@@ -1,4 +1,4 @@
-"""The matched-budget invariant. This is the experiment, so it is the one test that must hold.
+"""The matched-budget invariant for the shared-projection comparison family.
 
 If the models being compared are not the same size, then any difference between their scores
 could be a difference in capacity, and the whole comparison says nothing.
@@ -46,9 +46,11 @@ def sizes(corpus_name: str, vocab_size: int) -> dict[str, int]:
 
 
 @pytest.mark.parametrize(("corpus", "vocab_size"), CORPORA_UNDER_TEST)
-def test_every_model_but_the_baseline_is_the_same_size(corpus, vocab_size):
+def test_shared_projection_family_is_the_same_size(corpus, vocab_size):
     counts = sizes(corpus, vocab_size)
-    matched = {n: c for n, c in counts.items() if n != "baseline"}
+    matched = {
+        n: c for n, c in counts.items() if REGISTRY[n].shared or REGISTRY[n].matched
+    }
 
     smallest, largest = min(matched.values()), max(matched.values())
     spread = (largest - smallest) / smallest
@@ -74,7 +76,7 @@ def test_the_control_is_the_size_of_the_models_it_controls(corpus, vocab_size):
     control = counts["baseline_matched"]
 
     for name, count in counts.items():
-        if name == "baseline":
+        if not (REGISTRY[name].shared or REGISTRY[name].matched):
             continue
         slack = abs(count - control) / control
         assert slack <= MAX_SPREAD, (
@@ -100,7 +102,7 @@ def test_sharing_saves_a_real_share_of_the_model(corpus, vocab_size):
 def test_the_baseline_is_larger_than_what_it_is_compared_against(corpus, vocab_size):
     counts = sizes(corpus, vocab_size)
     for name, count in counts.items():
-        if name == "baseline":
+        if not (REGISTRY[name].shared or REGISTRY[name].matched):
             continue
         assert count < counts["baseline"], f"{corpus}: {name} is not smaller than the baseline"
 
@@ -128,10 +130,10 @@ def test_the_arithmetic_agrees_with_the_models_it_describes(corpus, vocab_size):
 
 def test_every_corpus_declares_what_a_correct_baseline_reaches():
     """A corpus with no published anchor cannot verify anything, and must say so rather than
-    quietly gate on nothing. `synthetic` is the only one allowed to have no calibration."""
+    quietly gate on nothing. Synthetic and the uncalibrated French recipe declare no gate."""
     for name in CORPORA:
         corpus = build_corpus(name)
-        if name == "synthetic":
+        if name in {"synthetic", "multi30k_enfr"}:
             assert corpus.calibration is None
             continue
 

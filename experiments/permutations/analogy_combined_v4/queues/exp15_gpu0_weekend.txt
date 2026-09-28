@@ -1,0 +1,8 @@
+# Rescheduled after the user freed exp15 RAM on September 25.
+# The exp18 GPU 0 replacement queue was retired before relaunching here.
+multi30k balanced_gated
+multi30k_enfr balanced_gated
+cogs balanced_gated
+multi30k shared_bottleneck
+multi30k_enfr shared_bottleneck
+cogs shared_bottleneck

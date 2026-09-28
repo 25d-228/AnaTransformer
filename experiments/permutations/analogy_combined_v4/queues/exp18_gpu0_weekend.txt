@@ -1,0 +1,3 @@
+# Retired before any cell started: the user freed exp15 RAM on September 25.
+# The six I/J short tasks are now in exp15_gpu0_weekend.txt.
+# The waiting wrapper may exit naturally after G releases the GPU lock.

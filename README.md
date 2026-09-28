@@ -547,3 +547,11 @@ and studies fixed, adaptive and context-dependent powers.
 
 - [Experiment code and protocols](experiments/compact_embeddings/README.md)
 - [Results and bootstrap intervals](results/compact_embeddings/README.md)
+
+## Combined analogy-preserving projection batch
+
+All 54 experiments in the A-M batch are complete, covering Multi30k EN-to-DE,
+Multi30k EN-to-FR, COGS generalization and IWSLT14 DE-to-EN.
+
+- [Model designs and execution notes](experiments/permutations/analogy_combined_v4/README.md)
+- [Full results table with parameter counts and bootstrap intervals](results/permutations/analogy_combined_v4/README.md)

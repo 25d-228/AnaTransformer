@@ -1,0 +1,9 @@
+multi30k diagonal_shortcuts
+multi30k_enfr diagonal_shortcuts
+cogs diagonal_shortcuts
+multi30k compact_qkv_no_analogy
+multi30k_enfr compact_qkv_no_analogy
+cogs compact_qkv_no_analogy
+multi30k balanced_qkv_no_analogy
+multi30k_enfr balanced_qkv_no_analogy
+cogs balanced_qkv_no_analogy

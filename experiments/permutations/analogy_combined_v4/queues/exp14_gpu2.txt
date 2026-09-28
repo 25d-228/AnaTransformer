@@ -1,0 +1,5 @@
+multi30k combo_crosskv
+multi30k_enfr combo_crosskv
+multi30k combo_selfqk
+multi30k_enfr combo_selfqk
+iwslt14 combo_selfqk

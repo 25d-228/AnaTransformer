@@ -1,0 +1,109 @@
+{
+  "multi30k": {
+    "baseline": {
+      "score": 40.78,
+      "half_width": 1.74,
+      "parameters": 2605568,
+      "source_results": "results/permutations/multi30k.md",
+      "source_note": "Earlier recorded full Transformer; saved predictions are unavailable. Rounded reference only, not a new paired comparison."
+    },
+    "shared_qkv": {
+      "score": 38.651869943809345,
+      "half_width": 1.648454853253913,
+      "parameters": 2213888,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-compact-power-v1/runs/multi30k_shared_qkv_seed42/results.json"
+    },
+    "pre_crossq": {
+      "score": 39.20314040163701,
+      "half_width": 1.656612613676888,
+      "parameters": 2296208,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-analogy-projection-v3/runs/multi30k_pre_crossq_seed42/results.json",
+      "source_report": "/mango/homes/YUE_Ziran/workspace/ana-analogy-projection-v3/reports/multi30k.json",
+      "source_note": "Completed analogy_projection_v3; reused, not retrained."
+    },
+    "pre_lowrank": {
+      "score": 38.982529884552804,
+      "half_width": 1.689553757904708,
+      "parameters": 2279312,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-analogy-projection-v3/runs/multi30k_pre_lowrank_seed42/results.json",
+      "source_report": "/mango/homes/YUE_Ziran/workspace/ana-analogy-projection-v3/reports/multi30k.json",
+      "source_note": "Completed analogy_projection_v3; reused, not retrained."
+    }
+  },
+  "multi30k_enfr": {
+    "baseline": {
+      "score": 60.80468189375464,
+      "half_width": 1.6491439923877564,
+      "parameters": 2605568,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-power-enfr-cogs-v1/runs/multi30k_enfr_baseline_seed42/results.json"
+    },
+    "shared_qkv": {
+      "score": 58.402977971523995,
+      "half_width": 1.696070699942954,
+      "parameters": 2213888,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-power-enfr-cogs-v1/runs/multi30k_enfr_shared_qkv_seed42/results.json"
+    },
+    "pre_crossq": {
+      "score": 58.70192237501942,
+      "half_width": 1.6531057576499286,
+      "parameters": 2296208,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-analogy-projection-v3/runs/multi30k_enfr_pre_crossq_seed42/results.json",
+      "source_report": "/mango/homes/YUE_Ziran/workspace/ana-analogy-projection-v3/reports/multi30k_enfr.json",
+      "source_note": "Completed analogy_projection_v3; reused, not retrained."
+    },
+    "pre_lowrank": {
+      "score": 59.514350902859256,
+      "half_width": 1.6696958937529551,
+      "parameters": 2279312,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-analogy-projection-v3/runs/multi30k_enfr_pre_lowrank_seed42/results.json",
+      "source_report": "/mango/homes/YUE_Ziran/workspace/ana-analogy-projection-v3/reports/multi30k_enfr.json",
+      "source_note": "Completed analogy_projection_v3; reused, not retrained."
+    }
+  },
+  "cogs": {
+    "baseline": {
+      "score": 78.6952380952381,
+      "half_width": 0.5333333333333314,
+      "parameters": 8844800,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-power-enfr-cogs-v1/reference_runs/cogs_baseline_seed42/results.json"
+    },
+    "shared_qkv": {
+      "score": 80.37619047619047,
+      "half_width": 0.5023809523809533,
+      "parameters": 5702144,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-power-enfr-cogs-v1/reference_runs/cogs_shared_qkv_seed42/results.json"
+    },
+    "pre_crossq": {
+      "score": 82.05714285714286,
+      "half_width": 0.4952380952381006,
+      "parameters": 6261080,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-analogy-projection-v3/runs/cogs_pre_crossq_seed42/results.json",
+      "source_report": "/mango/homes/YUE_Ziran/workspace/ana-analogy-projection-v3/reports/cogs.json",
+      "source_note": "Completed analogy_projection_v3; reused, not retrained."
+    },
+    "pre_lowrank": {
+      "score": 78.72380952380952,
+      "half_width": 0.538095238095238,
+      "parameters": 6128984,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-analogy-projection-v3/runs/cogs_pre_lowrank_seed42/results.json",
+      "source_report": "/mango/homes/YUE_Ziran/workspace/ana-analogy-projection-v3/reports/cogs.json",
+      "source_note": "Completed analogy_projection_v3; reused, not retrained."
+    }
+  },
+  "iwslt14": {
+    "baseline": {
+      "score": 33.45,
+      "half_width": 0.51,
+      "parameters": 36665344,
+      "source_results": "results/permutations/iwslt14.md",
+      "source_note": "Earlier recorded full Transformer; rounded historical reference."
+    },
+    "shared_qkv": {
+      "score": 31.58,
+      "half_width": 0.49,
+      "parameters": 27237376,
+      "source_results": "results/permutations/iwslt14.md",
+      "source_note": "Earlier recorded shared-QKV; rounded historical reference."
+    }
+  }
+}

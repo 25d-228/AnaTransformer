@@ -41,3 +41,9 @@ The two carry different marks, so a symbol names the test it came from: `*` is p
 
 [Completed compact-embedding and power-analogy experiments](compact_embeddings/README.md)
 include fixed-power, adaptive-power and context-dependent-power comparisons.
+
+## Combined analogy-preserving projections
+
+[Completed 54-run A-M batch](permutations/analogy_combined_v4/README.md):
+model sizes and bootstrap intervals across both Multi30k directions, COGS
+generalization and IWSLT14.

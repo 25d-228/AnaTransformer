@@ -1,0 +1,2 @@
+# Restart only J's failed-to-start French run. Earlier exp15 queue has ended.
+multi30k_enfr shared_bottleneck
