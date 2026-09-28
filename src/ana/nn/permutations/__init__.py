@@ -1,0 +1,1 @@
+"""Permutation-based projection variants."""

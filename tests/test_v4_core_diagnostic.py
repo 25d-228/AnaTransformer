@@ -10,14 +10,14 @@ import pytest
 import torch
 import torch.nn.functional as F
 
-from ana.nn.grouping import (
+from ana.nn.permutations.grouping import (
     FEATURE,
     PERM_CONTROL_A,
     PERM_CONTROL_B,
     V4_CORE,
     permutation_matrices,
 )
-from ana.nn.roles import (
+from ana.nn.permutations.roles import (
     FAMILY_SUBSET_INTERVENTIONS,
     D4MixingWithoutMagnitude,
     family_subset_masks,

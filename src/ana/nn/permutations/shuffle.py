@@ -7,9 +7,9 @@ from typing import Literal
 import torch
 from torch import Tensor, nn
 
-from ana.nn.grouping import FEATURE
+from ana.nn.permutations.grouping import FEATURE
+from ana.nn.permutations.roles import D4MixingWithoutMagnitude
 from ana.nn.projection import SharedQKV
-from ana.nn.roles import D4MixingWithoutMagnitude
 
 ShuffleTopology = Literal["benes", "butterfly"]
 

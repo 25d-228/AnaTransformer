@@ -9,7 +9,7 @@ import torch
 
 from ana.config import ENCODER_ONLY, ModelConfig
 from ana.nn.projection import SharedQKV
-from ana.nn.shuffle import BinarySwapPermutation, ShuffledD4QKV
+from ana.nn.permutations.shuffle import BinarySwapPermutation, ShuffledD4QKV
 from ana.registry import REGISTRY, build_model, count_parameters, model_parameters
 
 VARIANTS = [("ana_shuffle_benes_enc", "benes")]

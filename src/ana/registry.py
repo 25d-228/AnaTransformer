@@ -46,10 +46,15 @@ exponent router is initialised to emit one.
 gate is checked against. `shared_qkv` is the method being improved on. `baseline_matched` is an
 ordinary transformer at that same size: it separates the operator from the parameter budget.
 
+The compact-embedding models form a separate family: they keep ordinary independent
+Q/K/V projections and compress the tied lexical table. Their parameter counts are
+reported separately rather than being constrained to the shared-QKV budget.
+
 HOW THE MATCHED BASELINE IS BUILT, AND WHY IT NARROWS d_model
 
-Every model except `baseline` must be the same size, or a difference between them is capacity
-and not architecture. The matched baseline is an ordinary transformer shrunk to that size.
+The original shared-projection comparison keeps models near the shared-QKV budget.
+Its matched baseline is an ordinary transformer shrunk to that size; the separate
+compact-embedding family reports its own parameter counts.
 
 It shrinks by narrowing `d_model`, with `d_ff` held in the same proportion to it — the same
 transformer, thinner. Narrowing `d_ff` alone, which is the obvious thing to try, does not work
@@ -67,7 +72,12 @@ from dataclasses import dataclass, replace
 from ana.config import ALL_SITES, ENCODER_ONLY, ModelConfig, Site
 from ana.model import Seq2SeqTransformer
 from ana.nn.attention import MultiHeadAttention
-from ana.nn.grouping import (
+from ana.nn.embeddings.analogy_embedding import (
+    LinearCompressedEmbedding,
+    PowerAnalogyEmbedding,
+    ResidualPowerAnalogyEmbedding,
+)
+from ana.nn.permutations.grouping import (
     FEATURE,
     FEATURE_PER_GROUP,
     PERM_CONTROL_A,
@@ -78,7 +88,7 @@ from ana.nn.grouping import (
     PermutationFamily,
 )
 from ana.nn.projection import SeparateQKV, SharedQKV
-from ana.nn.roles import (
+from ana.nn.permutations.roles import (
     D4Mixing,
     D4MixingPowered,
     D4MixingWithoutMagnitude,
@@ -87,7 +97,7 @@ from ana.nn.roles import (
     RoleTransform,
     S4MixingWithoutMagnitude,
 )
-from ana.nn.shuffle import ShuffledD4QKV
+from ana.nn.permutations.shuffle import ShuffledD4QKV
 
 Mixer = Callable[[int, Grouping], RoleTransform]
 
@@ -105,8 +115,30 @@ class ModelSpec:
     sites: frozenset[Site] = ALL_SITES
     permutations: PermutationFamily | None = None
     shuffle_topology: str | None = None
+    embedding_compression: str | None = None
 
     def __post_init__(self) -> None:
+        if self.embedding_compression is not None and (
+            self.embedding_compression
+            not in (
+                "linear",
+                "power",
+                "linear_unit",
+                "power_unit",
+                "power_residual",
+                "power_residual_mix",
+            )
+            or self.shared
+            or self.matched
+            or self.mixer is not None
+            or self.grouping is not None
+            or self.permutations is not None
+            or self.shuffle_topology is not None
+            or self.sites != ALL_SITES
+        ):
+            raise ValueError(
+                f"{self.name}: compressed embeddings require an otherwise ordinary Transformer"
+            )
         if self.shuffle_topology is not None:
             if self.shuffle_topology not in ("butterfly", "benes"):
                 raise ValueError(f"{self.name}: unknown shuffle topology {self.shuffle_topology!r}")
@@ -150,6 +182,48 @@ REGISTRY: dict[str, ModelSpec] = {
             "control that decides whether an improvement over shared_qkv means anything",
             shared=False,
             matched=True,
+        ),
+        ModelSpec(
+            name="embedding_linear",
+            purpose="ordinary independent Q/K/V and GELU FFNs with a tied lexical table "
+            "factored into three stored coordinates per four model coordinates and a linear basis",
+            shared=False,
+            embedding_compression="linear",
+        ),
+        ModelSpec(
+            name="ana_embedding_learned",
+            purpose="ordinary independent Q/K/V and GELU FFNs with tied lexical features "
+            "constructed as positive four-term numerical analogies from three codes and learned p",
+            shared=False,
+            embedding_compression="power",
+        ),
+        ModelSpec(
+            name="embedding_unit_linear",
+            purpose="linear compressed tied lexical embeddings with unit-length non-padding "
+            "effective rows in both token lookup and vocabulary prediction",
+            shared=False,
+            embedding_compression="linear_unit",
+        ),
+        ModelSpec(
+            name="ana_embedding_unit_learned",
+            purpose="learned-power four-term lexical features with unit-length non-padding "
+            "effective embedding rows, ordinary independent Q/K/V and GELU FFNs",
+            shared=False,
+            embedding_compression="power_unit",
+        ),
+        ModelSpec(
+            name="ana_embedding_residual_learned",
+            purpose="unchanged linear compressed lexical table plus non-arithmetic four-term "
+            "power completion along fixed complementary directions; exact linear start at p=1",
+            shared=False,
+            embedding_compression="power_residual",
+        ),
+        ModelSpec(
+            name="ana_embedding_mix_learned",
+            purpose="linear-start four-term power completion with an identity-initialized "
+            "learned feature mixer inside the same fixed complementary output span",
+            shared=False,
+            embedding_compression="power_residual_mix",
         ),
         ModelSpec(
             name="shared_qkv",
@@ -383,6 +457,26 @@ def model_parameters(name: str, config: ModelConfig) -> int:
     spec = REGISTRY[name]
     if spec.matched:
         return baseline_parameters(matched_config(config))
+    if spec.embedding_compression is not None:
+        if config.d_model < 4 or config.d_model % 4:
+            raise ValueError("compressed embeddings require width divisible by four")
+        d = config.d_model
+        groups = d // 4
+        embedding = config.vocab_size * 3 * groups
+        if spec.embedding_compression in (
+            "linear",
+            "linear_unit",
+            "power_residual",
+            "power_residual_mix",
+        ):
+            embedding += 3 * groups * d
+            if spec.embedding_compression in ("power_residual", "power_residual_mix"):
+                embedding += groups
+            if spec.embedding_compression == "power_residual_mix":
+                embedding += groups * groups
+        else:
+            embedding += d * d + groups
+        return baseline_parameters(config) - config.vocab_size * d + embedding
     if not spec.shared:
         return baseline_parameters(config)
     return shared_parameters(spec, config)
@@ -429,7 +523,31 @@ def config_for(name: str, config: ModelConfig) -> ModelConfig:
 
 def build_model(name: str, config: ModelConfig) -> Seq2SeqTransformer:
     shape = config_for(name, config)
-    return Seq2SeqTransformer(shape, _attention_factory(REGISTRY[name], shape))
+    spec = REGISTRY[name]
+    model = Seq2SeqTransformer(shape, _attention_factory(spec, shape))
+    if spec.embedding_compression is not None:
+        # Keep every ordinary attention/FFN initialization; replace only the
+        # tied lexical table after the model's general initialization pass.
+        if spec.embedding_compression in ("power_residual", "power_residual_mix"):
+            model.embedding = ResidualPowerAnalogyEmbedding(
+                shape.vocab_size,
+                shape.d_model,
+                shape.pad_id,
+                learn_mixing=spec.embedding_compression == "power_residual_mix",
+            )
+        else:
+            embedding = (
+                LinearCompressedEmbedding
+                if spec.embedding_compression in ("linear", "linear_unit")
+                else PowerAnalogyEmbedding
+            )
+            model.embedding = embedding(
+                shape.vocab_size,
+                shape.d_model,
+                shape.pad_id,
+                normalize_rows=spec.embedding_compression.endswith("_unit"),
+            )
+    return model
 
 
 def count_parameters(model: Seq2SeqTransformer) -> int:

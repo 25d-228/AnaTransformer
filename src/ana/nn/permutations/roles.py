@@ -18,7 +18,7 @@ import torch
 import torch.nn.functional as F
 from torch import Tensor, nn
 
-from ana.nn.grouping import (
+from ana.nn.permutations.grouping import (
     D4_PERMUTATIONS,
     GROUP_SIZE,
     N_PERMUTATIONS,
@@ -105,7 +105,9 @@ def family_subset_masks(permutations: Tensor) -> tuple[Tensor, Tensor]:
     core = matches.any(dim=1)
     noncore = ~core
     if int(core.sum()) != 4 or int(noncore.sum()) != 4:
-        raise ValueError("the active family must partition into four core and four non-core routes")
+        raise ValueError(
+            "the active family must partition into four core and four non-core routes"
+        )
     return core, noncore
 
 
@@ -254,7 +256,9 @@ def temporary_d4_intervention(model: nn.Module, condition: D4Intervention) -> It
     modules = [module for module in model.modules() if isinstance(module, D4RoleTransform)]
     if not modules:
         raise ValueError("the model has no routed D4 role transforms")
-    if condition == "magnitude_one" and any(not isinstance(module, D4Mixing) for module in modules):
+    if condition == "magnitude_one" and any(
+        not isinstance(module, D4Mixing) for module in modules
+    ):
         raise ValueError("magnitude_one is only defined for D4 models with a learned magnitude")
 
     previous = [module._d4_intervention for module in modules]

@@ -29,7 +29,7 @@ from ana.data.corpora import build_corpus
 from ana.data.tokenizer import Tokenizer
 from ana.experiment import encode_split, git_commit, score_split
 from ana.model import Seq2SeqTransformer
-from ana.nn.grouping import (
+from ana.nn.permutations.grouping import (
     D4_PERMUTATIONS,
     GROUP_SIZE,
     N_PERMUTATIONS,
@@ -39,7 +39,7 @@ from ana.nn.grouping import (
     PermutationFamily,
     permutation_matrices,
 )
-from ana.nn.roles import (
+from ana.nn.permutations.roles import (
     FAMILY_SUBSET_INTERVENTIONS,
     D4Intervention,
     D4RoleTransform,

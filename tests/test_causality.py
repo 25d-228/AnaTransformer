@@ -19,8 +19,8 @@ import pytest
 import torch
 
 from ana.config import ALL_SITES, ModelConfig
-from ana.nn.grouping import FEATURE_PER_GROUP, GROUP_SIZE, SEQUENCE
-from ana.nn.roles import D4Mixing
+from ana.nn.permutations.grouping import FEATURE_PER_GROUP, GROUP_SIZE, SEQUENCE
+from ana.nn.permutations.roles import D4Mixing
 from ana.registry import REGISTRY, ModelSpec, build_model
 
 VOCAB = 64

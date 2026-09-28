@@ -36,3 +36,8 @@ The two carry different marks, so a symbol names the test it came from: `*` is p
 - [Multi30k shared-V4-core diagnostic](multi30k_v4_core_diagnostic_v1.md) —
   development-only core-usage statistics and 60 subset interventions over the 12 trained
   permutation-family checkpoints.
+
+## Compact embeddings
+
+[Completed compact-embedding and power-analogy experiments](compact_embeddings/README.md)
+include fixed-power, adaptive-power and context-dependent-power comparisons.

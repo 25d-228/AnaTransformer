@@ -10,8 +10,8 @@ import torch
 from ana.config import ENCODER_ONLY, ModelConfig, Selection, TrainConfig
 from ana.data.corpus import SyntheticCorpus
 from ana.experiment import run_cell
-from ana.nn.grouping import FEATURE, S4_PERMUTATIONS, permutation_matrices
-from ana.nn.roles import D4MixingWithoutMagnitude, S4MixingWithoutMagnitude
+from ana.nn.permutations.grouping import FEATURE, S4_PERMUTATIONS, permutation_matrices
+from ana.nn.permutations.roles import D4MixingWithoutMagnitude, S4MixingWithoutMagnitude
 from ana.registry import (
     PILOT_MODELS,
     REGISTRY,

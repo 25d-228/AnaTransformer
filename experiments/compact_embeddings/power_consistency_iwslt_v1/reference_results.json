@@ -1,0 +1,25 @@
+{
+  "corpus": "iwslt14",
+  "split": "test",
+  "metric": "BLEU/13a",
+  "reference_kind": "existing_reported_references",
+  "source_file": "results/iwslt14.md",
+  "precision": "Scores, bootstrap half-widths and parameter strings are copied at their reported precision.",
+  "models": {
+    "baseline": {
+      "reported_score": 33.45,
+      "reported_half_width": 0.51,
+      "reported_parameters": "36.67M"
+    },
+    "baseline_matched": {
+      "reported_score": 32.94,
+      "reported_half_width": 0.50,
+      "reported_parameters": "27.25M"
+    },
+    "shared_qkv": {
+      "reported_score": 31.58,
+      "reported_half_width": 0.49,
+      "reported_parameters": "27.24M"
+    }
+  }
+}

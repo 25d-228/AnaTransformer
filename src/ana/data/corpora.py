@@ -123,6 +123,47 @@ class Multi30k(LineAligned):
     )
 
 
+class Multi30kEnFr(Multi30k):
+    """Multi30k English into French, with its own training-only joint vocabulary.
+
+    The official Task 1 raw files supply 29,000 training pairs, 1,014 validation pairs and
+    1,000 test2016 pairs. Wu et al. (2021, arXiv 2105.14462) also evaluate this direction with
+    transformer_tiny: width 128, feed-forward 256, four heads and four encoder/decoder layers,
+    dropout 0.3. Their 61.80 BLEU is context, not an inherited German-language score gate.
+
+    This initial recipe retains this repository's sentence-batch Multi30k adaptation. In
+    particular, 20,000 updates and best-development-loss checkpoint selection are not an
+    exact replication of the paper's token batching and last-ten-checkpoint averaging.
+    The full reference run has not yet calibrated this new language direction.
+    """
+
+    name = "multi30k_enfr"
+    folder = "multi30k_enfr"
+    source_language = "en"
+    target_language = "fr"
+
+    recipe = Recipe(
+        max_steps=20_000,
+        batch_size=256,
+        warmup_steps=2_000,
+        learning_rate=5e-3,
+        schedule=Schedule.INVERSE_SQRT,
+        selection=Selection.BEST_DEV_LOSS,
+        verified=False,
+        source=(
+            "Wu et al. 2021 (arXiv 2105.14462), Multi30k English-to-French transformer_tiny: "
+            "128-wide, feed-forward 256, four heads, four encoder/decoder layers, dropout "
+            "0.3 and shared BPE. Repository adaptation: a new training-only joint 10k "
+            "SentencePiece BPE vocabulary, 20,000 updates, 256 sentences/batch, inverse-sqrt "
+            "from 5e-3 with 2,000 warmup steps and best-development-loss selection, not the "
+            "paper's token batching and last-ten-checkpoint averaging. Not yet calibrated "
+            "on English-to-French; every model in this comparison uses this same recipe."
+        ),
+    )
+
+    calibration = None
+
+
 class Iwslt14(LineAligned):
     """Talk transcripts: 160,239 pairs, German into English.
 
@@ -322,6 +363,7 @@ class Cogs(Corpus):
 
 CORPORA: dict[str, type[Corpus]] = {
     "multi30k": Multi30k,
+    "multi30k_enfr": Multi30kEnFr,
     "iwslt14": Iwslt14,
     "cogs": Cogs,
     # Needs no data on disk, so the whole pipeline can be exercised end to end before any

@@ -1,0 +1,1671 @@
+{
+  "study_id": "power_consistency_iwslt_v1",
+  "corpus": "iwslt14",
+  "split": "test",
+  "metric": "BLEU/13a",
+  "confidence": 0.95,
+  "resamples": 1000,
+  "bootstrap_seed": 12345,
+  "candidate": {
+    "model": "embedding_power_consistency",
+    "status": "completed",
+    "registry_model": "embedding_linear",
+    "parameters": 27241504,
+    "d_model": 448,
+    "d_ff": 856,
+    "training_steps": 50000,
+    "scored_step": 50000,
+    "interval": {
+      "score": 33.60357082531903,
+      "low": 33.124457525423075,
+      "high": 34.11945532004547,
+      "n": 6750,
+      "what_varies": "the test set",
+      "half_width": 0.49749889731119623
+    },
+    "source_results": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/runs/iwslt14_embedding_power_consistency_seed42/results.json",
+    "source_record": {
+      "model": "embedding_power_consistency",
+      "corpus": "iwslt14",
+      "metric": "BLEU/13a",
+      "parameters": 27241504,
+      "baseline_parameters": 36665344,
+      "scores": {
+        "dev": 34.06313651930511,
+        "test": 33.60357082531903
+      },
+      "steps_run": 50000,
+      "best_dev_loss": 2.716535801810909,
+      "best_step": 50000,
+      "scored_step": 50000,
+      "selection": "best_dev_loss",
+      "seconds": 32628.378952168976,
+      "manifest": {
+        "study_id": "power_consistency_iwslt_v1",
+        "corpus": "iwslt14",
+        "model": "embedding_power_consistency",
+        "contextual_parent_study": "ana-power-consistency-v1",
+        "parent_checkpoint_used": false,
+        "model_config": {
+          "vocab_size": 10000,
+          "d_model": 448,
+          "n_heads": 4,
+          "d_ff": 856,
+          "n_encoder_layers": 6,
+          "n_decoder_layers": 6,
+          "dropout": 0.3,
+          "label_smoothing": 0.1,
+          "max_positions": 256,
+          "pad_id": 0,
+          "bos_id": 1,
+          "eos_id": 2,
+          "unk_id": 3
+        },
+        "train_config": {
+          "max_steps": 50000,
+          "batch_size": 160,
+          "learning_rate": 0.0005,
+          "warmup_steps": 4000,
+          "schedule": "inverse_sqrt",
+          "selection": "best_dev_loss",
+          "weight_decay": 0.0001,
+          "max_grad_norm": 1.0,
+          "adam_betas": [
+            0.9,
+            0.98
+          ],
+          "adam_eps": 1e-09,
+          "eval_every": 1000,
+          "seed": 42,
+          "decode_batch_size": 32,
+          "beam_size": 5
+        },
+        "base_model": "embedding_linear",
+        "compression": "ordinary_tied_linear_336_to_448_embedding",
+        "embedding_parameters": 3510528,
+        "ordinary_attention_and_feed_forward": true,
+        "training_protocol": "fresh_original_optimizer_schedule_with_two_pass_consistency_objective",
+        "loss_configuration": {
+          "name": "all_pairs_power_dropout_consistency",
+          "power": 0.5,
+          "weight": 1.0,
+          "probability_floor_mass": 1e-06,
+          "dropout_views": 2,
+          "both_views_receive_gradients": true,
+          "supervised_loss": "mean of two existing label-smoothed cross-entropies",
+          "consistency_reduction": "sum over centered vocabulary defects, mean over valid target positions",
+          "target_ignore_index": -100
+        },
+        "power_scope": "training_loss_only",
+        "fixed_power": 0.5,
+        "learned_power": false,
+        "trainable_power_count": 0,
+        "consistency_coefficient": 1.0,
+        "probability_uniform_floor_mass": 1e-06,
+        "gradient_bearing_dropout_passes_per_update": 2,
+        "inference_unchanged": true,
+        "sequence_caps": {
+          "source": 96,
+          "target": 96,
+          "decode": 96,
+          "max_positions": 256
+        },
+        "architecture_change": {
+          "original_d_model": 512,
+          "original_d_ff": 1024,
+          "new_d_model": 448,
+          "new_d_ff": 856,
+          "heads": 4,
+          "head_width": 112,
+          "attention_sites": 18,
+          "ffn_sites": 12,
+          "encoder_layers": 6,
+          "decoder_layers": 6
+        },
+        "embedding": {
+          "stored_coefficients_per_token": 336,
+          "generated_features_per_token": 448,
+          "shared_basis_shape": [
+            336,
+            448
+          ],
+          "basis_bias": false,
+          "tied_input_output": true,
+          "row_normalization": false,
+          "input_scaling": "sqrt(d_model)",
+          "full_trainable_embedding_table_retained": false,
+          "effective_embedding": "codes@basis"
+        },
+        "initialization": {
+          "stored_code_scale": "sigma=d_model^(-1/2)",
+          "stored_codes": "independent_N(0,sigma^2)",
+          "basis": "orthogonal_rows_with_gain_sqrt(d_model/code_dim)",
+          "code_and_basis_rng": "same_initialization_sequence_as_ordinary_linear_compressed_embedding",
+          "pretrained_checkpoint": null
+        },
+        "analogy": {
+          "source": "https://arxiv.org/abs/2407.18770",
+          "condition": "A^p + D^p = B^p + C^p",
+          "domain": "same_target_position_next_word_distributions_under_two_independent_dropout_passes",
+          "positive_probabilities": "P_k=(1-epsilon)*softmax(logits_k)+epsilon/V",
+          "A": "P_1(i)",
+          "B": "P_1(j)",
+          "C": "P_2(i)",
+          "D": "P_2(j)",
+          "pair_residual": "P_1(i)^p+P_2(j)^p-P_1(j)^p-P_2(i)^p",
+          "all_pairs_identity": "sum_ij(pair_residual^2)/(2*V)=sum_i((delta_i-mean(delta))^2), delta=P_1^p-P_2^p",
+          "pair_coverage": "all_vocabulary_pairs_exactly_in_O(V)_per_valid_target_position",
+          "semantic_analogy_claim": false
+        },
+        "activation_checkpointing": false,
+        "context": {
+          "study_id": "power_consistency_iwslt_v1",
+          "corpus": "iwslt14",
+          "model": "embedding_power_consistency",
+          "contextual_parent_study": "ana-power-consistency-v1",
+          "parent_checkpoint_used": false,
+          "model_config": {
+            "vocab_size": 10000,
+            "d_model": 448,
+            "n_heads": 4,
+            "d_ff": 856,
+            "n_encoder_layers": 6,
+            "n_decoder_layers": 6,
+            "dropout": 0.3,
+            "label_smoothing": 0.1,
+            "max_positions": 256,
+            "pad_id": 0,
+            "bos_id": 1,
+            "eos_id": 2,
+            "unk_id": 3
+          },
+          "train_config": {
+            "max_steps": 50000,
+            "batch_size": 160,
+            "learning_rate": 0.0005,
+            "warmup_steps": 4000,
+            "schedule": "inverse_sqrt",
+            "selection": "best_dev_loss",
+            "weight_decay": 0.0001,
+            "max_grad_norm": 1.0,
+            "adam_betas": [
+              0.9,
+              0.98
+            ],
+            "adam_eps": 1e-09,
+            "eval_every": 1000,
+            "seed": 42,
+            "decode_batch_size": 32,
+            "beam_size": 5
+          },
+          "base_model": "embedding_linear",
+          "compression": "ordinary_tied_linear_336_to_448_embedding",
+          "embedding_parameters": 3510528,
+          "ordinary_attention_and_feed_forward": true,
+          "training_protocol": "fresh_original_optimizer_schedule_with_two_pass_consistency_objective",
+          "loss_configuration": {
+            "name": "all_pairs_power_dropout_consistency",
+            "power": 0.5,
+            "weight": 1.0,
+            "probability_floor_mass": 1e-06,
+            "dropout_views": 2,
+            "both_views_receive_gradients": true,
+            "supervised_loss": "mean of two existing label-smoothed cross-entropies",
+            "consistency_reduction": "sum over centered vocabulary defects, mean over valid target positions",
+            "target_ignore_index": -100
+          },
+          "power_scope": "training_loss_only",
+          "fixed_power": 0.5,
+          "learned_power": false,
+          "trainable_power_count": 0,
+          "consistency_coefficient": 1.0,
+          "probability_uniform_floor_mass": 1e-06,
+          "gradient_bearing_dropout_passes_per_update": 2,
+          "inference_unchanged": true,
+          "sequence_caps": {
+            "source": 96,
+            "target": 96,
+            "decode": 96,
+            "max_positions": 256
+          },
+          "architecture_change": {
+            "original_d_model": 512,
+            "original_d_ff": 1024,
+            "new_d_model": 448,
+            "new_d_ff": 856,
+            "heads": 4,
+            "head_width": 112,
+            "attention_sites": 18,
+            "ffn_sites": 12,
+            "encoder_layers": 6,
+            "decoder_layers": 6
+          },
+          "embedding": {
+            "stored_coefficients_per_token": 336,
+            "generated_features_per_token": 448,
+            "shared_basis_shape": [
+              336,
+              448
+            ],
+            "basis_bias": false,
+            "tied_input_output": true,
+            "row_normalization": false,
+            "input_scaling": "sqrt(d_model)",
+            "full_trainable_embedding_table_retained": false,
+            "effective_embedding": "codes@basis"
+          },
+          "initialization": {
+            "stored_code_scale": "sigma=d_model^(-1/2)",
+            "stored_codes": "independent_N(0,sigma^2)",
+            "basis": "orthogonal_rows_with_gain_sqrt(d_model/code_dim)",
+            "code_and_basis_rng": "same_initialization_sequence_as_ordinary_linear_compressed_embedding",
+            "pretrained_checkpoint": null
+          },
+          "analogy": {
+            "source": "https://arxiv.org/abs/2407.18770",
+            "condition": "A^p + D^p = B^p + C^p",
+            "domain": "same_target_position_next_word_distributions_under_two_independent_dropout_passes",
+            "positive_probabilities": "P_k=(1-epsilon)*softmax(logits_k)+epsilon/V",
+            "A": "P_1(i)",
+            "B": "P_1(j)",
+            "C": "P_2(i)",
+            "D": "P_2(j)",
+            "pair_residual": "P_1(i)^p+P_2(j)^p-P_1(j)^p-P_2(i)^p",
+            "all_pairs_identity": "sum_ij(pair_residual^2)/(2*V)=sum_i((delta_i-mean(delta))^2), delta=P_1^p-P_2^p",
+            "pair_coverage": "all_vocabulary_pairs_exactly_in_O(V)_per_valid_target_position",
+            "semantic_analogy_claim": false
+          },
+          "activation_checkpointing": false
+        },
+        "seed": 42,
+        "seeded_before_model_init": true,
+        "smoke": false,
+        "data_directory": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/data",
+        "tokenizer": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/data/iwslt14.model",
+        "training_host": "exp18",
+        "training_gpu": "NVIDIA RTX A6000",
+        "python": "3.11.15",
+        "torch": "2.11.0+cu128",
+        "allocator_cap_mib": 30720,
+        "evaluated_splits": [
+          "dev",
+          "test"
+        ],
+        "resumable_checkpoint_every": 1000
+      }
+    },
+    "source_hypotheses": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/runs/iwslt14_embedding_power_consistency_seed42/hypotheses.test.txt",
+    "source_references": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/runs/iwslt14_embedding_power_consistency_seed42/references.test.txt"
+  },
+  "ordinary": {
+    "model": "embedding_linear",
+    "status": "completed",
+    "registry_model": "embedding_linear",
+    "parameters": 27241504,
+    "d_model": 448,
+    "d_ff": 856,
+    "training_steps": 50000,
+    "scored_step": 50000,
+    "interval": {
+      "score": 32.815225117361805,
+      "low": 32.29920570887417,
+      "high": 33.31330413482949,
+      "n": 6750,
+      "what_varies": "the test set",
+      "half_width": 0.5070492129776589
+    },
+    "source_results": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/runs/iwslt14_embedding_linear_seed42/results.json",
+    "source_record": {
+      "model": "embedding_linear",
+      "corpus": "iwslt14",
+      "metric": "BLEU/13a",
+      "parameters": 27241504,
+      "baseline_parameters": 36665344,
+      "scores": {
+        "dev": 33.54248534363887,
+        "test": 32.815225117361805
+      },
+      "steps_run": 50000,
+      "best_dev_loss": 2.7716874196996537,
+      "best_step": 50000,
+      "scored_step": 50000,
+      "selection": "best_dev_loss",
+      "seconds": 23218.743903314986,
+      "manifest": {
+        "study_id": "power_consistency_iwslt_v1",
+        "corpus": "iwslt14",
+        "model": "embedding_linear",
+        "contextual_parent_study": "ana-power-consistency-v1",
+        "parent_checkpoint_used": false,
+        "model_config": {
+          "vocab_size": 10000,
+          "d_model": 448,
+          "n_heads": 4,
+          "d_ff": 856,
+          "n_encoder_layers": 6,
+          "n_decoder_layers": 6,
+          "dropout": 0.3,
+          "label_smoothing": 0.1,
+          "max_positions": 256,
+          "pad_id": 0,
+          "bos_id": 1,
+          "eos_id": 2,
+          "unk_id": 3
+        },
+        "train_config": {
+          "max_steps": 50000,
+          "batch_size": 160,
+          "learning_rate": 0.0005,
+          "warmup_steps": 4000,
+          "schedule": "inverse_sqrt",
+          "selection": "best_dev_loss",
+          "weight_decay": 0.0001,
+          "max_grad_norm": 1.0,
+          "adam_betas": [
+            0.9,
+            0.98
+          ],
+          "adam_eps": 1e-09,
+          "eval_every": 1000,
+          "seed": 42,
+          "decode_batch_size": 32,
+          "beam_size": 5
+        },
+        "base_model": "embedding_linear",
+        "compression": "ordinary_tied_linear_336_to_448_embedding",
+        "embedding_parameters": 3510528,
+        "ordinary_attention_and_feed_forward": true,
+        "training_protocol": "fresh_original_optimizer_schedule_with_single_pass_cross_entropy_objective",
+        "loss_configuration": {
+          "name": "ordinary_cross_entropy",
+          "label_smoothing": 0.1,
+          "target_ignore_index": -100
+        },
+        "power_scope": "not_used",
+        "fixed_power": null,
+        "learned_power": false,
+        "trainable_power_count": 0,
+        "consistency_coefficient": 0.0,
+        "probability_uniform_floor_mass": null,
+        "gradient_bearing_dropout_passes_per_update": 1,
+        "inference_unchanged": true,
+        "sequence_caps": {
+          "source": 96,
+          "target": 96,
+          "decode": 96,
+          "max_positions": 256
+        },
+        "architecture_change": {
+          "original_d_model": 512,
+          "original_d_ff": 1024,
+          "new_d_model": 448,
+          "new_d_ff": 856,
+          "heads": 4,
+          "head_width": 112,
+          "attention_sites": 18,
+          "ffn_sites": 12,
+          "encoder_layers": 6,
+          "decoder_layers": 6
+        },
+        "embedding": {
+          "stored_coefficients_per_token": 336,
+          "generated_features_per_token": 448,
+          "shared_basis_shape": [
+            336,
+            448
+          ],
+          "basis_bias": false,
+          "tied_input_output": true,
+          "row_normalization": false,
+          "input_scaling": "sqrt(d_model)",
+          "full_trainable_embedding_table_retained": false,
+          "effective_embedding": "codes@basis"
+        },
+        "initialization": {
+          "stored_code_scale": "sigma=d_model^(-1/2)",
+          "stored_codes": "independent_N(0,sigma^2)",
+          "basis": "orthogonal_rows_with_gain_sqrt(d_model/code_dim)",
+          "code_and_basis_rng": "same_initialization_sequence_as_ordinary_linear_compressed_embedding",
+          "pretrained_checkpoint": null
+        },
+        "activation_checkpointing": false,
+        "training_objective": "ordinary_cross_entropy",
+        "context": {
+          "study_id": "power_consistency_iwslt_v1",
+          "corpus": "iwslt14",
+          "model": "embedding_linear",
+          "contextual_parent_study": "ana-power-consistency-v1",
+          "parent_checkpoint_used": false,
+          "model_config": {
+            "vocab_size": 10000,
+            "d_model": 448,
+            "n_heads": 4,
+            "d_ff": 856,
+            "n_encoder_layers": 6,
+            "n_decoder_layers": 6,
+            "dropout": 0.3,
+            "label_smoothing": 0.1,
+            "max_positions": 256,
+            "pad_id": 0,
+            "bos_id": 1,
+            "eos_id": 2,
+            "unk_id": 3
+          },
+          "train_config": {
+            "max_steps": 50000,
+            "batch_size": 160,
+            "learning_rate": 0.0005,
+            "warmup_steps": 4000,
+            "schedule": "inverse_sqrt",
+            "selection": "best_dev_loss",
+            "weight_decay": 0.0001,
+            "max_grad_norm": 1.0,
+            "adam_betas": [
+              0.9,
+              0.98
+            ],
+            "adam_eps": 1e-09,
+            "eval_every": 1000,
+            "seed": 42,
+            "decode_batch_size": 32,
+            "beam_size": 5
+          },
+          "base_model": "embedding_linear",
+          "compression": "ordinary_tied_linear_336_to_448_embedding",
+          "embedding_parameters": 3510528,
+          "ordinary_attention_and_feed_forward": true,
+          "training_protocol": "fresh_original_optimizer_schedule_with_single_pass_cross_entropy_objective",
+          "loss_configuration": {
+            "name": "ordinary_cross_entropy",
+            "label_smoothing": 0.1,
+            "target_ignore_index": -100
+          },
+          "power_scope": "not_used",
+          "fixed_power": null,
+          "learned_power": false,
+          "trainable_power_count": 0,
+          "consistency_coefficient": 0.0,
+          "probability_uniform_floor_mass": null,
+          "gradient_bearing_dropout_passes_per_update": 1,
+          "inference_unchanged": true,
+          "sequence_caps": {
+            "source": 96,
+            "target": 96,
+            "decode": 96,
+            "max_positions": 256
+          },
+          "architecture_change": {
+            "original_d_model": 512,
+            "original_d_ff": 1024,
+            "new_d_model": 448,
+            "new_d_ff": 856,
+            "heads": 4,
+            "head_width": 112,
+            "attention_sites": 18,
+            "ffn_sites": 12,
+            "encoder_layers": 6,
+            "decoder_layers": 6
+          },
+          "embedding": {
+            "stored_coefficients_per_token": 336,
+            "generated_features_per_token": 448,
+            "shared_basis_shape": [
+              336,
+              448
+            ],
+            "basis_bias": false,
+            "tied_input_output": true,
+            "row_normalization": false,
+            "input_scaling": "sqrt(d_model)",
+            "full_trainable_embedding_table_retained": false,
+            "effective_embedding": "codes@basis"
+          },
+          "initialization": {
+            "stored_code_scale": "sigma=d_model^(-1/2)",
+            "stored_codes": "independent_N(0,sigma^2)",
+            "basis": "orthogonal_rows_with_gain_sqrt(d_model/code_dim)",
+            "code_and_basis_rng": "same_initialization_sequence_as_ordinary_linear_compressed_embedding",
+            "pretrained_checkpoint": null
+          },
+          "activation_checkpointing": false,
+          "training_objective": "ordinary_cross_entropy"
+        },
+        "seed": 42,
+        "seeded_before_model_init": true,
+        "smoke": false,
+        "data_directory": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/data",
+        "tokenizer": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/data/iwslt14.model",
+        "training_host": "exp18",
+        "training_gpu": "NVIDIA RTX A6000",
+        "python": "3.11.15",
+        "torch": "2.11.0+cu128",
+        "allocator_cap_mib": 16384,
+        "evaluated_splits": [
+          "dev",
+          "test"
+        ],
+        "resumable_checkpoint_every": 1000
+      }
+    },
+    "source_hypotheses": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/runs/iwslt14_embedding_linear_seed42/hypotheses.test.txt",
+    "source_references": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/runs/iwslt14_embedding_linear_seed42/references.test.txt"
+  },
+  "models": {
+    "embedding_linear": {
+      "model": "embedding_linear",
+      "status": "completed",
+      "registry_model": "embedding_linear",
+      "parameters": 27241504,
+      "d_model": 448,
+      "d_ff": 856,
+      "training_steps": 50000,
+      "scored_step": 50000,
+      "interval": {
+        "score": 32.815225117361805,
+        "low": 32.29920570887417,
+        "high": 33.31330413482949,
+        "n": 6750,
+        "what_varies": "the test set",
+        "half_width": 0.5070492129776589
+      },
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/runs/iwslt14_embedding_linear_seed42/results.json",
+      "source_record": {
+        "model": "embedding_linear",
+        "corpus": "iwslt14",
+        "metric": "BLEU/13a",
+        "parameters": 27241504,
+        "baseline_parameters": 36665344,
+        "scores": {
+          "dev": 33.54248534363887,
+          "test": 32.815225117361805
+        },
+        "steps_run": 50000,
+        "best_dev_loss": 2.7716874196996537,
+        "best_step": 50000,
+        "scored_step": 50000,
+        "selection": "best_dev_loss",
+        "seconds": 23218.743903314986,
+        "manifest": {
+          "study_id": "power_consistency_iwslt_v1",
+          "corpus": "iwslt14",
+          "model": "embedding_linear",
+          "contextual_parent_study": "ana-power-consistency-v1",
+          "parent_checkpoint_used": false,
+          "model_config": {
+            "vocab_size": 10000,
+            "d_model": 448,
+            "n_heads": 4,
+            "d_ff": 856,
+            "n_encoder_layers": 6,
+            "n_decoder_layers": 6,
+            "dropout": 0.3,
+            "label_smoothing": 0.1,
+            "max_positions": 256,
+            "pad_id": 0,
+            "bos_id": 1,
+            "eos_id": 2,
+            "unk_id": 3
+          },
+          "train_config": {
+            "max_steps": 50000,
+            "batch_size": 160,
+            "learning_rate": 0.0005,
+            "warmup_steps": 4000,
+            "schedule": "inverse_sqrt",
+            "selection": "best_dev_loss",
+            "weight_decay": 0.0001,
+            "max_grad_norm": 1.0,
+            "adam_betas": [
+              0.9,
+              0.98
+            ],
+            "adam_eps": 1e-09,
+            "eval_every": 1000,
+            "seed": 42,
+            "decode_batch_size": 32,
+            "beam_size": 5
+          },
+          "base_model": "embedding_linear",
+          "compression": "ordinary_tied_linear_336_to_448_embedding",
+          "embedding_parameters": 3510528,
+          "ordinary_attention_and_feed_forward": true,
+          "training_protocol": "fresh_original_optimizer_schedule_with_single_pass_cross_entropy_objective",
+          "loss_configuration": {
+            "name": "ordinary_cross_entropy",
+            "label_smoothing": 0.1,
+            "target_ignore_index": -100
+          },
+          "power_scope": "not_used",
+          "fixed_power": null,
+          "learned_power": false,
+          "trainable_power_count": 0,
+          "consistency_coefficient": 0.0,
+          "probability_uniform_floor_mass": null,
+          "gradient_bearing_dropout_passes_per_update": 1,
+          "inference_unchanged": true,
+          "sequence_caps": {
+            "source": 96,
+            "target": 96,
+            "decode": 96,
+            "max_positions": 256
+          },
+          "architecture_change": {
+            "original_d_model": 512,
+            "original_d_ff": 1024,
+            "new_d_model": 448,
+            "new_d_ff": 856,
+            "heads": 4,
+            "head_width": 112,
+            "attention_sites": 18,
+            "ffn_sites": 12,
+            "encoder_layers": 6,
+            "decoder_layers": 6
+          },
+          "embedding": {
+            "stored_coefficients_per_token": 336,
+            "generated_features_per_token": 448,
+            "shared_basis_shape": [
+              336,
+              448
+            ],
+            "basis_bias": false,
+            "tied_input_output": true,
+            "row_normalization": false,
+            "input_scaling": "sqrt(d_model)",
+            "full_trainable_embedding_table_retained": false,
+            "effective_embedding": "codes@basis"
+          },
+          "initialization": {
+            "stored_code_scale": "sigma=d_model^(-1/2)",
+            "stored_codes": "independent_N(0,sigma^2)",
+            "basis": "orthogonal_rows_with_gain_sqrt(d_model/code_dim)",
+            "code_and_basis_rng": "same_initialization_sequence_as_ordinary_linear_compressed_embedding",
+            "pretrained_checkpoint": null
+          },
+          "activation_checkpointing": false,
+          "training_objective": "ordinary_cross_entropy",
+          "context": {
+            "study_id": "power_consistency_iwslt_v1",
+            "corpus": "iwslt14",
+            "model": "embedding_linear",
+            "contextual_parent_study": "ana-power-consistency-v1",
+            "parent_checkpoint_used": false,
+            "model_config": {
+              "vocab_size": 10000,
+              "d_model": 448,
+              "n_heads": 4,
+              "d_ff": 856,
+              "n_encoder_layers": 6,
+              "n_decoder_layers": 6,
+              "dropout": 0.3,
+              "label_smoothing": 0.1,
+              "max_positions": 256,
+              "pad_id": 0,
+              "bos_id": 1,
+              "eos_id": 2,
+              "unk_id": 3
+            },
+            "train_config": {
+              "max_steps": 50000,
+              "batch_size": 160,
+              "learning_rate": 0.0005,
+              "warmup_steps": 4000,
+              "schedule": "inverse_sqrt",
+              "selection": "best_dev_loss",
+              "weight_decay": 0.0001,
+              "max_grad_norm": 1.0,
+              "adam_betas": [
+                0.9,
+                0.98
+              ],
+              "adam_eps": 1e-09,
+              "eval_every": 1000,
+              "seed": 42,
+              "decode_batch_size": 32,
+              "beam_size": 5
+            },
+            "base_model": "embedding_linear",
+            "compression": "ordinary_tied_linear_336_to_448_embedding",
+            "embedding_parameters": 3510528,
+            "ordinary_attention_and_feed_forward": true,
+            "training_protocol": "fresh_original_optimizer_schedule_with_single_pass_cross_entropy_objective",
+            "loss_configuration": {
+              "name": "ordinary_cross_entropy",
+              "label_smoothing": 0.1,
+              "target_ignore_index": -100
+            },
+            "power_scope": "not_used",
+            "fixed_power": null,
+            "learned_power": false,
+            "trainable_power_count": 0,
+            "consistency_coefficient": 0.0,
+            "probability_uniform_floor_mass": null,
+            "gradient_bearing_dropout_passes_per_update": 1,
+            "inference_unchanged": true,
+            "sequence_caps": {
+              "source": 96,
+              "target": 96,
+              "decode": 96,
+              "max_positions": 256
+            },
+            "architecture_change": {
+              "original_d_model": 512,
+              "original_d_ff": 1024,
+              "new_d_model": 448,
+              "new_d_ff": 856,
+              "heads": 4,
+              "head_width": 112,
+              "attention_sites": 18,
+              "ffn_sites": 12,
+              "encoder_layers": 6,
+              "decoder_layers": 6
+            },
+            "embedding": {
+              "stored_coefficients_per_token": 336,
+              "generated_features_per_token": 448,
+              "shared_basis_shape": [
+                336,
+                448
+              ],
+              "basis_bias": false,
+              "tied_input_output": true,
+              "row_normalization": false,
+              "input_scaling": "sqrt(d_model)",
+              "full_trainable_embedding_table_retained": false,
+              "effective_embedding": "codes@basis"
+            },
+            "initialization": {
+              "stored_code_scale": "sigma=d_model^(-1/2)",
+              "stored_codes": "independent_N(0,sigma^2)",
+              "basis": "orthogonal_rows_with_gain_sqrt(d_model/code_dim)",
+              "code_and_basis_rng": "same_initialization_sequence_as_ordinary_linear_compressed_embedding",
+              "pretrained_checkpoint": null
+            },
+            "activation_checkpointing": false,
+            "training_objective": "ordinary_cross_entropy"
+          },
+          "seed": 42,
+          "seeded_before_model_init": true,
+          "smoke": false,
+          "data_directory": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/data",
+          "tokenizer": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/data/iwslt14.model",
+          "training_host": "exp18",
+          "training_gpu": "NVIDIA RTX A6000",
+          "python": "3.11.15",
+          "torch": "2.11.0+cu128",
+          "allocator_cap_mib": 16384,
+          "evaluated_splits": [
+            "dev",
+            "test"
+          ],
+          "resumable_checkpoint_every": 1000
+        }
+      },
+      "source_hypotheses": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/runs/iwslt14_embedding_linear_seed42/hypotheses.test.txt",
+      "source_references": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/runs/iwslt14_embedding_linear_seed42/references.test.txt"
+    },
+    "embedding_power_consistency": {
+      "model": "embedding_power_consistency",
+      "status": "completed",
+      "registry_model": "embedding_linear",
+      "parameters": 27241504,
+      "d_model": 448,
+      "d_ff": 856,
+      "training_steps": 50000,
+      "scored_step": 50000,
+      "interval": {
+        "score": 33.60357082531903,
+        "low": 33.124457525423075,
+        "high": 34.11945532004547,
+        "n": 6750,
+        "what_varies": "the test set",
+        "half_width": 0.49749889731119623
+      },
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/runs/iwslt14_embedding_power_consistency_seed42/results.json",
+      "source_record": {
+        "model": "embedding_power_consistency",
+        "corpus": "iwslt14",
+        "metric": "BLEU/13a",
+        "parameters": 27241504,
+        "baseline_parameters": 36665344,
+        "scores": {
+          "dev": 34.06313651930511,
+          "test": 33.60357082531903
+        },
+        "steps_run": 50000,
+        "best_dev_loss": 2.716535801810909,
+        "best_step": 50000,
+        "scored_step": 50000,
+        "selection": "best_dev_loss",
+        "seconds": 32628.378952168976,
+        "manifest": {
+          "study_id": "power_consistency_iwslt_v1",
+          "corpus": "iwslt14",
+          "model": "embedding_power_consistency",
+          "contextual_parent_study": "ana-power-consistency-v1",
+          "parent_checkpoint_used": false,
+          "model_config": {
+            "vocab_size": 10000,
+            "d_model": 448,
+            "n_heads": 4,
+            "d_ff": 856,
+            "n_encoder_layers": 6,
+            "n_decoder_layers": 6,
+            "dropout": 0.3,
+            "label_smoothing": 0.1,
+            "max_positions": 256,
+            "pad_id": 0,
+            "bos_id": 1,
+            "eos_id": 2,
+            "unk_id": 3
+          },
+          "train_config": {
+            "max_steps": 50000,
+            "batch_size": 160,
+            "learning_rate": 0.0005,
+            "warmup_steps": 4000,
+            "schedule": "inverse_sqrt",
+            "selection": "best_dev_loss",
+            "weight_decay": 0.0001,
+            "max_grad_norm": 1.0,
+            "adam_betas": [
+              0.9,
+              0.98
+            ],
+            "adam_eps": 1e-09,
+            "eval_every": 1000,
+            "seed": 42,
+            "decode_batch_size": 32,
+            "beam_size": 5
+          },
+          "base_model": "embedding_linear",
+          "compression": "ordinary_tied_linear_336_to_448_embedding",
+          "embedding_parameters": 3510528,
+          "ordinary_attention_and_feed_forward": true,
+          "training_protocol": "fresh_original_optimizer_schedule_with_two_pass_consistency_objective",
+          "loss_configuration": {
+            "name": "all_pairs_power_dropout_consistency",
+            "power": 0.5,
+            "weight": 1.0,
+            "probability_floor_mass": 1e-06,
+            "dropout_views": 2,
+            "both_views_receive_gradients": true,
+            "supervised_loss": "mean of two existing label-smoothed cross-entropies",
+            "consistency_reduction": "sum over centered vocabulary defects, mean over valid target positions",
+            "target_ignore_index": -100
+          },
+          "power_scope": "training_loss_only",
+          "fixed_power": 0.5,
+          "learned_power": false,
+          "trainable_power_count": 0,
+          "consistency_coefficient": 1.0,
+          "probability_uniform_floor_mass": 1e-06,
+          "gradient_bearing_dropout_passes_per_update": 2,
+          "inference_unchanged": true,
+          "sequence_caps": {
+            "source": 96,
+            "target": 96,
+            "decode": 96,
+            "max_positions": 256
+          },
+          "architecture_change": {
+            "original_d_model": 512,
+            "original_d_ff": 1024,
+            "new_d_model": 448,
+            "new_d_ff": 856,
+            "heads": 4,
+            "head_width": 112,
+            "attention_sites": 18,
+            "ffn_sites": 12,
+            "encoder_layers": 6,
+            "decoder_layers": 6
+          },
+          "embedding": {
+            "stored_coefficients_per_token": 336,
+            "generated_features_per_token": 448,
+            "shared_basis_shape": [
+              336,
+              448
+            ],
+            "basis_bias": false,
+            "tied_input_output": true,
+            "row_normalization": false,
+            "input_scaling": "sqrt(d_model)",
+            "full_trainable_embedding_table_retained": false,
+            "effective_embedding": "codes@basis"
+          },
+          "initialization": {
+            "stored_code_scale": "sigma=d_model^(-1/2)",
+            "stored_codes": "independent_N(0,sigma^2)",
+            "basis": "orthogonal_rows_with_gain_sqrt(d_model/code_dim)",
+            "code_and_basis_rng": "same_initialization_sequence_as_ordinary_linear_compressed_embedding",
+            "pretrained_checkpoint": null
+          },
+          "analogy": {
+            "source": "https://arxiv.org/abs/2407.18770",
+            "condition": "A^p + D^p = B^p + C^p",
+            "domain": "same_target_position_next_word_distributions_under_two_independent_dropout_passes",
+            "positive_probabilities": "P_k=(1-epsilon)*softmax(logits_k)+epsilon/V",
+            "A": "P_1(i)",
+            "B": "P_1(j)",
+            "C": "P_2(i)",
+            "D": "P_2(j)",
+            "pair_residual": "P_1(i)^p+P_2(j)^p-P_1(j)^p-P_2(i)^p",
+            "all_pairs_identity": "sum_ij(pair_residual^2)/(2*V)=sum_i((delta_i-mean(delta))^2), delta=P_1^p-P_2^p",
+            "pair_coverage": "all_vocabulary_pairs_exactly_in_O(V)_per_valid_target_position",
+            "semantic_analogy_claim": false
+          },
+          "activation_checkpointing": false,
+          "context": {
+            "study_id": "power_consistency_iwslt_v1",
+            "corpus": "iwslt14",
+            "model": "embedding_power_consistency",
+            "contextual_parent_study": "ana-power-consistency-v1",
+            "parent_checkpoint_used": false,
+            "model_config": {
+              "vocab_size": 10000,
+              "d_model": 448,
+              "n_heads": 4,
+              "d_ff": 856,
+              "n_encoder_layers": 6,
+              "n_decoder_layers": 6,
+              "dropout": 0.3,
+              "label_smoothing": 0.1,
+              "max_positions": 256,
+              "pad_id": 0,
+              "bos_id": 1,
+              "eos_id": 2,
+              "unk_id": 3
+            },
+            "train_config": {
+              "max_steps": 50000,
+              "batch_size": 160,
+              "learning_rate": 0.0005,
+              "warmup_steps": 4000,
+              "schedule": "inverse_sqrt",
+              "selection": "best_dev_loss",
+              "weight_decay": 0.0001,
+              "max_grad_norm": 1.0,
+              "adam_betas": [
+                0.9,
+                0.98
+              ],
+              "adam_eps": 1e-09,
+              "eval_every": 1000,
+              "seed": 42,
+              "decode_batch_size": 32,
+              "beam_size": 5
+            },
+            "base_model": "embedding_linear",
+            "compression": "ordinary_tied_linear_336_to_448_embedding",
+            "embedding_parameters": 3510528,
+            "ordinary_attention_and_feed_forward": true,
+            "training_protocol": "fresh_original_optimizer_schedule_with_two_pass_consistency_objective",
+            "loss_configuration": {
+              "name": "all_pairs_power_dropout_consistency",
+              "power": 0.5,
+              "weight": 1.0,
+              "probability_floor_mass": 1e-06,
+              "dropout_views": 2,
+              "both_views_receive_gradients": true,
+              "supervised_loss": "mean of two existing label-smoothed cross-entropies",
+              "consistency_reduction": "sum over centered vocabulary defects, mean over valid target positions",
+              "target_ignore_index": -100
+            },
+            "power_scope": "training_loss_only",
+            "fixed_power": 0.5,
+            "learned_power": false,
+            "trainable_power_count": 0,
+            "consistency_coefficient": 1.0,
+            "probability_uniform_floor_mass": 1e-06,
+            "gradient_bearing_dropout_passes_per_update": 2,
+            "inference_unchanged": true,
+            "sequence_caps": {
+              "source": 96,
+              "target": 96,
+              "decode": 96,
+              "max_positions": 256
+            },
+            "architecture_change": {
+              "original_d_model": 512,
+              "original_d_ff": 1024,
+              "new_d_model": 448,
+              "new_d_ff": 856,
+              "heads": 4,
+              "head_width": 112,
+              "attention_sites": 18,
+              "ffn_sites": 12,
+              "encoder_layers": 6,
+              "decoder_layers": 6
+            },
+            "embedding": {
+              "stored_coefficients_per_token": 336,
+              "generated_features_per_token": 448,
+              "shared_basis_shape": [
+                336,
+                448
+              ],
+              "basis_bias": false,
+              "tied_input_output": true,
+              "row_normalization": false,
+              "input_scaling": "sqrt(d_model)",
+              "full_trainable_embedding_table_retained": false,
+              "effective_embedding": "codes@basis"
+            },
+            "initialization": {
+              "stored_code_scale": "sigma=d_model^(-1/2)",
+              "stored_codes": "independent_N(0,sigma^2)",
+              "basis": "orthogonal_rows_with_gain_sqrt(d_model/code_dim)",
+              "code_and_basis_rng": "same_initialization_sequence_as_ordinary_linear_compressed_embedding",
+              "pretrained_checkpoint": null
+            },
+            "analogy": {
+              "source": "https://arxiv.org/abs/2407.18770",
+              "condition": "A^p + D^p = B^p + C^p",
+              "domain": "same_target_position_next_word_distributions_under_two_independent_dropout_passes",
+              "positive_probabilities": "P_k=(1-epsilon)*softmax(logits_k)+epsilon/V",
+              "A": "P_1(i)",
+              "B": "P_1(j)",
+              "C": "P_2(i)",
+              "D": "P_2(j)",
+              "pair_residual": "P_1(i)^p+P_2(j)^p-P_1(j)^p-P_2(i)^p",
+              "all_pairs_identity": "sum_ij(pair_residual^2)/(2*V)=sum_i((delta_i-mean(delta))^2), delta=P_1^p-P_2^p",
+              "pair_coverage": "all_vocabulary_pairs_exactly_in_O(V)_per_valid_target_position",
+              "semantic_analogy_claim": false
+            },
+            "activation_checkpointing": false
+          },
+          "seed": 42,
+          "seeded_before_model_init": true,
+          "smoke": false,
+          "data_directory": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/data",
+          "tokenizer": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/data/iwslt14.model",
+          "training_host": "exp18",
+          "training_gpu": "NVIDIA RTX A6000",
+          "python": "3.11.15",
+          "torch": "2.11.0+cu128",
+          "allocator_cap_mib": 30720,
+          "evaluated_splits": [
+            "dev",
+            "test"
+          ],
+          "resumable_checkpoint_every": 1000
+        }
+      },
+      "source_hypotheses": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/runs/iwslt14_embedding_power_consistency_seed42/hypotheses.test.txt",
+      "source_references": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/runs/iwslt14_embedding_power_consistency_seed42/references.test.txt"
+    }
+  },
+  "power_minus_ordinary": {
+    "first_model": "embedding_power_consistency",
+    "second_model": "embedding_linear",
+    "direction": "power-trained minus ordinary compact model",
+    "difference": 0.7883457079572267,
+    "low": 0.5973917502364685,
+    "high": 0.9960408090431372,
+    "n": 6750,
+    "what_varies": "the test set",
+    "source_results": [
+      "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/runs/iwslt14_embedding_power_consistency_seed42/results.json",
+      "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/runs/iwslt14_embedding_linear_seed42/results.json"
+    ],
+    "source_records": [
+      {
+        "model": "embedding_power_consistency",
+        "corpus": "iwslt14",
+        "metric": "BLEU/13a",
+        "parameters": 27241504,
+        "baseline_parameters": 36665344,
+        "scores": {
+          "dev": 34.06313651930511,
+          "test": 33.60357082531903
+        },
+        "steps_run": 50000,
+        "best_dev_loss": 2.716535801810909,
+        "best_step": 50000,
+        "scored_step": 50000,
+        "selection": "best_dev_loss",
+        "seconds": 32628.378952168976,
+        "manifest": {
+          "study_id": "power_consistency_iwslt_v1",
+          "corpus": "iwslt14",
+          "model": "embedding_power_consistency",
+          "contextual_parent_study": "ana-power-consistency-v1",
+          "parent_checkpoint_used": false,
+          "model_config": {
+            "vocab_size": 10000,
+            "d_model": 448,
+            "n_heads": 4,
+            "d_ff": 856,
+            "n_encoder_layers": 6,
+            "n_decoder_layers": 6,
+            "dropout": 0.3,
+            "label_smoothing": 0.1,
+            "max_positions": 256,
+            "pad_id": 0,
+            "bos_id": 1,
+            "eos_id": 2,
+            "unk_id": 3
+          },
+          "train_config": {
+            "max_steps": 50000,
+            "batch_size": 160,
+            "learning_rate": 0.0005,
+            "warmup_steps": 4000,
+            "schedule": "inverse_sqrt",
+            "selection": "best_dev_loss",
+            "weight_decay": 0.0001,
+            "max_grad_norm": 1.0,
+            "adam_betas": [
+              0.9,
+              0.98
+            ],
+            "adam_eps": 1e-09,
+            "eval_every": 1000,
+            "seed": 42,
+            "decode_batch_size": 32,
+            "beam_size": 5
+          },
+          "base_model": "embedding_linear",
+          "compression": "ordinary_tied_linear_336_to_448_embedding",
+          "embedding_parameters": 3510528,
+          "ordinary_attention_and_feed_forward": true,
+          "training_protocol": "fresh_original_optimizer_schedule_with_two_pass_consistency_objective",
+          "loss_configuration": {
+            "name": "all_pairs_power_dropout_consistency",
+            "power": 0.5,
+            "weight": 1.0,
+            "probability_floor_mass": 1e-06,
+            "dropout_views": 2,
+            "both_views_receive_gradients": true,
+            "supervised_loss": "mean of two existing label-smoothed cross-entropies",
+            "consistency_reduction": "sum over centered vocabulary defects, mean over valid target positions",
+            "target_ignore_index": -100
+          },
+          "power_scope": "training_loss_only",
+          "fixed_power": 0.5,
+          "learned_power": false,
+          "trainable_power_count": 0,
+          "consistency_coefficient": 1.0,
+          "probability_uniform_floor_mass": 1e-06,
+          "gradient_bearing_dropout_passes_per_update": 2,
+          "inference_unchanged": true,
+          "sequence_caps": {
+            "source": 96,
+            "target": 96,
+            "decode": 96,
+            "max_positions": 256
+          },
+          "architecture_change": {
+            "original_d_model": 512,
+            "original_d_ff": 1024,
+            "new_d_model": 448,
+            "new_d_ff": 856,
+            "heads": 4,
+            "head_width": 112,
+            "attention_sites": 18,
+            "ffn_sites": 12,
+            "encoder_layers": 6,
+            "decoder_layers": 6
+          },
+          "embedding": {
+            "stored_coefficients_per_token": 336,
+            "generated_features_per_token": 448,
+            "shared_basis_shape": [
+              336,
+              448
+            ],
+            "basis_bias": false,
+            "tied_input_output": true,
+            "row_normalization": false,
+            "input_scaling": "sqrt(d_model)",
+            "full_trainable_embedding_table_retained": false,
+            "effective_embedding": "codes@basis"
+          },
+          "initialization": {
+            "stored_code_scale": "sigma=d_model^(-1/2)",
+            "stored_codes": "independent_N(0,sigma^2)",
+            "basis": "orthogonal_rows_with_gain_sqrt(d_model/code_dim)",
+            "code_and_basis_rng": "same_initialization_sequence_as_ordinary_linear_compressed_embedding",
+            "pretrained_checkpoint": null
+          },
+          "analogy": {
+            "source": "https://arxiv.org/abs/2407.18770",
+            "condition": "A^p + D^p = B^p + C^p",
+            "domain": "same_target_position_next_word_distributions_under_two_independent_dropout_passes",
+            "positive_probabilities": "P_k=(1-epsilon)*softmax(logits_k)+epsilon/V",
+            "A": "P_1(i)",
+            "B": "P_1(j)",
+            "C": "P_2(i)",
+            "D": "P_2(j)",
+            "pair_residual": "P_1(i)^p+P_2(j)^p-P_1(j)^p-P_2(i)^p",
+            "all_pairs_identity": "sum_ij(pair_residual^2)/(2*V)=sum_i((delta_i-mean(delta))^2), delta=P_1^p-P_2^p",
+            "pair_coverage": "all_vocabulary_pairs_exactly_in_O(V)_per_valid_target_position",
+            "semantic_analogy_claim": false
+          },
+          "activation_checkpointing": false,
+          "context": {
+            "study_id": "power_consistency_iwslt_v1",
+            "corpus": "iwslt14",
+            "model": "embedding_power_consistency",
+            "contextual_parent_study": "ana-power-consistency-v1",
+            "parent_checkpoint_used": false,
+            "model_config": {
+              "vocab_size": 10000,
+              "d_model": 448,
+              "n_heads": 4,
+              "d_ff": 856,
+              "n_encoder_layers": 6,
+              "n_decoder_layers": 6,
+              "dropout": 0.3,
+              "label_smoothing": 0.1,
+              "max_positions": 256,
+              "pad_id": 0,
+              "bos_id": 1,
+              "eos_id": 2,
+              "unk_id": 3
+            },
+            "train_config": {
+              "max_steps": 50000,
+              "batch_size": 160,
+              "learning_rate": 0.0005,
+              "warmup_steps": 4000,
+              "schedule": "inverse_sqrt",
+              "selection": "best_dev_loss",
+              "weight_decay": 0.0001,
+              "max_grad_norm": 1.0,
+              "adam_betas": [
+                0.9,
+                0.98
+              ],
+              "adam_eps": 1e-09,
+              "eval_every": 1000,
+              "seed": 42,
+              "decode_batch_size": 32,
+              "beam_size": 5
+            },
+            "base_model": "embedding_linear",
+            "compression": "ordinary_tied_linear_336_to_448_embedding",
+            "embedding_parameters": 3510528,
+            "ordinary_attention_and_feed_forward": true,
+            "training_protocol": "fresh_original_optimizer_schedule_with_two_pass_consistency_objective",
+            "loss_configuration": {
+              "name": "all_pairs_power_dropout_consistency",
+              "power": 0.5,
+              "weight": 1.0,
+              "probability_floor_mass": 1e-06,
+              "dropout_views": 2,
+              "both_views_receive_gradients": true,
+              "supervised_loss": "mean of two existing label-smoothed cross-entropies",
+              "consistency_reduction": "sum over centered vocabulary defects, mean over valid target positions",
+              "target_ignore_index": -100
+            },
+            "power_scope": "training_loss_only",
+            "fixed_power": 0.5,
+            "learned_power": false,
+            "trainable_power_count": 0,
+            "consistency_coefficient": 1.0,
+            "probability_uniform_floor_mass": 1e-06,
+            "gradient_bearing_dropout_passes_per_update": 2,
+            "inference_unchanged": true,
+            "sequence_caps": {
+              "source": 96,
+              "target": 96,
+              "decode": 96,
+              "max_positions": 256
+            },
+            "architecture_change": {
+              "original_d_model": 512,
+              "original_d_ff": 1024,
+              "new_d_model": 448,
+              "new_d_ff": 856,
+              "heads": 4,
+              "head_width": 112,
+              "attention_sites": 18,
+              "ffn_sites": 12,
+              "encoder_layers": 6,
+              "decoder_layers": 6
+            },
+            "embedding": {
+              "stored_coefficients_per_token": 336,
+              "generated_features_per_token": 448,
+              "shared_basis_shape": [
+                336,
+                448
+              ],
+              "basis_bias": false,
+              "tied_input_output": true,
+              "row_normalization": false,
+              "input_scaling": "sqrt(d_model)",
+              "full_trainable_embedding_table_retained": false,
+              "effective_embedding": "codes@basis"
+            },
+            "initialization": {
+              "stored_code_scale": "sigma=d_model^(-1/2)",
+              "stored_codes": "independent_N(0,sigma^2)",
+              "basis": "orthogonal_rows_with_gain_sqrt(d_model/code_dim)",
+              "code_and_basis_rng": "same_initialization_sequence_as_ordinary_linear_compressed_embedding",
+              "pretrained_checkpoint": null
+            },
+            "analogy": {
+              "source": "https://arxiv.org/abs/2407.18770",
+              "condition": "A^p + D^p = B^p + C^p",
+              "domain": "same_target_position_next_word_distributions_under_two_independent_dropout_passes",
+              "positive_probabilities": "P_k=(1-epsilon)*softmax(logits_k)+epsilon/V",
+              "A": "P_1(i)",
+              "B": "P_1(j)",
+              "C": "P_2(i)",
+              "D": "P_2(j)",
+              "pair_residual": "P_1(i)^p+P_2(j)^p-P_1(j)^p-P_2(i)^p",
+              "all_pairs_identity": "sum_ij(pair_residual^2)/(2*V)=sum_i((delta_i-mean(delta))^2), delta=P_1^p-P_2^p",
+              "pair_coverage": "all_vocabulary_pairs_exactly_in_O(V)_per_valid_target_position",
+              "semantic_analogy_claim": false
+            },
+            "activation_checkpointing": false
+          },
+          "seed": 42,
+          "seeded_before_model_init": true,
+          "smoke": false,
+          "data_directory": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/data",
+          "tokenizer": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/data/iwslt14.model",
+          "training_host": "exp18",
+          "training_gpu": "NVIDIA RTX A6000",
+          "python": "3.11.15",
+          "torch": "2.11.0+cu128",
+          "allocator_cap_mib": 30720,
+          "evaluated_splits": [
+            "dev",
+            "test"
+          ],
+          "resumable_checkpoint_every": 1000
+        }
+      },
+      {
+        "model": "embedding_linear",
+        "corpus": "iwslt14",
+        "metric": "BLEU/13a",
+        "parameters": 27241504,
+        "baseline_parameters": 36665344,
+        "scores": {
+          "dev": 33.54248534363887,
+          "test": 32.815225117361805
+        },
+        "steps_run": 50000,
+        "best_dev_loss": 2.7716874196996537,
+        "best_step": 50000,
+        "scored_step": 50000,
+        "selection": "best_dev_loss",
+        "seconds": 23218.743903314986,
+        "manifest": {
+          "study_id": "power_consistency_iwslt_v1",
+          "corpus": "iwslt14",
+          "model": "embedding_linear",
+          "contextual_parent_study": "ana-power-consistency-v1",
+          "parent_checkpoint_used": false,
+          "model_config": {
+            "vocab_size": 10000,
+            "d_model": 448,
+            "n_heads": 4,
+            "d_ff": 856,
+            "n_encoder_layers": 6,
+            "n_decoder_layers": 6,
+            "dropout": 0.3,
+            "label_smoothing": 0.1,
+            "max_positions": 256,
+            "pad_id": 0,
+            "bos_id": 1,
+            "eos_id": 2,
+            "unk_id": 3
+          },
+          "train_config": {
+            "max_steps": 50000,
+            "batch_size": 160,
+            "learning_rate": 0.0005,
+            "warmup_steps": 4000,
+            "schedule": "inverse_sqrt",
+            "selection": "best_dev_loss",
+            "weight_decay": 0.0001,
+            "max_grad_norm": 1.0,
+            "adam_betas": [
+              0.9,
+              0.98
+            ],
+            "adam_eps": 1e-09,
+            "eval_every": 1000,
+            "seed": 42,
+            "decode_batch_size": 32,
+            "beam_size": 5
+          },
+          "base_model": "embedding_linear",
+          "compression": "ordinary_tied_linear_336_to_448_embedding",
+          "embedding_parameters": 3510528,
+          "ordinary_attention_and_feed_forward": true,
+          "training_protocol": "fresh_original_optimizer_schedule_with_single_pass_cross_entropy_objective",
+          "loss_configuration": {
+            "name": "ordinary_cross_entropy",
+            "label_smoothing": 0.1,
+            "target_ignore_index": -100
+          },
+          "power_scope": "not_used",
+          "fixed_power": null,
+          "learned_power": false,
+          "trainable_power_count": 0,
+          "consistency_coefficient": 0.0,
+          "probability_uniform_floor_mass": null,
+          "gradient_bearing_dropout_passes_per_update": 1,
+          "inference_unchanged": true,
+          "sequence_caps": {
+            "source": 96,
+            "target": 96,
+            "decode": 96,
+            "max_positions": 256
+          },
+          "architecture_change": {
+            "original_d_model": 512,
+            "original_d_ff": 1024,
+            "new_d_model": 448,
+            "new_d_ff": 856,
+            "heads": 4,
+            "head_width": 112,
+            "attention_sites": 18,
+            "ffn_sites": 12,
+            "encoder_layers": 6,
+            "decoder_layers": 6
+          },
+          "embedding": {
+            "stored_coefficients_per_token": 336,
+            "generated_features_per_token": 448,
+            "shared_basis_shape": [
+              336,
+              448
+            ],
+            "basis_bias": false,
+            "tied_input_output": true,
+            "row_normalization": false,
+            "input_scaling": "sqrt(d_model)",
+            "full_trainable_embedding_table_retained": false,
+            "effective_embedding": "codes@basis"
+          },
+          "initialization": {
+            "stored_code_scale": "sigma=d_model^(-1/2)",
+            "stored_codes": "independent_N(0,sigma^2)",
+            "basis": "orthogonal_rows_with_gain_sqrt(d_model/code_dim)",
+            "code_and_basis_rng": "same_initialization_sequence_as_ordinary_linear_compressed_embedding",
+            "pretrained_checkpoint": null
+          },
+          "activation_checkpointing": false,
+          "training_objective": "ordinary_cross_entropy",
+          "context": {
+            "study_id": "power_consistency_iwslt_v1",
+            "corpus": "iwslt14",
+            "model": "embedding_linear",
+            "contextual_parent_study": "ana-power-consistency-v1",
+            "parent_checkpoint_used": false,
+            "model_config": {
+              "vocab_size": 10000,
+              "d_model": 448,
+              "n_heads": 4,
+              "d_ff": 856,
+              "n_encoder_layers": 6,
+              "n_decoder_layers": 6,
+              "dropout": 0.3,
+              "label_smoothing": 0.1,
+              "max_positions": 256,
+              "pad_id": 0,
+              "bos_id": 1,
+              "eos_id": 2,
+              "unk_id": 3
+            },
+            "train_config": {
+              "max_steps": 50000,
+              "batch_size": 160,
+              "learning_rate": 0.0005,
+              "warmup_steps": 4000,
+              "schedule": "inverse_sqrt",
+              "selection": "best_dev_loss",
+              "weight_decay": 0.0001,
+              "max_grad_norm": 1.0,
+              "adam_betas": [
+                0.9,
+                0.98
+              ],
+              "adam_eps": 1e-09,
+              "eval_every": 1000,
+              "seed": 42,
+              "decode_batch_size": 32,
+              "beam_size": 5
+            },
+            "base_model": "embedding_linear",
+            "compression": "ordinary_tied_linear_336_to_448_embedding",
+            "embedding_parameters": 3510528,
+            "ordinary_attention_and_feed_forward": true,
+            "training_protocol": "fresh_original_optimizer_schedule_with_single_pass_cross_entropy_objective",
+            "loss_configuration": {
+              "name": "ordinary_cross_entropy",
+              "label_smoothing": 0.1,
+              "target_ignore_index": -100
+            },
+            "power_scope": "not_used",
+            "fixed_power": null,
+            "learned_power": false,
+            "trainable_power_count": 0,
+            "consistency_coefficient": 0.0,
+            "probability_uniform_floor_mass": null,
+            "gradient_bearing_dropout_passes_per_update": 1,
+            "inference_unchanged": true,
+            "sequence_caps": {
+              "source": 96,
+              "target": 96,
+              "decode": 96,
+              "max_positions": 256
+            },
+            "architecture_change": {
+              "original_d_model": 512,
+              "original_d_ff": 1024,
+              "new_d_model": 448,
+              "new_d_ff": 856,
+              "heads": 4,
+              "head_width": 112,
+              "attention_sites": 18,
+              "ffn_sites": 12,
+              "encoder_layers": 6,
+              "decoder_layers": 6
+            },
+            "embedding": {
+              "stored_coefficients_per_token": 336,
+              "generated_features_per_token": 448,
+              "shared_basis_shape": [
+                336,
+                448
+              ],
+              "basis_bias": false,
+              "tied_input_output": true,
+              "row_normalization": false,
+              "input_scaling": "sqrt(d_model)",
+              "full_trainable_embedding_table_retained": false,
+              "effective_embedding": "codes@basis"
+            },
+            "initialization": {
+              "stored_code_scale": "sigma=d_model^(-1/2)",
+              "stored_codes": "independent_N(0,sigma^2)",
+              "basis": "orthogonal_rows_with_gain_sqrt(d_model/code_dim)",
+              "code_and_basis_rng": "same_initialization_sequence_as_ordinary_linear_compressed_embedding",
+              "pretrained_checkpoint": null
+            },
+            "activation_checkpointing": false,
+            "training_objective": "ordinary_cross_entropy"
+          },
+          "seed": 42,
+          "seeded_before_model_init": true,
+          "smoke": false,
+          "data_directory": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/data",
+          "tokenizer": "/mango/homes/YUE_Ziran/workspace/ana-power-consistency-iwslt-v1/data/iwslt14.model",
+          "training_host": "exp18",
+          "training_gpu": "NVIDIA RTX A6000",
+          "python": "3.11.15",
+          "torch": "2.11.0+cu128",
+          "allocator_cap_mib": 16384,
+          "evaluated_splits": [
+            "dev",
+            "test"
+          ],
+          "resumable_checkpoint_every": 1000
+        }
+      }
+    ]
+  },
+  "reported_references": {
+    "corpus": "iwslt14",
+    "split": "test",
+    "metric": "BLEU/13a",
+    "reference_kind": "existing_reported_references",
+    "source_file": "results/iwslt14.md",
+    "precision": "Scores, bootstrap half-widths and parameter strings are copied at their reported precision.",
+    "models": {
+      "baseline": {
+        "reported_score": 33.45,
+        "reported_half_width": 0.51,
+        "reported_parameters": "36.67M"
+      },
+      "baseline_matched": {
+        "reported_score": 32.94,
+        "reported_half_width": 0.5,
+        "reported_parameters": "27.25M"
+      },
+      "shared_qkv": {
+        "reported_score": 31.58,
+        "reported_half_width": 0.49,
+        "reported_parameters": "27.24M"
+      }
+    }
+  },
+  "reference_snapshot": "/home/Yue_Ziran/workspace/ana-power-consistency-iwslt-v1/reference_results.json",
+  "rounded_point_comparisons": {
+    "baseline": {
+      "type": "candidate_minus_rounded_reported_score",
+      "candidate_score": 33.60357082531903,
+      "reference_reported_score": 33.45,
+      "difference": 0.15357082531902932,
+      "reference_source_file": "results/iwslt14.md"
+    },
+    "baseline_matched": {
+      "type": "candidate_minus_rounded_reported_score",
+      "candidate_score": 33.60357082531903,
+      "reference_reported_score": 32.94,
+      "difference": 0.6635708253190344,
+      "reference_source_file": "results/iwslt14.md"
+    },
+    "shared_qkv": {
+      "type": "candidate_minus_rounded_reported_score",
+      "candidate_score": 33.60357082531903,
+      "reference_reported_score": 31.58,
+      "difference": 2.023570825319034,
+      "reference_source_file": "results/iwslt14.md"
+    }
+  },
+  "reference_comparison_scope": "rounded point scores only; no paired intervals",
+  "compact_comparison_scope": "paired bootstrap from genuine predictions when both complete",
+  "completed_new_models": 2,
+  "total_new_models": 2,
+  "complete": true
+}

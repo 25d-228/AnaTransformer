@@ -13,8 +13,8 @@ import pytest
 import torch
 
 from ana.config import ModelConfig
-from ana.nn.grouping import FEATURE, FEATURE_PER_GROUP, GROUP_SIZE, SEQUENCE
-from ana.nn.roles import POWER_FLOOR, D4Mixing, D4MixingPowered, signed_power
+from ana.nn.permutations.grouping import FEATURE, FEATURE_PER_GROUP, GROUP_SIZE, SEQUENCE
+from ana.nn.permutations.roles import POWER_FLOOR, D4Mixing, D4MixingPowered, signed_power
 from ana.registry import build_model, count_parameters
 
 VOCAB = 64

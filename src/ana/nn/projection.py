@@ -12,7 +12,7 @@ from collections.abc import Callable
 
 from torch import Tensor, nn
 
-from ana.nn.roles import RoleTransform
+from ana.nn.permutations.roles import RoleTransform
 
 RoleFactory = Callable[[int], RoleTransform]
 

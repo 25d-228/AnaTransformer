@@ -539,3 +539,11 @@ because every operator reaching the decoder is positionwise, which the registry 
 eight models. `tests/test_beam.py` checks that a beam of one is exactly greedy, and that a wider
 beam never returns a sequence greedy beats on the model's own objective — a beam that loses its
 backpointers does not raise, it just quietly scores a point or two low.
+
+## Compact embeddings and power-based training
+
+The completed compact-embedding branch keeps independent Q/K/V projections
+and studies fixed, adaptive and context-dependent powers.
+
+- [Experiment code and protocols](experiments/compact_embeddings/README.md)
+- [Results and bootstrap intervals](results/compact_embeddings/README.md)

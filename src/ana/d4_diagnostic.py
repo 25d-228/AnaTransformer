@@ -20,9 +20,9 @@ from ana.data.corpora import build_corpus
 from ana.data.tokenizer import Tokenizer
 from ana.experiment import encode_split, git_commit, score_split
 from ana.model import Seq2SeqTransformer
-from ana.nn.grouping import D4_PERMUTATIONS, FEATURE, N_PERMUTATIONS, permutation_matrices
+from ana.nn.permutations.grouping import D4_PERMUTATIONS, FEATURE, N_PERMUTATIONS, permutation_matrices
 from ana.nn.projection import SharedQKV
-from ana.nn.roles import (
+from ana.nn.permutations.roles import (
     D4Intervention,
     D4Mixing,
     D4RoleTransform,

@@ -25,8 +25,8 @@ from ana.d4_diagnostic import (
     require_reproduction,
     validate_artifact,
 )
-from ana.nn.grouping import FEATURE, N_PERMUTATIONS, permutation_matrices
-from ana.nn.roles import (
+from ana.nn.permutations.grouping import FEATURE, N_PERMUTATIONS, permutation_matrices
+from ana.nn.permutations.roles import (
     D4Mixing,
     D4MixingWithoutMagnitude,
     temporary_d4_intervention,

@@ -7,8 +7,8 @@ import torch
 import torch.nn.functional as F
 
 from ana.config import ENCODER_ONLY, ModelConfig
-from ana.nn.grouping import FEATURE
-from ana.nn.roles import D4Mixing, D4MixingWithoutMagnitude, DynamicMagnification
+from ana.nn.permutations.grouping import FEATURE
+from ana.nn.permutations.roles import D4Mixing, D4MixingWithoutMagnitude, DynamicMagnification
 from ana.registry import PILOT_MODELS, REGISTRY, build_model
 
 CONFIG = ModelConfig(

@@ -30,7 +30,7 @@ from ana.d4_diagnostic import (
 from ana.data.corpora import build_corpus
 from ana.data.tokenizer import Tokenizer
 from ana.experiment import encode_split, git_commit
-from ana.nn.grouping import (
+from ana.nn.permutations.grouping import (
     D4_PERMUTATIONS,
     N_PERMUTATIONS,
     PERM_CONTROL_A,

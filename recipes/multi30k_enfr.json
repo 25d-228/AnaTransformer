@@ -1,0 +1,12 @@
+{
+  "max_steps": 20000,
+  "batch_size": 256,
+  "warmup_steps": 2000,
+  "learning_rate": 0.005,
+  "schedule": "inverse_sqrt",
+  "selection": "best_dev_loss",
+  "weight_decay": 0.0,
+  "adam_betas": [0.9, 0.98],
+  "verified": false,
+  "source": "Wu et al. 2021 (arXiv 2105.14462), Multi30k English-to-French transformer_tiny: width 128, feed-forward 256, four heads, four encoder/decoder layers, dropout 0.3 and shared BPE. Repository adaptation: a fresh training-only joint 10k SentencePiece BPE vocabulary, 20,000 updates, sentence batches of 256, inverse-sqrt from 5e-3 with 2,000 warmup steps, label smoothing 0.1 and best-development-loss selection. These are not an exact replication of the paper's token batching and last-ten-checkpoint averaging. English-to-French has not yet been calibrated; the German score gate and verified recipe status are not reused. All five comparison models use this same recipe."
+}

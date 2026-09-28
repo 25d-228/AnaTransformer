@@ -1,7 +1,7 @@
 """The encoder-decoder itself.
 
-The model does not know which variant it is. It asks a factory for an attention module at
-each of the twelve sites and is otherwise identical across the whole study. Normalisation
+The model asks a factory for an attention module at each attention site. The registry can
+also replace feed-forward blocks in compact FFN variants after initialization. Normalisation
 is applied before each sublayer rather than after: post-norm is what the original paper
 used, but it is sensitive to the warmup schedule in a way that is easy to mistake for a
 property of the model being tested.
@@ -14,6 +14,7 @@ from collections.abc import Callable
 import torch
 import torch.nn.functional as F
 from torch import Tensor, nn
+from torch.utils.checkpoint import checkpoint
 
 from ana.config import ModelConfig, Site
 from ana.nn.attention import AttentionCache, MultiHeadAttention
@@ -109,6 +110,8 @@ class Seq2SeqTransformer(nn.Module):
     def __init__(self, config: ModelConfig, attention: AttentionFactory) -> None:
         super().__init__()
         self.config = config
+        # Reuse the IWSLT task's execution-only opt-in; no state or RNG changes.
+        self.activation_checkpointing = False
 
         self.embedding = TiedEmbedding(config.vocab_size, config.d_model, config.pad_id)
         self.register_buffer(
@@ -161,7 +164,17 @@ class Seq2SeqTransformer(nn.Module):
         blocked = padding_mask(source_mask)
         x = self._embed(source_ids)
         for layer in self.encoder:
-            x = layer(x, source_mask, blocked)
+            if self.activation_checkpointing and self.training and torch.is_grad_enabled():
+                x = checkpoint(
+                    layer,
+                    x,
+                    source_mask,
+                    blocked,
+                    use_reentrant=False,
+                    preserve_rng_state=True,
+                )
+            else:
+                x = layer(x, source_mask, blocked)
         return self.norm_encoder(x)
 
     def decode(
@@ -177,7 +190,20 @@ class Seq2SeqTransformer(nn.Module):
 
         x = self._embed(target_ids)
         for layer in self.decoder:
-            x = layer(x, memory, target_mask, source_mask, blocked_self, blocked_cross)
+            if self.activation_checkpointing and self.training and torch.is_grad_enabled():
+                x = checkpoint(
+                    layer,
+                    x,
+                    memory,
+                    target_mask,
+                    source_mask,
+                    blocked_self,
+                    blocked_cross,
+                    use_reentrant=False,
+                    preserve_rng_state=True,
+                )
+            else:
+                x = layer(x, memory, target_mask, source_mask, blocked_self, blocked_cross)
         return self.norm_decoder(x)
 
     def logits(

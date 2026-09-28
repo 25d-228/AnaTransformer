@@ -13,7 +13,7 @@ import torch
 from ana.config import ENCODER_ONLY, ModelConfig, Selection, TrainConfig
 from ana.data.corpus import SyntheticCorpus
 from ana.experiment import run_cell
-from ana.nn.grouping import (
+from ana.nn.permutations.grouping import (
     D4_PERMUTATIONS,
     FEATURE,
     PERM_CONTROL_A,
@@ -21,7 +21,7 @@ from ana.nn.grouping import (
     PERM_CONTROL_C,
     permutation_matrices,
 )
-from ana.nn.roles import D4MixingWithoutMagnitude, temporary_d4_intervention
+from ana.nn.permutations.roles import D4MixingWithoutMagnitude, temporary_d4_intervention
 from ana.permutation_family import (
     CONTROL_MODELS,
     FAMILIES,
