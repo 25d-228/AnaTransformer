@@ -6,6 +6,8 @@ cd "$ANA_SERVER"
 export CUDA_DEVICE_ORDER=PCI_BUS_ID
 export CUDA_VISIBLE_DEVICES=${1:?GPU index required}
 queue_file=${2:?queue file required}
+queue_run_cell=${ANA_RUN_CELL:-run_cell.py}
+queue_report=${ANA_REPORT:-report.py}
 if (( $# != 2 )) || [[ ! $CUDA_VISIBLE_DEVICES =~ ^[0-9]+$ ]]; then
     echo 'Usage: bash run.sh GPU QUEUE_FILE'
     exit 2
@@ -65,7 +67,7 @@ while read -r queue_corpus queue_model; do
         *) echo "Unknown corpus: $queue_corpus"; exit 2 ;;
     esac
     case "$queue_model" in
-        combo|combo_wide|compact_q|compact_qkv|combo_crosskv|combo_selfqk|balanced_qkv|gated_qkv|pre_crossq|pre_lowrank|balanced_gated|shared_bottleneck|diagonal_shortcuts|compact_qkv_no_analogy|balanced_qkv_no_analogy) ;;
+        combo|combo_wide|compact_q|compact_qkv|combo_crosskv|combo_selfqk|balanced_qkv|gated_qkv|pre_crossq|pre_lowrank|balanced_gated|shared_bottleneck|diagonal_shortcuts|compact_qkv_no_analogy|balanced_qkv_no_analogy|d_router_03|d_router_10|d_cross_focus) ;;
         *) echo "Unknown model: $queue_model"; exit 2 ;;
     esac
     while true; do
@@ -83,7 +85,7 @@ while read -r queue_corpus queue_model; do
         "$queue_corpus" "$queue_model" "$(date --iso-8601=seconds)"
     queue_code=0
     for queue_attempt in 1 2; do
-        if "$queue_python" -B run_cell.py "$queue_corpus" "$queue_model" >> "$queue_log" 2>&1; then
+        if "$queue_python" -B "$queue_run_cell" "$queue_corpus" "$queue_model" >> "$queue_log" 2>&1; then
             queue_code=0
             break
         else
@@ -99,7 +101,7 @@ while read -r queue_corpus queue_model; do
     if (( queue_code == 0 )); then
         printf 'COMPLETED corpus=%s model=%s at=%s\n' \
             "$queue_corpus" "$queue_model" "$(date --iso-8601=seconds)"
-        if ! "$queue_python" -B report.py "$queue_corpus" >> "$queue_log" 2>&1; then
+        if ! "$queue_python" -B "$queue_report" "$queue_corpus" >> "$queue_log" 2>&1; then
             echo "REPORT_FAILED corpus=$queue_corpus model=$queue_model"
             queue_failures=$((queue_failures + 1))
         fi
@@ -109,7 +111,7 @@ while read -r queue_corpus queue_model; do
         queue_failures=$((queue_failures + 1))
     fi
 done < "$queue_file"
-if ! "$queue_python" -B report.py all >> "logs/final_report_gpu${CUDA_VISIBLE_DEVICES}.log" 2>&1; then
+if ! "$queue_python" -B "$queue_report" all >> "logs/final_report_gpu${CUDA_VISIBLE_DEVICES}.log" 2>&1; then
     echo 'FINAL_REPORT_FAILED'
     queue_failures=$((queue_failures + 1))
 fi

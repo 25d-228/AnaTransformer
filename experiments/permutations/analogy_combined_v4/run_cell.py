@@ -137,7 +137,7 @@ def capacity():
     return cap_mib
 
 
-def run(corpus_name, model_name, describe=False):
+def run(corpus_name, model_name, describe=False, *, study_id="analogy_combined_v4"):
     if model_name not in models_for_corpus(corpus_name):
         raise ValueError("This model is not scheduled for this corpus.")
     if Path.cwd() != SERVER:
@@ -170,7 +170,7 @@ def run(corpus_name, model_name, describe=False):
     ):
         raise ValueError("COGS retains the original width 512 and zero label smoothing.")
     context = plain({
-        "study_id": "analogy_combined_v4", "corpus": corpus_name, "model": model_name,
+        "study_id": study_id, "corpus": corpus_name, "model": model_name,
         "model_config": asdict(model.config), "train_config": asdict(config),
         "model_details": model_details(model_name),
         "base_model": "shared_qkv", "embedding_class": type(model.embedding).__name__,
@@ -178,7 +178,8 @@ def run(corpus_name, model_name, describe=False):
         "training_objective": "ordinary_single_pass_cross_entropy",
         "gradient_bearing_dropout_passes_per_example": 1,
         "optimizer_learning_rate_scales": {
-            "routing_controllers": 0.1, "backbone_and_readout": 1.0,
+            "routing_controllers": getattr(model, "analogy_routing_lr_scale", 0.1),
+            "backbone_and_readout": 1.0,
         },
         "best_dev_checkpoint": "best.pt; diagnostic only when corpus selection is final",
         "train_pair_count": len(splits["train"]), "dev_pair_count": len(splits["dev"]),

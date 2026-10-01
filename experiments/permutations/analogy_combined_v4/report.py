@@ -39,6 +39,13 @@ REFERENCE_LABELS = {
     "pre_crossq": "Design 2: before projection + separate cross-attention Q",
     "pre_lowrank": "Design 4: before projection + small role-specific mixing",
 }
+STUDY_ID = "analogy_combined_v4"
+STUDY_TITLE = "combined analogy-preserving projections, batch 4"
+TRAINING_NOTE = (
+    "Original standard embeddings and corpus recipes; ordinary single-pass "
+    "cross-entropy training. Routers use one tenth of the base learning rate. "
+    "COGS still scores final weights; its best-dev checkpoint is diagnostic only."
+)
 NOTE = (
     "New-run ± is half the width of a 95% example-bootstrap interval "
     "(1,000 resamples). Reference rows are supplied existing results, not "
@@ -125,10 +132,8 @@ def load_row(corpus, task_root, model, expected, cached=None):
 def markdown(report):
     metric = "Exact match (%)" if report["corpus"] == "cogs" else "BLEU"
     lines = [
-        f"# {TITLES[report['corpus']]}: combined analogy-preserving projections, batch 4", "",
-        "Original standard embeddings and corpus recipes; ordinary single-pass "
-        "cross-entropy training. Routers use one tenth of the base learning rate. "
-        "COGS still scores final weights; its best-dev checkpoint is diagnostic only.", "",
+        f"# {TITLES[report['corpus']]}: {STUDY_TITLE}", "",
+        TRAINING_NOTE, "",
         f"| Model | Parameters | {metric} |", "|---|---:|---:|",
     ]
     for name, row in report["references"].items():
@@ -176,7 +181,7 @@ def report_corpus(name, task_root, reports, references_file):
             if key in supplied and key not in models
         }
         report = {
-            "study_id": "analogy_combined_v4", "corpus": name, "split": SPLITS[name],
+            "study_id": STUDY_ID, "corpus": name, "split": SPLITS[name],
             "metric": corpus.metric.name, "confidence": 0.95,
             "resamples": 1000, "bootstrap_seed": 12345, "uncertainty_note": NOTE,
             "references": references, "models": models,

@@ -405,7 +405,8 @@ class DiagonalResidualProjection(ResidualProjection):
 
 
 def construct(
-    corpus_name: str, model_name: str, full_shape: ModelConfig
+    corpus_name: str, model_name: str, full_shape: ModelConfig, *,
+    encoder_rank: int | None = None, cross_rank: int | None = None,
 ) -> Seq2SeqTransformer:
     """Keep full corpus shapes and ordinary embeddings, below full-model size."""
     model_details(model_name)
@@ -413,6 +414,12 @@ def construct(
         raise ValueError(f"unsupported corpus {corpus_name!r}")
     if full_shape.d_model != CORPUS_WIDTHS[corpus_name]:
         raise ValueError("this study keeps the original corpus backbone width")
+    if encoder_rank is not None or cross_rank is not None:
+        if model_name != "compact_qkv":
+            raise ValueError("rank overrides are supported only for model D")
+        for rank in (encoder_rank, cross_rank):
+            if rank is not None and not 1 <= rank <= full_shape.d_model:
+                raise ValueError("residual rank must be between one and d_model")
     if model_name in NO_ANALOGY_CONTROLS:
         model = construct(
             corpus_name, NO_ANALOGY_CONTROLS[model_name], full_shape
@@ -478,6 +485,28 @@ def construct(
                     layer.self_attention.projection, d_model,
                     ("query", "key"), d_model // 8,
                 )
+    # Construct ordinary D first so different ranks do not change the initial
+    # analogy controllers or backbone. Only replace the small residual layers.
+    with torch.random.fork_rng(devices=[]):
+        sites = (
+            (model.encoder, "self_attention", encoder_rank),
+            (model.decoder, "cross_attention", cross_rank),
+        )
+        for layers, attention_name, rank in sites:
+            if rank is None or rank == d_model // 8:
+                continue
+            for layer in layers:
+                projection = getattr(layer, attention_name).projection
+                projection.down = nn.ModuleDict({
+                    name: nn.Linear(d_model, rank, bias=False)
+                    for name in ROLE_NAMES
+                })
+                projection.up = nn.ModuleDict({
+                    name: nn.Linear(rank, d_model, bias=False)
+                    for name in ROLE_NAMES
+                })
+                for up in projection.up.values():
+                    nn.init.zeros_(up.weight)
     if count_parameters(model) >= baseline_parameters(full_shape):
         raise ValueError(
             "the analogy model must stay smaller than the full Transformer"

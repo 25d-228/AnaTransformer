@@ -1,0 +1,1189 @@
+{
+  "study_id": "analogy_refinement_v5",
+  "corpus": "multi30k",
+  "split": "test",
+  "metric": "BLEU/13a",
+  "confidence": 0.95,
+  "resamples": 1000,
+  "bootstrap_seed": 12345,
+  "uncertainty_note": "New-run \u00b1 is half the width of a 95% example-bootstrap interval (1,000 resamples). Reference rows are supplied existing results, not new runs. Their provenance is retained in JSON. COGS reports generalization only.",
+  "references": {
+    "baseline": {
+      "score": 40.78,
+      "half_width": 1.74,
+      "parameters": 2605568,
+      "source_results": "results/permutations/multi30k.md",
+      "source_note": "Earlier recorded full Transformer; saved predictions are unavailable. Rounded reference only, not a new paired comparison.",
+      "label": "Full Transformer",
+      "source_report": "results/permutations/analogy_combined_v4/multi30k.json"
+    },
+    "shared_qkv": {
+      "score": 38.651869943809345,
+      "half_width": 1.648454853253913,
+      "parameters": 2213888,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-compact-power-v1/runs/multi30k_shared_qkv_seed42/results.json",
+      "label": "Shared-QKV",
+      "source_report": "results/permutations/analogy_combined_v4/multi30k.json"
+    },
+    "compact_qkv_no_analogy": {
+      "label": "L: D without analogy",
+      "score": 39.76163429939454,
+      "half_width": 1.728038087596385,
+      "parameters": 2312192,
+      "interval": {
+        "score": 39.76163429939454,
+        "low": 38.02690780035532,
+        "high": 41.48298397554809,
+        "n": 1000,
+        "what_varies": "the test set",
+        "half_width": 1.728038087596385
+      },
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/multi30k_compact_qkv_no_analogy_seed42/results.json",
+      "source_hypotheses": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/multi30k_compact_qkv_no_analogy_seed42/hypotheses.test.txt",
+      "source_references": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/multi30k_compact_qkv_no_analogy_seed42/references.test.txt",
+      "source_report": "results/permutations/analogy_combined_v4/multi30k.json",
+      "source_note": "Completed v4 model L; reused, not retrained. Its branch allocation matches D/D1/D2, not D3."
+    },
+    "compact_qkv": {
+      "label": "D: compact cross-Q/K/V",
+      "score": 39.921637220812016,
+      "half_width": 1.6765094484520837,
+      "parameters": 2328464,
+      "interval": {
+        "score": 39.921637220812016,
+        "low": 38.191873093088276,
+        "high": 41.54489198999244,
+        "n": 1000,
+        "what_varies": "the test set",
+        "half_width": 1.6765094484520837
+      },
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/multi30k_compact_qkv_seed42/results.json",
+      "source_hypotheses": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/multi30k_compact_qkv_seed42/hypotheses.test.txt",
+      "source_references": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/multi30k_compact_qkv_seed42/references.test.txt",
+      "source_report": "results/permutations/analogy_combined_v4/multi30k.json",
+      "source_note": "Completed v4 model D; reused, not retrained."
+    }
+  },
+  "models": {
+    "d_router_03": {
+      "model": "d_router_03",
+      "status": "completed",
+      "parameters": 2328464,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-analogy-refinement-v5/runs/multi30k_d_router_03_seed42/results.json",
+      "interval": {
+        "score": 40.04016991449788,
+        "low": 38.39291389716493,
+        "high": 41.67795267962074,
+        "n": 1000,
+        "what_varies": "the test set",
+        "half_width": 1.6425193912279035
+      },
+      "source_mtime_ns": {
+        "results": 1790586382768960142,
+        "hypotheses": 1790586382758960156,
+        "references": 1790586382758960156
+      },
+      "baseline_parameters": 2605568,
+      "saved_percent": 10.635070740813523,
+      "model_config": {
+        "vocab_size": 10000,
+        "d_model": 128,
+        "n_heads": 4,
+        "d_ff": 256,
+        "n_encoder_layers": 4,
+        "n_decoder_layers": 4,
+        "dropout": 0.3,
+        "label_smoothing": 0.1,
+        "max_positions": 256,
+        "pad_id": 0,
+        "bos_id": 1,
+        "eos_id": 2,
+        "unk_id": 3
+      },
+      "train_config": {
+        "max_steps": 20000,
+        "batch_size": 256,
+        "learning_rate": 0.005,
+        "warmup_steps": 2000,
+        "schedule": "inverse_sqrt",
+        "selection": "best_dev_loss",
+        "weight_decay": 0.0,
+        "max_grad_norm": 1.0,
+        "adam_betas": [
+          0.9,
+          0.98
+        ],
+        "adam_eps": 1e-09,
+        "eval_every": 1000,
+        "seed": 42,
+        "decode_batch_size": 32,
+        "beam_size": 5
+      },
+      "model_details": {
+        "name": "d_router_03",
+        "label": "D1: model D with controller learning rate 0.3x",
+        "sites": "encoder",
+        "roles": [
+          "query",
+          "key",
+          "value"
+        ],
+        "global_routing": "input-dependent hard Bene\u0161, positions restored",
+        "global_passes": "one per encoder input stream, shared by roles",
+        "positive_encoding": "softplus(x)+1e-6 and softplus(-x)+1e-6",
+        "canonical_order": "0 < a < b <= c < d on both rails",
+        "local_routing": "hard D4; negative rail uses reversal conjugation",
+        "common_multiplier": "exp(0.1*tanh(logit)), shared by both rails",
+        "invalid_group_action": "both rails bypass D4 and multiplier",
+        "readout": "small signed input correction before the shared projection",
+        "correction_gain_initial": 0.1,
+        "independent_cross_attention": "none",
+        "low_rank_residual": "d_model / 8",
+        "encoder_residual_input": "role-conditioned analogy input",
+        "cross_residual_roles": [
+          "query",
+          "key",
+          "value"
+        ],
+        "decoder_self_residual_roles": [],
+        "decoder_residual_rank": "d_model / 8",
+        "decoder_residual_input": "ordinary attention input; no analogy block",
+        "residual_bias": false,
+        "residual_up_initial": "zero",
+        "initial_function": "ordinary shared-QKV",
+        "routing_learning_rate_scale": 0.3,
+        "learned_power": false,
+        "computed_power": false,
+        "ordinary_embeddings": true,
+        "preservation_scope": "each accepted canonical positive rail only",
+        "parent_model": "analogy_combined_v4/compact_qkv",
+        "residual_budget": "same total parameter count as model D",
+        "initialization": "same initial weights as model D"
+      },
+      "training_steps": 20000,
+      "scored_step": 19000,
+      "training_seconds": 7715.027219013078,
+      "diagnostics_scored": {
+        "step": 19000,
+        "scope": "development_real_tokens",
+        "counts": {
+          "global_switches": 54645760,
+          "global_swaps": 26684578,
+          "quartets_seen": 6305280,
+          "eligible_quartets": 6305268,
+          "nonidentity_routes": 3650582,
+          "scaled_quartets": 6305267,
+          "changed_quartets": 6305267
+        },
+        "fractions": {
+          "eligible_fraction": 0.9999980968331303,
+          "routed_fraction_of_eligible": 0.5789733283343388,
+          "changed_fraction_of_eligible": 0.999999841402459,
+          "global_swap_fraction": 0.48831927673803055
+        },
+        "by_module": {
+          "encoder.0.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 5886794
+          },
+          "encoder.0.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 98484,
+            "scaled_quartets": 525438,
+            "changed_quartets": 525438
+          },
+          "encoder.0.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 268982,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.0.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 416724,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.1.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 7115251
+          },
+          "encoder.1.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 202170,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.1.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 310061,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.1.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 390721,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.2.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 6840946
+          },
+          "encoder.2.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 206432,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.2.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 288808,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.2.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 426805,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.3.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 6841587
+          },
+          "encoder.3.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 230162,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.3.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 388978,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.3.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 422255,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          }
+        },
+        "correction_gains": {
+          "encoder.0.self_attention.projection.changes.query": 0.16701015830039978,
+          "encoder.0.self_attention.projection.changes.key": 0.12319537997245789,
+          "encoder.0.self_attention.projection.changes.value": 0.10953329503536224,
+          "encoder.1.self_attention.projection.changes.query": 0.16043828427791595,
+          "encoder.1.self_attention.projection.changes.key": 0.13608990609645844,
+          "encoder.1.self_attention.projection.changes.value": 0.09399781376123428,
+          "encoder.2.self_attention.projection.changes.query": 0.14773041009902954,
+          "encoder.2.self_attention.projection.changes.key": 0.11013439297676086,
+          "encoder.2.self_attention.projection.changes.value": 0.09133170545101166,
+          "encoder.3.self_attention.projection.changes.query": 0.12249745428562164,
+          "encoder.3.self_attention.projection.changes.key": 0.08409643918275833,
+          "encoder.3.self_attention.projection.changes.value": 0.09327676147222519
+        },
+        "mixer_mean_frobenius_norms": {}
+      },
+      "diagnostics_final": {
+        "step": 20000,
+        "scope": "development_real_tokens",
+        "counts": {
+          "global_switches": 54645760,
+          "global_swaps": 26947297,
+          "quartets_seen": 6305280,
+          "eligible_quartets": 6305274,
+          "nonidentity_routes": 3715804,
+          "scaled_quartets": 6305274,
+          "changed_quartets": 6305274
+        },
+        "fractions": {
+          "eligible_fraction": 0.9999990484165652,
+          "routed_fraction_of_eligible": 0.5893168163667432,
+          "changed_fraction_of_eligible": 1.0,
+          "global_swap_fraction": 0.4931269507460414
+        },
+        "by_module": {
+          "encoder.0.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 6036824
+          },
+          "encoder.0.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 95027,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.0.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 291677,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.0.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 421649,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.1.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 7237236
+          },
+          "encoder.1.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 209187,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.1.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 338251,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.1.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 409487,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.2.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 6849199
+          },
+          "encoder.2.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 202822,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.2.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 289398,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.2.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 417082,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.3.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 6824038
+          },
+          "encoder.3.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 230199,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.3.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 384672,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.3.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 426353,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          }
+        },
+        "correction_gains": {
+          "encoder.0.self_attention.projection.changes.query": 0.16814157366752625,
+          "encoder.0.self_attention.projection.changes.key": 0.12613998353481293,
+          "encoder.0.self_attention.projection.changes.value": 0.1151794046163559,
+          "encoder.1.self_attention.projection.changes.query": 0.1569257527589798,
+          "encoder.1.self_attention.projection.changes.key": 0.1360970288515091,
+          "encoder.1.self_attention.projection.changes.value": 0.09617091715335846,
+          "encoder.2.self_attention.projection.changes.query": 0.14874060451984406,
+          "encoder.2.self_attention.projection.changes.key": 0.10787342488765717,
+          "encoder.2.self_attention.projection.changes.value": 0.08689389377832413,
+          "encoder.3.self_attention.projection.changes.query": 0.11933764815330505,
+          "encoder.3.self_attention.projection.changes.key": 0.08444153517484665,
+          "encoder.3.self_attention.projection.changes.value": 0.09377110004425049
+        },
+        "mixer_mean_frobenius_norms": {}
+      },
+      "source_hypotheses": "/mango/homes/YUE_Ziran/workspace/ana-analogy-refinement-v5/runs/multi30k_d_router_03_seed42/hypotheses.test.txt",
+      "source_references": "/mango/homes/YUE_Ziran/workspace/ana-analogy-refinement-v5/runs/multi30k_d_router_03_seed42/references.test.txt"
+    },
+    "d_router_10": {
+      "model": "d_router_10",
+      "status": "completed",
+      "parameters": 2328464,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-analogy-refinement-v5/runs/multi30k_d_router_10_seed42/results.json",
+      "interval": {
+        "score": 39.48931955138607,
+        "low": 37.758414307038414,
+        "high": 41.051497033288186,
+        "n": 1000,
+        "what_varies": "the test set",
+        "half_width": 1.6465413631248857
+      },
+      "source_mtime_ns": {
+        "results": 1790586639298612672,
+        "hypotheses": 1790586639288612685,
+        "references": 1790586639288612685
+      },
+      "baseline_parameters": 2605568,
+      "saved_percent": 10.635070740813523,
+      "model_config": {
+        "vocab_size": 10000,
+        "d_model": 128,
+        "n_heads": 4,
+        "d_ff": 256,
+        "n_encoder_layers": 4,
+        "n_decoder_layers": 4,
+        "dropout": 0.3,
+        "label_smoothing": 0.1,
+        "max_positions": 256,
+        "pad_id": 0,
+        "bos_id": 1,
+        "eos_id": 2,
+        "unk_id": 3
+      },
+      "train_config": {
+        "max_steps": 20000,
+        "batch_size": 256,
+        "learning_rate": 0.005,
+        "warmup_steps": 2000,
+        "schedule": "inverse_sqrt",
+        "selection": "best_dev_loss",
+        "weight_decay": 0.0,
+        "max_grad_norm": 1.0,
+        "adam_betas": [
+          0.9,
+          0.98
+        ],
+        "adam_eps": 1e-09,
+        "eval_every": 1000,
+        "seed": 42,
+        "decode_batch_size": 32,
+        "beam_size": 5
+      },
+      "model_details": {
+        "name": "d_router_10",
+        "label": "D2: model D with controller learning rate 1.0x",
+        "sites": "encoder",
+        "roles": [
+          "query",
+          "key",
+          "value"
+        ],
+        "global_routing": "input-dependent hard Bene\u0161, positions restored",
+        "global_passes": "one per encoder input stream, shared by roles",
+        "positive_encoding": "softplus(x)+1e-6 and softplus(-x)+1e-6",
+        "canonical_order": "0 < a < b <= c < d on both rails",
+        "local_routing": "hard D4; negative rail uses reversal conjugation",
+        "common_multiplier": "exp(0.1*tanh(logit)), shared by both rails",
+        "invalid_group_action": "both rails bypass D4 and multiplier",
+        "readout": "small signed input correction before the shared projection",
+        "correction_gain_initial": 0.1,
+        "independent_cross_attention": "none",
+        "low_rank_residual": "d_model / 8",
+        "encoder_residual_input": "role-conditioned analogy input",
+        "cross_residual_roles": [
+          "query",
+          "key",
+          "value"
+        ],
+        "decoder_self_residual_roles": [],
+        "decoder_residual_rank": "d_model / 8",
+        "decoder_residual_input": "ordinary attention input; no analogy block",
+        "residual_bias": false,
+        "residual_up_initial": "zero",
+        "initial_function": "ordinary shared-QKV",
+        "routing_learning_rate_scale": 1.0,
+        "learned_power": false,
+        "computed_power": false,
+        "ordinary_embeddings": true,
+        "preservation_scope": "each accepted canonical positive rail only",
+        "parent_model": "analogy_combined_v4/compact_qkv",
+        "residual_budget": "same total parameter count as model D",
+        "initialization": "same initial weights as model D"
+      },
+      "training_steps": 20000,
+      "scored_step": 19000,
+      "training_seconds": 7971.745867066085,
+      "diagnostics_scored": {
+        "step": 19000,
+        "scope": "development_real_tokens",
+        "counts": {
+          "global_switches": 54645760,
+          "global_swaps": 26408948,
+          "quartets_seen": 6305280,
+          "eligible_quartets": 6305262,
+          "nonidentity_routes": 3770658,
+          "scaled_quartets": 6305262,
+          "changed_quartets": 6305262
+        },
+        "fractions": {
+          "eligible_fraction": 0.9999971452496955,
+          "routed_fraction_of_eligible": 0.5980176557294526,
+          "changed_fraction_of_eligible": 1.0,
+          "global_swap_fraction": 0.4832753355429589
+        },
+        "by_module": {
+          "encoder.0.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 5826794
+          },
+          "encoder.0.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 108696,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.0.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 356363,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.0.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 456860,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.1.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 6912384
+          },
+          "encoder.1.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 196038,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.1.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 355884,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.1.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 368510,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.2.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 6829890
+          },
+          "encoder.2.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525437,
+            "nonidentity_routes": 205589,
+            "scaled_quartets": 525437,
+            "changed_quartets": 525437
+          },
+          "encoder.2.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525437,
+            "nonidentity_routes": 306701,
+            "scaled_quartets": 525437,
+            "changed_quartets": 525437
+          },
+          "encoder.2.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525437,
+            "nonidentity_routes": 413889,
+            "scaled_quartets": 525437,
+            "changed_quartets": 525437
+          },
+          "encoder.3.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 6839880
+          },
+          "encoder.3.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525438,
+            "nonidentity_routes": 247899,
+            "scaled_quartets": 525438,
+            "changed_quartets": 525438
+          },
+          "encoder.3.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525438,
+            "nonidentity_routes": 344216,
+            "scaled_quartets": 525438,
+            "changed_quartets": 525438
+          },
+          "encoder.3.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525438,
+            "nonidentity_routes": 410013,
+            "scaled_quartets": 525438,
+            "changed_quartets": 525438
+          }
+        },
+        "correction_gains": {
+          "encoder.0.self_attention.projection.changes.query": 0.1843927949666977,
+          "encoder.0.self_attention.projection.changes.key": 0.12182731926441193,
+          "encoder.0.self_attention.projection.changes.value": 0.11474581807851791,
+          "encoder.1.self_attention.projection.changes.query": 0.15955673158168793,
+          "encoder.1.self_attention.projection.changes.key": 0.15497808158397675,
+          "encoder.1.self_attention.projection.changes.value": 0.09820795059204102,
+          "encoder.2.self_attention.projection.changes.query": 0.15779346227645874,
+          "encoder.2.self_attention.projection.changes.key": 0.1321699321269989,
+          "encoder.2.self_attention.projection.changes.value": 0.09005207568407059,
+          "encoder.3.self_attention.projection.changes.query": 0.112386554479599,
+          "encoder.3.self_attention.projection.changes.key": 0.08197512477636337,
+          "encoder.3.self_attention.projection.changes.value": 0.10980876535177231
+        },
+        "mixer_mean_frobenius_norms": {}
+      },
+      "diagnostics_final": {
+        "step": 20000,
+        "scope": "development_real_tokens",
+        "counts": {
+          "global_switches": 54645760,
+          "global_swaps": 26229074,
+          "quartets_seen": 6305280,
+          "eligible_quartets": 6305268,
+          "nonidentity_routes": 3682000,
+          "scaled_quartets": 6305268,
+          "changed_quartets": 6305268
+        },
+        "fractions": {
+          "eligible_fraction": 0.9999980968331303,
+          "routed_fraction_of_eligible": 0.5839561458767494,
+          "changed_fraction_of_eligible": 1.0,
+          "global_swap_fraction": 0.479983698643774
+        },
+        "by_module": {
+          "encoder.0.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 5594900
+          },
+          "encoder.0.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 115892,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.0.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 300404,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.0.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 459139,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.1.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 6857102
+          },
+          "encoder.1.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 190508,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.1.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 339351,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.1.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 360913,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.2.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 6946517
+          },
+          "encoder.2.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 193024,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.2.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 315333,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.2.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 411926,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.3.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 6830555
+          },
+          "encoder.3.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525438,
+            "nonidentity_routes": 256890,
+            "scaled_quartets": 525438,
+            "changed_quartets": 525438
+          },
+          "encoder.3.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525438,
+            "nonidentity_routes": 333681,
+            "scaled_quartets": 525438,
+            "changed_quartets": 525438
+          },
+          "encoder.3.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525438,
+            "nonidentity_routes": 404939,
+            "scaled_quartets": 525438,
+            "changed_quartets": 525438
+          }
+        },
+        "correction_gains": {
+          "encoder.0.self_attention.projection.changes.query": 0.18263106048107147,
+          "encoder.0.self_attention.projection.changes.key": 0.12882225215435028,
+          "encoder.0.self_attention.projection.changes.value": 0.11418262124061584,
+          "encoder.1.self_attention.projection.changes.query": 0.14904046058654785,
+          "encoder.1.self_attention.projection.changes.key": 0.14854350686073303,
+          "encoder.1.self_attention.projection.changes.value": 0.09706079959869385,
+          "encoder.2.self_attention.projection.changes.query": 0.16099563241004944,
+          "encoder.2.self_attention.projection.changes.key": 0.12476912885904312,
+          "encoder.2.self_attention.projection.changes.value": 0.08990917354822159,
+          "encoder.3.self_attention.projection.changes.query": 0.11044980585575104,
+          "encoder.3.self_attention.projection.changes.key": 0.08306685090065002,
+          "encoder.3.self_attention.projection.changes.value": 0.11007335036993027
+        },
+        "mixer_mean_frobenius_norms": {}
+      },
+      "source_hypotheses": "/mango/homes/YUE_Ziran/workspace/ana-analogy-refinement-v5/runs/multi30k_d_router_10_seed42/hypotheses.test.txt",
+      "source_references": "/mango/homes/YUE_Ziran/workspace/ana-analogy-refinement-v5/runs/multi30k_d_router_10_seed42/references.test.txt"
+    },
+    "d_cross_focus": {
+      "model": "d_cross_focus",
+      "status": "completed",
+      "parameters": 2328464,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-analogy-refinement-v5/runs/multi30k_d_cross_focus_seed42/results.json",
+      "interval": {
+        "score": 39.362488757514875,
+        "low": 37.709895098985115,
+        "high": 41.01874758810851,
+        "n": 1000,
+        "what_varies": "the test set",
+        "half_width": 1.654426244561698
+      },
+      "source_mtime_ns": {
+        "results": 1790586646088603473,
+        "hypotheses": 1790586646078603487,
+        "references": 1790586646078603487
+      },
+      "baseline_parameters": 2605568,
+      "saved_percent": 10.635070740813523,
+      "model_config": {
+        "vocab_size": 10000,
+        "d_model": 128,
+        "n_heads": 4,
+        "d_ff": 256,
+        "n_encoder_layers": 4,
+        "n_decoder_layers": 4,
+        "dropout": 0.3,
+        "label_smoothing": 0.1,
+        "max_positions": 256,
+        "pad_id": 0,
+        "bos_id": 1,
+        "eos_id": 2,
+        "unk_id": 3
+      },
+      "train_config": {
+        "max_steps": 20000,
+        "batch_size": 256,
+        "learning_rate": 0.005,
+        "warmup_steps": 2000,
+        "schedule": "inverse_sqrt",
+        "selection": "best_dev_loss",
+        "weight_decay": 0.0,
+        "max_grad_norm": 1.0,
+        "adam_betas": [
+          0.9,
+          0.98
+        ],
+        "adam_eps": 1e-09,
+        "eval_every": 1000,
+        "seed": 42,
+        "decode_batch_size": 32,
+        "beam_size": 5
+      },
+      "model_details": {
+        "name": "d_cross_focus",
+        "label": "D3: model D with cross-attention-focused branches",
+        "sites": "encoder",
+        "roles": [
+          "query",
+          "key",
+          "value"
+        ],
+        "global_routing": "input-dependent hard Bene\u0161, positions restored",
+        "global_passes": "one per encoder input stream, shared by roles",
+        "positive_encoding": "softplus(x)+1e-6 and softplus(-x)+1e-6",
+        "canonical_order": "0 < a < b <= c < d on both rails",
+        "local_routing": "hard D4; negative rail uses reversal conjugation",
+        "common_multiplier": "exp(0.1*tanh(logit)), shared by both rails",
+        "invalid_group_action": "both rails bypass D4 and multiplier",
+        "readout": "small signed input correction before the shared projection",
+        "correction_gain_initial": 0.1,
+        "independent_cross_attention": "none",
+        "low_rank_residual": "d_model / 16",
+        "encoder_residual_input": "role-conditioned analogy input",
+        "cross_residual_roles": [
+          "query",
+          "key",
+          "value"
+        ],
+        "decoder_self_residual_roles": [],
+        "decoder_residual_rank": "3 * d_model / 16",
+        "decoder_residual_input": "ordinary attention input; no analogy block",
+        "residual_bias": false,
+        "residual_up_initial": "zero",
+        "initial_function": "ordinary shared-QKV",
+        "routing_learning_rate_scale": 0.1,
+        "learned_power": false,
+        "computed_power": false,
+        "ordinary_embeddings": true,
+        "preservation_scope": "each accepted canonical positive rail only",
+        "parent_model": "analogy_combined_v4/compact_qkv",
+        "residual_budget": "same total parameter count as model D",
+        "initialization": "retain model D backbone and analogy weights; replace only residual matrices, with zero-initialized up projections"
+      },
+      "training_steps": 20000,
+      "scored_step": 19000,
+      "training_seconds": 7978.164878555108,
+      "diagnostics_scored": {
+        "step": 19000,
+        "scope": "development_real_tokens",
+        "counts": {
+          "global_switches": 54645760,
+          "global_swaps": 26823182,
+          "quartets_seen": 6305280,
+          "eligible_quartets": 6305274,
+          "nonidentity_routes": 3326331,
+          "scaled_quartets": 6305274,
+          "changed_quartets": 6305274
+        },
+        "fractions": {
+          "eligible_fraction": 0.9999990484165652,
+          "routed_fraction_of_eligible": 0.5275474150687187,
+          "changed_fraction_of_eligible": 1.0,
+          "global_swap_fraction": 0.4908556857842219
+        },
+        "by_module": {
+          "encoder.0.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 6571455
+          },
+          "encoder.0.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 73025,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.0.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 164257,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.0.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 394933,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.1.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 6573668
+          },
+          "encoder.1.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 184692,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.1.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 257353,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.1.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 357271,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.2.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 6767159
+          },
+          "encoder.2.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525438,
+            "nonidentity_routes": 193855,
+            "scaled_quartets": 525438,
+            "changed_quartets": 525438
+          },
+          "encoder.2.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525438,
+            "nonidentity_routes": 356984,
+            "scaled_quartets": 525438,
+            "changed_quartets": 525438
+          },
+          "encoder.2.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525438,
+            "nonidentity_routes": 383304,
+            "scaled_quartets": 525438,
+            "changed_quartets": 525438
+          },
+          "encoder.3.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 6910900
+          },
+          "encoder.3.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 222686,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.3.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 383616,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.3.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 354355,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          }
+        },
+        "correction_gains": {
+          "encoder.0.self_attention.projection.changes.query": 0.16706505417823792,
+          "encoder.0.self_attention.projection.changes.key": 0.09452889114618301,
+          "encoder.0.self_attention.projection.changes.value": 0.08587581664323807,
+          "encoder.1.self_attention.projection.changes.query": 0.14018338918685913,
+          "encoder.1.self_attention.projection.changes.key": 0.11256902664899826,
+          "encoder.1.self_attention.projection.changes.value": 0.09150237590074539,
+          "encoder.2.self_attention.projection.changes.query": 0.12879499793052673,
+          "encoder.2.self_attention.projection.changes.key": 0.0812583640217781,
+          "encoder.2.self_attention.projection.changes.value": 0.0711192637681961,
+          "encoder.3.self_attention.projection.changes.query": 0.11726326495409012,
+          "encoder.3.self_attention.projection.changes.key": 0.0645701140165329,
+          "encoder.3.self_attention.projection.changes.value": 0.10510943084955215
+        },
+        "mixer_mean_frobenius_norms": {}
+      },
+      "diagnostics_final": {
+        "step": 20000,
+        "scope": "development_real_tokens",
+        "counts": {
+          "global_switches": 54645760,
+          "global_swaps": 26779072,
+          "quartets_seen": 6305280,
+          "eligible_quartets": 6305271,
+          "nonidentity_routes": 3406209,
+          "scaled_quartets": 6305267,
+          "changed_quartets": 6305267
+        },
+        "fractions": {
+          "eligible_fraction": 0.9999985726248477,
+          "routed_fraction_of_eligible": 0.5402161144223618,
+          "changed_fraction_of_eligible": 0.9999993656101379,
+          "global_swap_fraction": 0.49004848683594115
+        },
+        "by_module": {
+          "encoder.0.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 6466841
+          },
+          "encoder.0.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 78980,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.0.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 153266,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.0.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525439,
+            "nonidentity_routes": 399242,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.1.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 6605479
+          },
+          "encoder.1.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 189603,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.1.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 296957,
+            "scaled_quartets": 525439,
+            "changed_quartets": 525439
+          },
+          "encoder.1.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 374301,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.2.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 6785606
+          },
+          "encoder.2.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525438,
+            "nonidentity_routes": 197324,
+            "scaled_quartets": 525435,
+            "changed_quartets": 525435
+          },
+          "encoder.2.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525438,
+            "nonidentity_routes": 356116,
+            "scaled_quartets": 525438,
+            "changed_quartets": 525438
+          },
+          "encoder.2.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525438,
+            "nonidentity_routes": 386226,
+            "scaled_quartets": 525438,
+            "changed_quartets": 525438
+          },
+          "encoder.3.self_attention.projection.preparation.shuffle": {
+            "global_switches": 13661440,
+            "global_swaps": 6921146
+          },
+          "encoder.3.self_attention.projection.changes.query": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 226817,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.3.self_attention.projection.changes.key": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 376786,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          },
+          "encoder.3.self_attention.projection.changes.value": {
+            "quartets_seen": 525440,
+            "eligible_quartets": 525440,
+            "nonidentity_routes": 370591,
+            "scaled_quartets": 525440,
+            "changed_quartets": 525440
+          }
+        },
+        "correction_gains": {
+          "encoder.0.self_attention.projection.changes.query": 0.16508197784423828,
+          "encoder.0.self_attention.projection.changes.key": 0.0961347371339798,
+          "encoder.0.self_attention.projection.changes.value": 0.08504995703697205,
+          "encoder.1.self_attention.projection.changes.query": 0.1462419480085373,
+          "encoder.1.self_attention.projection.changes.key": 0.10880205780267715,
+          "encoder.1.self_attention.projection.changes.value": 0.09123588353395462,
+          "encoder.2.self_attention.projection.changes.query": 0.13500630855560303,
+          "encoder.2.self_attention.projection.changes.key": 0.08320249617099762,
+          "encoder.2.self_attention.projection.changes.value": 0.07189570367336273,
+          "encoder.3.self_attention.projection.changes.query": 0.1188320592045784,
+          "encoder.3.self_attention.projection.changes.key": 0.0636044442653656,
+          "encoder.3.self_attention.projection.changes.value": 0.09783441573381424
+        },
+        "mixer_mean_frobenius_norms": {}
+      },
+      "source_hypotheses": "/mango/homes/YUE_Ziran/workspace/ana-analogy-refinement-v5/runs/multi30k_d_cross_focus_seed42/hypotheses.test.txt",
+      "source_references": "/mango/homes/YUE_Ziran/workspace/ana-analogy-refinement-v5/runs/multi30k_d_cross_focus_seed42/references.test.txt"
+    }
+  },
+  "complete": true
+}
