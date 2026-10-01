@@ -67,7 +67,7 @@ while read -r queue_corpus queue_model; do
         *) echo "Unknown corpus: $queue_corpus"; exit 2 ;;
     esac
     case "$queue_model" in
-        combo|combo_wide|compact_q|compact_qkv|combo_crosskv|combo_selfqk|balanced_qkv|gated_qkv|pre_crossq|pre_lowrank|balanced_gated|shared_bottleneck|diagonal_shortcuts|compact_qkv_no_analogy|balanced_qkv_no_analogy|d_router_03|d_router_10|d_cross_focus) ;;
+        combo|combo_wide|compact_q|compact_qkv|combo_crosskv|combo_selfqk|balanced_qkv|gated_qkv|pre_crossq|pre_lowrank|balanced_gated|shared_bottleneck|diagonal_shortcuts|compact_qkv_no_analogy|balanced_qkv_no_analogy|d_router_03|d_router_10|d_cross_focus|compact_qkv_clean) ;;
         *) echo "Unknown model: $queue_model"; exit 2 ;;
     esac
     while true; do

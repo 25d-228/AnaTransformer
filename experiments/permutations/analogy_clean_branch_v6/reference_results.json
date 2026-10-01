@@ -1,0 +1,171 @@
+{
+  "multi30k": {
+    "baseline": {
+      "score": 40.78,
+      "half_width": 1.74,
+      "parameters": 2605568,
+      "source_results": "results/permutations/multi30k.md",
+      "source_note": "Earlier recorded full Transformer; saved predictions are unavailable. Rounded reference only, not a new paired comparison.",
+      "label": "Full Transformer",
+      "source_report": "results/permutations/analogy_combined_v4/multi30k.json"
+    },
+    "shared_qkv": {
+      "score": 38.651869943809345,
+      "half_width": 1.648454853253913,
+      "parameters": 2213888,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-compact-power-v1/runs/multi30k_shared_qkv_seed42/results.json",
+      "label": "Shared-QKV",
+      "source_report": "results/permutations/analogy_combined_v4/multi30k.json"
+    },
+    "compact_qkv": {
+      "label": "D: compact cross-Q/K/V",
+      "score": 39.921637220812016,
+      "half_width": 1.6765094484520837,
+      "parameters": 2328464,
+      "interval": {
+        "score": 39.921637220812016,
+        "low": 38.191873093088276,
+        "high": 41.54489198999244,
+        "n": 1000,
+        "what_varies": "the test set",
+        "half_width": 1.6765094484520837
+      },
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/multi30k_compact_qkv_seed42/results.json",
+      "source_hypotheses": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/multi30k_compact_qkv_seed42/hypotheses.test.txt",
+      "source_references": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/multi30k_compact_qkv_seed42/references.test.txt",
+      "source_report": "results/permutations/analogy_combined_v4/multi30k.json",
+      "source_note": "Completed v4 model D; reused, not retrained."
+    },
+    "compact_qkv_no_analogy": {
+      "label": "L: D without analogy",
+      "score": 39.76163429939454,
+      "half_width": 1.728038087596385,
+      "parameters": 2312192,
+      "interval": {
+        "score": 39.76163429939454,
+        "low": 38.02690780035532,
+        "high": 41.48298397554809,
+        "n": 1000,
+        "what_varies": "the test set",
+        "half_width": 1.728038087596385
+      },
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/multi30k_compact_qkv_no_analogy_seed42/results.json",
+      "source_hypotheses": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/multi30k_compact_qkv_no_analogy_seed42/hypotheses.test.txt",
+      "source_references": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/multi30k_compact_qkv_no_analogy_seed42/references.test.txt",
+      "source_report": "results/permutations/analogy_combined_v4/multi30k.json",
+      "source_note": "Completed v4 model L; reused, not retrained. Its branch allocation matches D and D-clean."
+    }
+  },
+  "multi30k_enfr": {
+    "baseline": {
+      "score": 60.80468189375464,
+      "half_width": 1.6491439923877564,
+      "parameters": 2605568,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-power-enfr-cogs-v1/runs/multi30k_enfr_baseline_seed42/results.json",
+      "label": "Full Transformer",
+      "source_report": "results/permutations/analogy_combined_v4/multi30k_enfr.json"
+    },
+    "shared_qkv": {
+      "score": 58.402977971523995,
+      "half_width": 1.696070699942954,
+      "parameters": 2213888,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-power-enfr-cogs-v1/runs/multi30k_enfr_shared_qkv_seed42/results.json",
+      "label": "Shared-QKV",
+      "source_report": "results/permutations/analogy_combined_v4/multi30k_enfr.json"
+    },
+    "compact_qkv": {
+      "label": "D: compact cross-Q/K/V",
+      "score": 59.65795052834076,
+      "half_width": 1.6632484574112993,
+      "parameters": 2328464,
+      "interval": {
+        "score": 59.65795052834076,
+        "low": 57.94552045519789,
+        "high": 61.272017370020485,
+        "n": 1000,
+        "what_varies": "the test set",
+        "half_width": 1.6632484574112993
+      },
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/multi30k_enfr_compact_qkv_seed42/results.json",
+      "source_hypotheses": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/multi30k_enfr_compact_qkv_seed42/hypotheses.test.txt",
+      "source_references": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/multi30k_enfr_compact_qkv_seed42/references.test.txt",
+      "source_report": "results/permutations/analogy_combined_v4/multi30k_enfr.json",
+      "source_note": "Completed v4 model D; reused, not retrained."
+    },
+    "compact_qkv_no_analogy": {
+      "label": "L: D without analogy",
+      "score": 59.14524541911359,
+      "half_width": 1.6500303734847357,
+      "parameters": 2312192,
+      "interval": {
+        "score": 59.14524541911359,
+        "low": 57.47455484583649,
+        "high": 60.77461559280596,
+        "n": 1000,
+        "what_varies": "the test set",
+        "half_width": 1.6500303734847357
+      },
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/multi30k_enfr_compact_qkv_no_analogy_seed42/results.json",
+      "source_hypotheses": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/multi30k_enfr_compact_qkv_no_analogy_seed42/hypotheses.test.txt",
+      "source_references": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/multi30k_enfr_compact_qkv_no_analogy_seed42/references.test.txt",
+      "source_report": "results/permutations/analogy_combined_v4/multi30k_enfr.json",
+      "source_note": "Completed v4 model L; reused, not retrained. Its branch allocation matches D and D-clean."
+    }
+  },
+  "cogs": {
+    "baseline": {
+      "score": 78.6952380952381,
+      "half_width": 0.5333333333333314,
+      "parameters": 8844800,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-power-enfr-cogs-v1/reference_runs/cogs_baseline_seed42/results.json",
+      "label": "Full Transformer",
+      "source_report": "results/permutations/analogy_combined_v4/cogs.json"
+    },
+    "shared_qkv": {
+      "score": 80.37619047619047,
+      "half_width": 0.5023809523809533,
+      "parameters": 5702144,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-power-enfr-cogs-v1/reference_runs/cogs_shared_qkv_seed42/results.json",
+      "label": "Shared-QKV",
+      "source_report": "results/permutations/analogy_combined_v4/cogs.json"
+    },
+    "compact_qkv": {
+      "label": "D: compact cross-Q/K/V",
+      "score": 82.04761904761905,
+      "half_width": 0.5047619047619065,
+      "parameters": 6522200,
+      "interval": {
+        "score": 82.04761904761905,
+        "low": 81.53809523809524,
+        "high": 82.54761904761905,
+        "n": 21000,
+        "what_varies": "the test set",
+        "half_width": 0.5047619047619065
+      },
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/cogs_compact_qkv_seed42/results.json",
+      "source_hypotheses": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/cogs_compact_qkv_seed42/hypotheses.gen.txt",
+      "source_references": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/cogs_compact_qkv_seed42/references.gen.txt",
+      "source_report": "results/permutations/analogy_combined_v4/cogs.json",
+      "source_note": "Completed v4 model D; reused, not retrained."
+    },
+    "compact_qkv_no_analogy": {
+      "label": "L: D without analogy",
+      "score": 78.10952380952381,
+      "half_width": 0.5309523809523782,
+      "parameters": 6488576,
+      "interval": {
+        "score": 78.10952380952381,
+        "low": 77.57619047619048,
+        "high": 78.63809523809523,
+        "n": 21000,
+        "what_varies": "the test set",
+        "half_width": 0.5309523809523782
+      },
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/cogs_compact_qkv_no_analogy_seed42/results.json",
+      "source_hypotheses": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/cogs_compact_qkv_no_analogy_seed42/hypotheses.gen.txt",
+      "source_references": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/cogs_compact_qkv_no_analogy_seed42/references.gen.txt",
+      "source_report": "results/permutations/analogy_combined_v4/cogs.json",
+      "source_note": "Completed v4 model L; reused, not retrained. Its branch allocation matches D and D-clean."
+    }
+  }
+}

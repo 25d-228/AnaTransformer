@@ -1,0 +1,331 @@
+{
+  "study_id": "analogy_clean_branch_v6",
+  "corpus": "cogs",
+  "split": "gen",
+  "metric": "exact match",
+  "confidence": 0.95,
+  "resamples": 1000,
+  "bootstrap_seed": 12345,
+  "uncertainty_note": "New-run \u00b1 is half the width of a 95% example-bootstrap interval (1,000 resamples). Reference rows are supplied existing results, not new runs. Their provenance is retained in JSON. COGS reports generalization only.",
+  "references": {
+    "baseline": {
+      "score": 78.6952380952381,
+      "half_width": 0.5333333333333314,
+      "parameters": 8844800,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-power-enfr-cogs-v1/reference_runs/cogs_baseline_seed42/results.json",
+      "label": "Full Transformer",
+      "source_report": "results/permutations/analogy_combined_v4/cogs.json"
+    },
+    "shared_qkv": {
+      "score": 80.37619047619047,
+      "half_width": 0.5023809523809533,
+      "parameters": 5702144,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-power-enfr-cogs-v1/reference_runs/cogs_shared_qkv_seed42/results.json",
+      "label": "Shared-QKV",
+      "source_report": "results/permutations/analogy_combined_v4/cogs.json"
+    },
+    "compact_qkv_no_analogy": {
+      "label": "L: D without analogy",
+      "score": 78.10952380952381,
+      "half_width": 0.5309523809523782,
+      "parameters": 6488576,
+      "interval": {
+        "score": 78.10952380952381,
+        "low": 77.57619047619048,
+        "high": 78.63809523809523,
+        "n": 21000,
+        "what_varies": "the test set",
+        "half_width": 0.5309523809523782
+      },
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/cogs_compact_qkv_no_analogy_seed42/results.json",
+      "source_hypotheses": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/cogs_compact_qkv_no_analogy_seed42/hypotheses.gen.txt",
+      "source_references": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/cogs_compact_qkv_no_analogy_seed42/references.gen.txt",
+      "source_report": "results/permutations/analogy_combined_v4/cogs.json",
+      "source_note": "Completed v4 model L; reused, not retrained. Its branch allocation matches D and D-clean."
+    },
+    "compact_qkv": {
+      "label": "D: compact cross-Q/K/V",
+      "score": 82.04761904761905,
+      "half_width": 0.5047619047619065,
+      "parameters": 6522200,
+      "interval": {
+        "score": 82.04761904761905,
+        "low": 81.53809523809524,
+        "high": 82.54761904761905,
+        "n": 21000,
+        "what_varies": "the test set",
+        "half_width": 0.5047619047619065
+      },
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/cogs_compact_qkv_seed42/results.json",
+      "source_hypotheses": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/cogs_compact_qkv_seed42/hypotheses.gen.txt",
+      "source_references": "/mango/homes/YUE_Ziran/workspace/ana-analogy-combined-v4/runs/cogs_compact_qkv_seed42/references.gen.txt",
+      "source_report": "results/permutations/analogy_combined_v4/cogs.json",
+      "source_note": "Completed v4 model D; reused, not retrained."
+    }
+  },
+  "models": {
+    "compact_qkv_clean": {
+      "model": "compact_qkv_clean",
+      "status": "completed",
+      "parameters": 6522200,
+      "source_results": "/mango/homes/YUE_Ziran/workspace/ana-analogy-clean-branch-v6/runs/cogs_compact_qkv_clean_seed42/results.json",
+      "interval": {
+        "score": 79.68095238095238,
+        "low": 79.17142857142858,
+        "high": 80.20476190476191,
+        "n": 21000,
+        "what_varies": "the test set",
+        "half_width": 0.5166666666666657
+      },
+      "source_mtime_ns": {
+        "results": 1790658941188050162,
+        "hypotheses": 1790658941138050220,
+        "references": 1790658941178050174
+      },
+      "baseline_parameters": 8844800,
+      "saved_percent": 26.25949710564399,
+      "model_config": {
+        "vocab_size": 835,
+        "d_model": 512,
+        "n_heads": 8,
+        "d_ff": 512,
+        "n_encoder_layers": 2,
+        "n_decoder_layers": 2,
+        "dropout": 0.1,
+        "label_smoothing": 0.0,
+        "max_positions": 640,
+        "pad_id": 0,
+        "bos_id": 1,
+        "eos_id": 2,
+        "unk_id": 3
+      },
+      "train_config": {
+        "max_steps": 50000,
+        "batch_size": 128,
+        "learning_rate": 0.0001,
+        "warmup_steps": 0,
+        "schedule": "constant",
+        "selection": "final",
+        "weight_decay": 0.0,
+        "max_grad_norm": 1.0,
+        "adam_betas": [
+          0.9,
+          0.999
+        ],
+        "adam_eps": 1e-09,
+        "eval_every": 1000,
+        "seed": 42,
+        "decode_batch_size": 32,
+        "beam_size": 5
+      },
+      "model_details": {
+        "name": "compact_qkv_clean",
+        "label": "D-clean: unchanged-input small branches",
+        "sites": "encoder",
+        "roles": [
+          "query",
+          "key",
+          "value"
+        ],
+        "global_routing": "input-dependent hard Bene\u0161, positions restored",
+        "global_passes": "one per encoder input stream, shared by roles",
+        "positive_encoding": "softplus(x)+1e-6 and softplus(-x)+1e-6",
+        "canonical_order": "0 < a < b <= c < d on both rails",
+        "local_routing": "hard D4; negative rail uses reversal conjugation",
+        "common_multiplier": "exp(0.1*tanh(logit)), shared by both rails",
+        "invalid_group_action": "both rails bypass D4 and multiplier",
+        "readout": "small signed input correction before the shared projection",
+        "correction_gain_initial": 0.1,
+        "independent_cross_attention": "none",
+        "low_rank_residual": "d_model / 8",
+        "encoder_residual_input": "original unchanged attention input",
+        "cross_residual_roles": [
+          "query",
+          "key",
+          "value"
+        ],
+        "decoder_self_residual_roles": [],
+        "decoder_residual_rank": "d_model / 8",
+        "decoder_residual_input": "ordinary attention input; no analogy block",
+        "residual_bias": false,
+        "residual_up_initial": "zero",
+        "initial_function": "ordinary shared-QKV",
+        "routing_learning_rate_scale": 0.1,
+        "learned_power": false,
+        "computed_power": false,
+        "ordinary_embeddings": true,
+        "preservation_scope": "each accepted canonical positive rail only",
+        "parent_model": "analogy_combined_v4/compact_qkv",
+        "encoder_shared_projection_input": "role-conditioned analogy input",
+        "residual_budget": "same total parameter count as model D",
+        "initialization": "same initial weights as model D"
+      },
+      "training_steps": 50000,
+      "scored_step": 50000,
+      "training_seconds": 7715.878033502027,
+      "diagnostics_scored": {
+        "step": 50000,
+        "scope": "development_real_tokens",
+        "counts": {
+          "global_switches": 250414080,
+          "global_swaps": 80959812,
+          "quartets_seen": 22095360,
+          "eligible_quartets": 22095360,
+          "nonidentity_routes": 17875174,
+          "scaled_quartets": 22095065,
+          "changed_quartets": 22095351
+        },
+        "fractions": {
+          "eligible_fraction": 1.0,
+          "routed_fraction_of_eligible": 0.8090012563723786,
+          "changed_fraction_of_eligible": 0.9999995926746611,
+          "global_swap_fraction": 0.3233037535269582
+        },
+        "by_module": {
+          "encoder.0.self_attention.projection.preparation.shuffle": {
+            "global_switches": 125207040,
+            "global_swaps": 43283777
+          },
+          "encoder.0.self_attention.projection.changes.query": {
+            "quartets_seen": 3682560,
+            "eligible_quartets": 3682560,
+            "nonidentity_routes": 3532757,
+            "scaled_quartets": 3682265,
+            "changed_quartets": 3682551
+          },
+          "encoder.0.self_attention.projection.changes.key": {
+            "quartets_seen": 3682560,
+            "eligible_quartets": 3682560,
+            "nonidentity_routes": 3428490,
+            "scaled_quartets": 3682560,
+            "changed_quartets": 3682560
+          },
+          "encoder.0.self_attention.projection.changes.value": {
+            "quartets_seen": 3682560,
+            "eligible_quartets": 3682560,
+            "nonidentity_routes": 3519769,
+            "scaled_quartets": 3682560,
+            "changed_quartets": 3682560
+          },
+          "encoder.1.self_attention.projection.preparation.shuffle": {
+            "global_switches": 125207040,
+            "global_swaps": 37676035
+          },
+          "encoder.1.self_attention.projection.changes.query": {
+            "quartets_seen": 3682560,
+            "eligible_quartets": 3682560,
+            "nonidentity_routes": 1853792,
+            "scaled_quartets": 3682560,
+            "changed_quartets": 3682560
+          },
+          "encoder.1.self_attention.projection.changes.key": {
+            "quartets_seen": 3682560,
+            "eligible_quartets": 3682560,
+            "nonidentity_routes": 1858082,
+            "scaled_quartets": 3682560,
+            "changed_quartets": 3682560
+          },
+          "encoder.1.self_attention.projection.changes.value": {
+            "quartets_seen": 3682560,
+            "eligible_quartets": 3682560,
+            "nonidentity_routes": 3682284,
+            "scaled_quartets": 3682560,
+            "changed_quartets": 3682560
+          }
+        },
+        "correction_gains": {
+          "encoder.0.self_attention.projection.changes.query": 0.11270925402641296,
+          "encoder.0.self_attention.projection.changes.key": 0.10175574570894241,
+          "encoder.0.self_attention.projection.changes.value": 0.12231241166591644,
+          "encoder.1.self_attention.projection.changes.query": 0.11324729770421982,
+          "encoder.1.self_attention.projection.changes.key": 0.10592810064554214,
+          "encoder.1.self_attention.projection.changes.value": 0.13060449063777924
+        },
+        "mixer_mean_frobenius_norms": {}
+      },
+      "diagnostics_final": {
+        "step": 50000,
+        "scope": "development_real_tokens",
+        "counts": {
+          "global_switches": 250414080,
+          "global_swaps": 80959812,
+          "quartets_seen": 22095360,
+          "eligible_quartets": 22095360,
+          "nonidentity_routes": 17875174,
+          "scaled_quartets": 22095065,
+          "changed_quartets": 22095351
+        },
+        "fractions": {
+          "eligible_fraction": 1.0,
+          "routed_fraction_of_eligible": 0.8090012563723786,
+          "changed_fraction_of_eligible": 0.9999995926746611,
+          "global_swap_fraction": 0.3233037535269582
+        },
+        "by_module": {
+          "encoder.0.self_attention.projection.preparation.shuffle": {
+            "global_switches": 125207040,
+            "global_swaps": 43283777
+          },
+          "encoder.0.self_attention.projection.changes.query": {
+            "quartets_seen": 3682560,
+            "eligible_quartets": 3682560,
+            "nonidentity_routes": 3532757,
+            "scaled_quartets": 3682265,
+            "changed_quartets": 3682551
+          },
+          "encoder.0.self_attention.projection.changes.key": {
+            "quartets_seen": 3682560,
+            "eligible_quartets": 3682560,
+            "nonidentity_routes": 3428490,
+            "scaled_quartets": 3682560,
+            "changed_quartets": 3682560
+          },
+          "encoder.0.self_attention.projection.changes.value": {
+            "quartets_seen": 3682560,
+            "eligible_quartets": 3682560,
+            "nonidentity_routes": 3519769,
+            "scaled_quartets": 3682560,
+            "changed_quartets": 3682560
+          },
+          "encoder.1.self_attention.projection.preparation.shuffle": {
+            "global_switches": 125207040,
+            "global_swaps": 37676035
+          },
+          "encoder.1.self_attention.projection.changes.query": {
+            "quartets_seen": 3682560,
+            "eligible_quartets": 3682560,
+            "nonidentity_routes": 1853792,
+            "scaled_quartets": 3682560,
+            "changed_quartets": 3682560
+          },
+          "encoder.1.self_attention.projection.changes.key": {
+            "quartets_seen": 3682560,
+            "eligible_quartets": 3682560,
+            "nonidentity_routes": 1858082,
+            "scaled_quartets": 3682560,
+            "changed_quartets": 3682560
+          },
+          "encoder.1.self_attention.projection.changes.value": {
+            "quartets_seen": 3682560,
+            "eligible_quartets": 3682560,
+            "nonidentity_routes": 3682284,
+            "scaled_quartets": 3682560,
+            "changed_quartets": 3682560
+          }
+        },
+        "correction_gains": {
+          "encoder.0.self_attention.projection.changes.query": 0.11270925402641296,
+          "encoder.0.self_attention.projection.changes.key": 0.10175574570894241,
+          "encoder.0.self_attention.projection.changes.value": 0.12231241166591644,
+          "encoder.1.self_attention.projection.changes.query": 0.11324729770421982,
+          "encoder.1.self_attention.projection.changes.key": 0.10592810064554214,
+          "encoder.1.self_attention.projection.changes.value": 0.13060449063777924
+        },
+        "mixer_mean_frobenius_norms": {}
+      },
+      "source_hypotheses": "/mango/homes/YUE_Ziran/workspace/ana-analogy-clean-branch-v6/runs/cogs_compact_qkv_clean_seed42/hypotheses.gen.txt",
+      "source_references": "/mango/homes/YUE_Ziran/workspace/ana-analogy-clean-branch-v6/runs/cogs_compact_qkv_clean_seed42/references.gen.txt"
+    }
+  },
+  "complete": true
+}

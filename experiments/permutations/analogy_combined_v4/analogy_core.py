@@ -239,7 +239,8 @@ class AnalogyProjection(QKVProjection):
     """Three input transformations reuse one dense attention projection."""
 
     def __init__(
-        self, original: SharedQKV, *, low_rank: bool = False, mixer: bool = False
+        self, original: SharedQKV, *, low_rank: bool = False,
+        mixer: bool = False, clean_residual_input: bool = False,
     ) -> None:
         super().__init__()
         d_model = original.shared.in_features
@@ -253,6 +254,7 @@ class AnalogyProjection(QKVProjection):
         })
         self.post_projection = mixer
         self.low_rank = low_rank
+        self.clean_residual_input = clean_residual_input
         if low_rank:
             rank = d_model // 8
             self.down = nn.ModuleDict({
@@ -277,7 +279,10 @@ class AnalogyProjection(QKVProjection):
             )
             output = self.roles[name](projected, mask)
             if self.low_rank:
-                output = output + self.up[name](self.down[name](conditioned))
+                residual_input = (
+                    values if self.clean_residual_input else conditioned
+                )
+                output = output + self.up[name](self.down[name](residual_input))
             outputs.append(output)
         return tuple(outputs)
 
