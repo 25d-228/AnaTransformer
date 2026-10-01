@@ -555,3 +555,18 @@ Multi30k EN-to-FR, COGS generalization and IWSLT14 DE-to-EN.
 
 - [Model designs and execution notes](experiments/permutations/analogy_combined_v4/README.md)
 - [Full results table with parameter counts and bootstrap intervals](results/permutations/analogy_combined_v4/README.md)
+
+## Completed follow-up permutation batches
+
+These batches retain ordinary embeddings and numerical-analogy-preserving
+operations. All runs cover Multi30k EN-to-DE, EN-to-FR and COGS; no new
+IWSLT14 runs are included.
+
+| Batch | Runs | Design and results |
+|---|---:|---|
+| 5: model-D refinements | 9 | [Code](experiments/permutations/analogy_refinement_v5/README.md) · [Results](results/permutations/analogy_refinement_v5/README.md) |
+| 6: unchanged-input small branches | 3 | [Code](experiments/permutations/analogy_clean_branch_v6/README.md) · [Results](results/permutations/analogy_clean_branch_v6/README.md) |
+| 7: analogy specialization | 18 | [Code](experiments/permutations/analogy_specialization_v7/README.md) · [Results](results/permutations/analogy_specialization_v7/README.md) |
+
+Result tables include model sizes and symmetric 95% bootstrap half-widths.
+Per-corpus JSON records preserve exact scores, intervals and prediction paths.

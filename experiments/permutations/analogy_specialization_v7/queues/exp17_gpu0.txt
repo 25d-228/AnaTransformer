@@ -1,0 +1,2 @@
+cogs rail_readout
+cogs query_only
